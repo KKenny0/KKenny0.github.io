@@ -46,7 +46,7 @@ exclude:
   - vendor
   - Gemfile
   - Gemfile.lock
-  - README.md
+  - readme.md
   - README_zh_Hans.md
   - README_zh_Hant.md
   - README_de.md
