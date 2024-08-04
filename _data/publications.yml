@@ -1,0 +1,17 @@
+main:
+
+  - title: Semantic matching based legal information retrieval system for COVID-19 pandemic
+    authors: Junlin Zhu, <strong>Jiaye Wu</strong>, Xudong Luo*, Jie Liu (*Corresponding authors)
+    conference_short: Artif.Intellig.& L
+    conference: Artificial Intelligence and Law <strong>(Artif.Intellig.& L)</strong>, Vol. 32.
+    pdf: https://link.springer.com/article/10.1007/s10506-023-09354-x
+    image: ./assets/img/artif-intel-law.png
+    notes: Journal Article
+
+  - title: Alignment-based graph network for judicial examination task
+    authors: <strong>Jiaye Wu</strong>, Xudong Luo* (*Corresponding authors)
+    conference_short: KSEM
+    conference: Knowledge Science, Engineering and Management <strong>(KSEM)</strong>, 2021.
+    pdf: https://link.springer.com/chapter/10.1007/978-3-030-82153-1_32
+    image: ./assets/img/ksem-2023.png
+    notes: Conference paper
