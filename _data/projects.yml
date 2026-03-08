@@ -50,13 +50,22 @@ highlight:
     updated: "2025-07-24"
     highlight: true
 
+# Projects I've contributed to
+contributions:
+  - name: kotaemon
+    url: https://github.com/Cinnamon/kotaemon
+    description: "An open-source RAG-based tool for chatting with your documents. Clean UI, multi-LLM support, hybrid retrieval, and advanced citations"
+    stars: 25186
+    language: Python
+    role: Contributor
+
 # Tech stack for tags
 tech_stack:
   - LLM
   - RAG
   - GraphRAG
   - NLP
+  - PEFT
+  - Prompt Engineering
   - PyTorch
   - Python
-  - TypeScript
-  - Visualization

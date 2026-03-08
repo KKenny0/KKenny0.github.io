@@ -4,7 +4,7 @@ layout: homepage
 
 ## About Me
 
-AI Engineer of a FinTech Company. Learn/Create/Help.
+AI Engineer at a Camera Company. Building intelligent systems that see, understand, and create. Passionate about LLM, RAG, and making AI accessible.
 
 ## Techs
 
@@ -13,6 +13,7 @@ AI Engineer of a FinTech Company. Learn/Create/Help.
 <span class="tech-tag">RAG</span>
 <span class="tech-tag">GraphRAG</span>
 <span class="tech-tag">NLP</span>
+<span class="tech-tag">Computer Vision</span>
 <span class="tech-tag">PEFT</span>
 <span class="tech-tag">Prompt Engineering</span>
 <span class="tech-tag">PyTorch</span>
@@ -22,8 +23,9 @@ AI Engineer of a FinTech Company. Learn/Create/Help.
 ## News
 
 <ul class="news-list">
+  <li><span class="news-date">[2025]</span> <span class="news-content">Contributing to <a href="https://github.com/Cinnamon/kotaemon" target="_blank">kotaemon</a>, an open-source RAG tool with 25k+ stars.</span></li>
   <li><span class="news-date">[June 2024]</span> <span class="news-content">Our paper about Legal QA is published in <em>Artificial Intelligence and Law</em>.</span></li>
-  <li><span class="news-date">[Feb 2024]</span> <span class="news-content">Joining a fintech company as AI engineer.</span></li>
+  <li><span class="news-date">[Feb 2024]</span> <span class="news-content">Joining a camera company as AI engineer.</span></li>
   <li><span class="news-date">[Sept 2022]</span> <span class="news-content">Joining a large consumer goods company as AI engineer.</span></li>
 </ul>
 

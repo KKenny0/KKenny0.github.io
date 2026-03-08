@@ -313,3 +313,19 @@ header h1 {
   background: linear-gradient(135deg, #cd7f32 0%, #a0522d 100%);
   color: white;
 }
+
+/* Contribution card style */
+.contribution-card {
+  border-left: 3px solid var(--color-accent);
+}
+
+.project-role {
+  background: var(--color-accent);
+  color: white;
+  padding: 0.125rem 0.375rem;
+  border-radius: 3px;
+  font-size: 0.7rem;
+  font-weight: 500;
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+}
