@@ -31,6 +31,8 @@ AI Engineer at a Camera Company. Building intelligent systems that see, understa
 
 {% include open-source.md %}
 
+{% include_relative _includes/writings.md %}
+
 {% include_relative _includes/projects.md %}
 
 {% include_relative _includes/publications.md %}
