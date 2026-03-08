@@ -24,7 +24,7 @@ AI Engineer at a Camera Company. Building intelligent systems that see, understa
 ## News
 
 <ul class="news-list">
-  <li><span class="news-date">[2025]</span> <span class="news-content">Contributing to <a href="https://github.com/Cinnamon/kotaemon" target="_blank">kotaemon</a>, an open-source RAG tool with 25k+ stars.</span></li>
+  <li><span class="news-date">[2025]</span> <span class="news-content">Contributing to <a href="https://github.com/Cinnamon/kotaemon" target="_blank" rel="noopener">kotaemon</a>, an open-source RAG tool with 25k+ stars.</span></li>
   <li><span class="news-date">[June 2024]</span> <span class="news-content">Our paper about Legal QA is published in <em>Artificial Intelligence and Law</em>.</span></li>
   <li><span class="news-date">[Feb 2024]</span> <span class="news-content">Joining a camera company as AI engineer.</span></li>
   <li><span class="news-date">[Sept 2022]</span> <span class="news-content">Joining a large consumer goods company as AI engineer.</span></li>

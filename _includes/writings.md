@@ -26,6 +26,6 @@
 
 <div style="margin-top: 1rem;">
   <a href="https://www.zhihu.com/column/c_2009193453284771808" target="_blank" rel="noopener" class="writing-column-link">
-    📚 技术分享专栏 →
+    📚 技术分享专栏
   </a>
 </div>
