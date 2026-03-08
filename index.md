@@ -12,10 +12,11 @@ AI Engineer at a Camera Company. Building intelligent systems that see, understa
 <span class="tech-tag">LLM</span>
 <span class="tech-tag">RAG</span>
 <span class="tech-tag">GraphRAG</span>
-<span class="tech-tag">NLP</span>
+<span class="tech-tag">AI Agents</span>
+<span class="tech-tag">OpenClaw</span>
+<span class="tech-tag">Claude Code</span>
 <span class="tech-tag">Computer Vision</span>
-<span class="tech-tag">PEFT</span>
-<span class="tech-tag">Prompt Engineering</span>
+<span class="tech-tag">NLP</span>
 <span class="tech-tag">PyTorch</span>
 <span class="tech-tag">Python</span>
 </div>

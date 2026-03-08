@@ -1,9 +1,31 @@
-## Writings & Content
+## Writings
 
-Beyond coding, I share insights on AI/LLM technologies and daily tech news:
+<div class="writing-list">
 
-- **[我为 OpenClaw 做了个可视化控制中心](https://zhuanlan.zhihu.com/p/)** - Building a visual control center for OpenClaw
-- **[聊天直接生视频？字节的 Seedance Skill 怎么个事儿](https://zhuanlan.zhihu.com/p/)** - Exploring ByteDance's Seedance video generation
-- **[Step 3.5 Flash: 推理巅峰，执行如电](https://zhuanlan.zhihu.com/p/)** - Analysis of Step 3.5 Flash model
+<div class="writing-item">
+  <a href="https://zhuanlan.zhihu.com/p/2008517158615941484" target="_blank" rel="noopener" class="writing-title">书接上文，我为 OpenClaw🦀做了个"可视化大脑"2.0</a>
+  <span class="writing-date">2026-03-07</span>
+</div>
 
-More articles on [知乎](https://www.zhihu.com/people/kenny-wu-56/posts) and [每日科技资讯](https://zhuanlan.zhihu.com/p/) series.
+<div class="writing-item">
+  <a href="https://zhuanlan.zhihu.com/p/2010014684263228756" target="_blank" rel="noopener" class="writing-title">GPT5.4 值得一篇每日科技资讯</a>
+  <span class="writing-date">2026-03-06</span>
+</div>
+
+<div class="writing-item">
+  <a href="https://zhuanlan.zhihu.com/p/2009329852029886637" target="_blank" rel="noopener" class="writing-title">聊天直接生视频？字节的 Seedance Skill 怎么个事儿</a>
+  <span class="writing-date">2026-02-25</span>
+</div>
+
+<div class="writing-item">
+  <a href="https://zhuanlan.zhihu.com/p/2008517158615941484" target="_blank" rel="noopener" class="writing-title">我为 OpenClaw 做了个可视化控制中心</a>
+  <span class="writing-date">2026-02-21</span>
+</div>
+
+</div>
+
+<div style="margin-top: 1rem;">
+  <a href="https://www.zhihu.com/column/c_2009193453284771808" target="_blank" rel="noopener" class="writing-column-link">
+    📚 技术分享专栏 →
+  </a>
+</div>
