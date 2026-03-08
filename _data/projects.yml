@@ -1,0 +1,62 @@
+# Open Source Projects
+# Fetches from GitHub - manually curated highlights
+
+highlight:
+  - name: torchKbert
+    url: https://github.com/KKenny0/torchKbert
+    description: "A PyTorch implementation of K-BERT for knowledge-enhanced language representation"
+    stars: 8
+    language: Python
+    updated: "2022-11-24"
+    highlight: true
+
+  - name: RAGVizExpander
+    url: https://github.com/KKenny0/RAGVizExpander
+    description: "Open-source tool to visualise your RAG. Visualize vector recall with custom content extraction, LLM, Embedding, and Chunking"
+    stars: 6
+    language: Jupyter Notebook
+    updated: "2024-11-27"
+    highlight: true
+
+  - name: open-omnisearch
+    url: https://github.com/KKenny0/open-omnisearch
+    description: "Self-adaptive Planning Agent. Multi-modal Retrieval-Augmented Generation with adaptive planning"
+    stars: 5
+    language: Python
+    updated: "2024-11-28"
+    highlight: true
+
+  - name: GraphRAGxplorer
+    url: https://github.com/KKenny0/GraphRAGxplorer
+    description: "Open-source tool to visualise your GraphRAG. Visualize graph-based retrieval"
+    stars: 3
+    language: Python
+    updated: "2024-12-04"
+    highlight: true
+
+  - name: LLMpedia
+    url: https://github.com/KKenny0/LLMpedia
+    description: "Online encyclopedia collecting and sharing LLM-related resources. Covers basics, research, applications, tools and best practices"
+    stars: 1
+    language: HTML
+    updated: "2024-12-27"
+    highlight: true
+
+  - name: Video-Auto-Wipe
+    url: https://github.com/KKenny0/Video-Auto-Wipe
+    description: "Erase specific content from videos that you don't want to see"
+    stars: 1
+    language: Python
+    updated: "2025-07-24"
+    highlight: true
+
+# Tech stack for tags
+tech_stack:
+  - LLM
+  - RAG
+  - GraphRAG
+  - NLP
+  - PyTorch
+  - Python
+  - TypeScript
+  - Visualization

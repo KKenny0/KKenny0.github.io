@@ -1,0 +1,315 @@
+/* Minimal-inspired custom styles */
+/* Color palette inspired by Obsidian Minimal theme */
+
+:root {
+  /* Light mode */
+  --color-bg: #fafafa;
+  --color-bg-secondary: #f5f5f5;
+  --color-text: #3b3b3b;
+  --color-text-secondary: #5c5c5c;
+  --color-accent: #5c7cfa;
+  --color-accent-hover: #4c6ef5;
+  --color-border: #e5e5e5;
+  --color-card-bg: #ffffff;
+  --color-code-bg: #f0f0f0;
+  --shadow-card: 0 1px 3px rgba(0, 0, 0, 0.06), 0 1px 2px rgba(0, 0, 0, 0.04);
+  --shadow-card-hover: 0 8px 25px rgba(0, 0, 0, 0.1);
+}
+
+@media (prefers-color-scheme: dark) {
+  :root {
+    --color-bg: #191919;
+    --color-bg-secondary: #252525;
+    --color-text: #d4d4d4;
+    --color-text-secondary: #a0a0a0;
+    --color-accent: #748ffc;
+    --color-accent-hover: #91a7ff;
+    --color-border: #333333;
+    --color-card-bg: #222222;
+    --color-code-bg: #2a2a2a;
+    --shadow-card: 0 2px 8px rgba(0, 0, 0, 0.3);
+    --shadow-card-hover: 0 12px 30px rgba(0, 0, 0, 0.5);
+  }
+  
+  body {
+    background-color: var(--color-bg);
+    color: var(--color-text);
+  }
+  
+  h1, h2, h3, h4, h5, h6 {
+    color: var(--color-accent);
+  }
+  
+  autocolor {
+    color: var(--color-text-secondary) !important;
+  }
+  
+  strong {
+    color: var(--color-text);
+  }
+  
+  a {
+    color: var(--color-accent);
+  }
+}
+
+/* Base styles */
+body {
+  background-color: var(--color-bg);
+  color: var(--color-text);
+  transition: background-color 0.25s ease, color 0.25s ease;
+}
+
+/* Modern section headers */
+section h2 {
+  color: var(--color-text);
+  font-weight: 600;
+  font-size: 1.4rem;
+  margin-bottom: 1.5rem;
+  padding-bottom: 0.5rem;
+  border-bottom: 2px solid var(--color-accent);
+  display: inline-block;
+}
+
+/* Card grid for projects */
+.project-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+  gap: 1.5rem;
+  margin: 1.5rem 0;
+}
+
+.project-card {
+  background: var(--color-card-bg);
+  border: 1px solid var(--color-border);
+  border-radius: 12px;
+  padding: 1.5rem;
+  transition: all 0.25s ease;
+  box-shadow: var(--shadow-card);
+}
+
+.project-card:hover {
+  transform: translateY(-4px);
+  box-shadow: var(--shadow-card-hover);
+  border-color: var(--color-accent);
+}
+
+.project-header {
+  display: flex;
+  align-items: flex-start;
+  justify-content: space-between;
+  margin-bottom: 0.5rem;
+}
+
+.project-title {
+  font-size: 1.1rem;
+  font-weight: 600;
+  color: var(--color-text);
+  margin: 0;
+  text-decoration: none;
+}
+
+.project-title:hover {
+  color: var(--color-accent);
+}
+
+.project-stars {
+  display: flex;
+  align-items: center;
+  gap: 0.25rem;
+  color: var(--color-text-secondary);
+  font-size: 0.85rem;
+}
+
+.project-stars svg {
+  width: 16px;
+  height: 16px;
+  fill: currentColor;
+}
+
+.project-description {
+  color: var(--color-text-secondary);
+  font-size: 0.9rem;
+  line-height: 1.5;
+  margin-bottom: 1rem;
+}
+
+.project-meta {
+  display: flex;
+  align-items: center;
+  gap: 1rem;
+  font-size: 0.8rem;
+  color: var(--color-text-secondary);
+}
+
+.project-language {
+  display: flex;
+  align-items: center;
+  gap: 0.25rem;
+}
+
+.lang-dot {
+  width: 10px;
+  height: 10px;
+  border-radius: 50%;
+  display: inline-block;
+}
+
+.project-updated {
+  font-size: 0.75rem;
+  opacity: 0.7;
+}
+
+/* Language colors */
+.lang-python { background-color: #3572A5; }
+.lang-typescript { background-color: #3178c6; }
+.lang-html { background-color: #e34c26; }
+.lang-jupyter { background-color: #F37626; }
+.lang-css { background-color: #563d7c; }
+
+/* Tech tags */
+.tech-tags {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.5rem;
+  margin: 1rem 0;
+}
+
+.tech-tag {
+  background: var(--color-bg-secondary);
+  color: var(--color-text-secondary);
+  padding: 0.25rem 0.5rem;
+  border-radius: 4px;
+  font-size: 0.75rem;
+  font-weight: 500;
+  transition: all 0.15s ease;
+  display: inline-block;
+}
+
+.tech-tag:hover {
+  background: var(--color-accent);
+  color: white;
+}
+
+/* News timeline */
+.news-list {
+  list-style: none;
+  padding: 0;
+  margin: 0;
+}
+
+.news-list li {
+  position: relative;
+  padding-left: 1.5rem;
+  margin-bottom: 1rem;
+}
+
+.news-list li:before {
+  content: '';
+  position: absolute;
+  left: 0;
+  top: 8px;
+  width: 8px;
+  height: 8px;
+  border-radius: 50%;
+  background: var(--color-accent);
+}
+
+.news-list li:after {
+  content: '';
+  position: absolute;
+  left: 3px;
+  top: 20px;
+  width: 2px;
+  height: calc(100% + 4px);
+  background: var(--color-border);
+}
+
+.news-list li:last-child:after {
+  display: none;
+}
+
+.news-date {
+  font-weight: 600;
+  color: var(--color-accent);
+  margin-right: 0.5rem;
+}
+
+.news-content {
+  color: var(--color-text-secondary);
+}
+
+/* Social icons hover effect */
+.social-icons a {
+  transition: all 0.15s ease;
+}
+
+.social-icons a:hover {
+  transform: scale(1.15);
+  color: var(--color-accent) !important;
+}
+
+/* Links */
+a {
+  color: var(--color-accent);
+  transition: color 0.15s ease;
+}
+
+a:hover {
+  color: var(--color-accent-hover);
+}
+
+/* Responsive adjustments */
+@media (max-width: 768px) {
+  .project-grid {
+    grid-template-columns: 1fr;
+  }
+  
+  .project-card {
+    padding: 1rem;
+  }
+}
+
+/* Smooth scrolling */
+html {
+  scroll-behavior: smooth;
+}
+
+/* Selection color */
+::selection {
+  background: var(--color-accent);
+  color: white;
+}
+
+/* Header improvements */
+header h1 {
+  font-weight: 700;
+}
+
+/* Competition badges */
+.badge {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  min-width: 60px;
+  padding: 0.25rem 0.5rem;
+  border-radius: 4px;
+  font-size: 0.75rem;
+  font-weight: 600;
+  margin-right: 0.5rem;
+}
+
+.badge-gold {
+  background: linear-gradient(135deg, #f6d365 0%, #fda085 100%);
+  color: #333;
+}
+
+.badge-silver {
+  background: linear-gradient(135deg, #e8e8e8 0%, #b8b8b8 100%);
+  color: #333;
+}
+
+.badge-bronze {
+  background: linear-gradient(135deg, #cd7f32 0%, #a0522d 100%);
+  color: white;
+}
