@@ -1,71 +1,71 @@
-# Open Source Projects
-# Fetches from GitHub - manually curated highlights
+# Open Source Projects — Claude Code Plugins & Skills
 
 highlight:
-  - name: torchKbert
-    url: https://github.com/KKenny0/torchKbert
-    description: "A PyTorch implementation of K-BERT for knowledge-enhanced language representation"
-    stars: 8
-    language: Python
-    updated: "2022-11-24"
+  - name: claude-buddy
+    url: https://github.com/KKenny0/claude-buddy
+    description: "🐾 Claude Code Plugin — virtual pet companion for coding sessions. Tamagotchi meets developer workflow with real-time mood & stats"
+    stars: 4
+    language: JavaScript
+    updated: "2026-04-04"
     highlight: true
 
-  - name: RAGVizExpander
-    url: https://github.com/KKenny0/RAGVizExpander
-    description: "Open-source tool to visualise your RAG. Visualize vector recall with custom content extraction, LLM, Embedding, and Chunking"
-    stars: 6
-    language: Jupyter Notebook
-    updated: "2024-11-27"
-    highlight: true
-
-  - name: open-omnisearch
-    url: https://github.com/KKenny0/open-omnisearch
-    description: "Self-adaptive Planning Agent. Multi-modal Retrieval-Augmented Generation with adaptive planning"
-    stars: 5
-    language: Python
-    updated: "2024-11-28"
-    highlight: true
-
-  - name: GraphRAGxplorer
-    url: https://github.com/KKenny0/GraphRAGxplorer
-    description: "Open-source tool to visualise your GraphRAG. Visualize graph-based retrieval"
+  - name: git-daily-note-updater-skill
+    url: https://github.com/KKenny0/git-daily-note-updater-skill
+    description: "Generate structured Obsidian daily notes from Git commit history automatically"
     stars: 3
     language: Python
-    updated: "2024-12-04"
+    updated: "2026-03-27"
     highlight: true
 
-  - name: LLMpedia
-    url: https://github.com/KKenny0/LLMpedia
-    description: "Online encyclopedia collecting and sharing LLM-related resources. Covers basics, research, applications, tools and best practices"
-    stars: 1
-    language: HTML
-    updated: "2024-12-27"
-    highlight: true
-
-  - name: Video-Auto-Wipe
-    url: https://github.com/KKenny0/Video-Auto-Wipe
-    description: "Erase specific content from videos that you don't want to see"
+  - name: self-distiller-skill
+    url: https://github.com/KKenny0/self-distiller-skill
+    description: "Distill yourself into an AI persona and talk to yourself. Text mode out of the box; voice mode adds cognitive depth"
     stars: 1
     language: Python
-    updated: "2025-07-24"
+    updated: "2026-04-02"
+    highlight: true
+
+  - name: forge
+    url: https://github.com/KKenny0/forge
+    description: "Agentic skills framework — combines structured brainstorming, planning, and execution into a unified Claude Code skill pack"
+    stars: 1
+    language: Python
+    updated: "2026-03-31"
+    highlight: true
+
+  - name: worklog-monthly-review-skill
+    url: https://github.com/KKenny0/worklog-monthly-review-skill
+    description: "Pipeline for structuring daily notes into monthly worklogs and generating analysis-ready summaries"
+    stars: 1
+    language: Python
+    updated: "2026-04-01"
+    highlight: true
+
+  - name: Fun-Hacker-News
+    url: https://github.com/KKenny0/Fun-Hacker-News
+    description: "AI-powered Hacker News digest — auto-fetches and analyzes daily AI/Agent-related posts with commentary"
+    stars: 1
+    language: Python
+    updated: "2026-04-01"
     highlight: true
 
 # Projects I've contributed to
 contributions:
   - name: kotaemon
     url: https://github.com/Cinnamon/kotaemon
-    description: "An open-source RAG-based tool for chatting with your documents. Clean UI, multi-LLM support, hybrid retrieval, and advanced citations"
+    description: "Open-source RAG-based tool for chatting with your documents. Clean UI, multi-LLM support, hybrid retrieval, and advanced citations"
     stars: 25186
     language: Python
     role: Contributor
 
 # Tech stack for tags
 tech_stack:
+  - Claude Code
+  - AI Agents
   - LLM
   - RAG
   - GraphRAG
   - NLP
-  - PEFT
-  - Prompt Engineering
   - PyTorch
   - Python
+  - TypeScript
