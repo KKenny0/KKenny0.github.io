@@ -4,10 +4,10 @@ layout: homepage
 
 <div class="intro-hero">
   <div class="hero-copy">
-    <h2 class="hero-name">Kenny Wu</h2>
-    <p class="hero-title">AI engineer building intelligent systems with a quiet rhythm.</p>
+    <p class="hero-kicker">AI Agent Engineer</p>
+    <h2 class="hero-title">Building practical AI agents and multimodal workflows.</h2>
     <span class="title-rule" aria-hidden="true"></span>
-    <p class="hero-lede">I work on LLMs, RAG, agents, and practical AI systems. Outside of work, I collect small rituals: music, yoga, coffee, good food, long walks, and the sea.</p>
+    <p class="hero-lede">I turn open-ended model behavior into staged, observable, and reusable systems. Outside of work, I collect small rituals: music, yoga, coffee, good food, long walks, and the sea.</p>
   </div>
 
   <div class="line-garden" aria-label="Line art about music, movement, coffee, food, walking, and the sea">
@@ -83,8 +83,7 @@ layout: homepage
       <i class="fa-regular fa-user"></i>
     </div>
     <h2>About</h2>
-    <p>AI engineer at a camera company. I design and build intelligent systems that see, understand, and create. Passionate about LLMs, RAG, agents, and turning research into reliable tools.</p>
-    <a class="row-action" href="#work">View More <i class="fa-solid fa-arrow-right" aria-hidden="true"></i></a>
+    <p>AI engineer in Shenzhen, focused on LLM applications, agent workflows, multimodal generation, and RAG systems. I care about turning prompt experiments into reusable, observable, product-grade systems.</p>
   </section>
 
   <section id="interests" class="feature-row compact-row">
@@ -109,28 +108,27 @@ layout: homepage
     <div class="feature-icon" aria-hidden="true">
       <i class="fa-solid fa-code"></i>
     </div>
-    <h2>Selected Work</h2>
+    <h2>Recent Work</h2>
     <div class="mini-card-grid">
       <a class="mini-card" href="#projects">
-        <strong>Enterprise RAG System</strong>
-        <span>Achieves ~89% recall through customized chunking and recall techniques.</span>
-        <small>RAG · Python</small>
+        <strong>AI Comic Generation Pipeline</strong>
+        <span>Storyboard automation for long scripts with reusable character and scene context.</span>
+        <small>Agent Workflow · 2026</small>
         <i class="fa-solid fa-arrow-right" aria-hidden="true"></i>
       </a>
       <a class="mini-card" href="#projects">
-        <strong>Live Speech Error Correction</strong>
-        <span>E-commerce live streaming speech error correction model.</span>
-        <small>ASR · Python</small>
+        <strong>Short Drama Identity System</strong>
+        <span>Cross-episode character identity, entity alignment, and highlight retrieval for editing.</span>
+        <small>Multimodal · 2025-2026</small>
         <i class="fa-solid fa-arrow-right" aria-hidden="true"></i>
       </a>
-      <a class="mini-card" href="#publications">
-        <strong>Legal Info Retrieval System</strong>
-        <span>AI-powered system for COVID-19 legal information retrieval.</span>
-        <small>NLP · Python</small>
+      <a class="mini-card" href="#projects">
+        <strong>Enterprise RAG & Safety Review</strong>
+        <span>Document QA and internal LLM safety review with ~90% recall and answer accuracy.</span>
+        <small>RAG · 2024</small>
         <i class="fa-solid fa-arrow-right" aria-hidden="true"></i>
       </a>
     </div>
-    <a class="row-action" href="#projects">View All Projects <i class="fa-solid fa-arrow-right" aria-hidden="true"></i></a>
   </section>
 
   <section id="writings" class="feature-row writings-row">
@@ -139,20 +137,108 @@ layout: homepage
     </div>
     <h2>Writings</h2>
     <div class="writing-lines">
-      <a href="https://zhuanlan.zhihu.com/p/2008517158615941484" target="_blank" rel="noopener"><span>我为 OpenClaw 做了个可视化控制中心</span><time>2026-02-21</time></a>
-      <a href="https://zhuanlan.zhihu.com/p/2010014684263228756" target="_blank" rel="noopener"><span>聊天直接生视频？字节的 Seedance Skill 怎么个事儿</span><time>2026-02-25</time></a>
-      <a href="https://zhuanlan.zhihu.com/p/2009329852029886637" target="_blank" rel="noopener"><span>Step 3.5 Flash: 推理巅峰，执行如电</span><time>2026-02-23</time></a>
+      <a href="https://zhuanlan.zhihu.com/p/2031687123431051328" target="_blank" rel="noopener"><span>Claude Code Compact 机制研究：从上下文压缩到可恢复代理记忆</span></a>
+      <a href="https://zhuanlan.zhihu.com/p/2026240034802528822" target="_blank" rel="noopener"><span>为什么同样的模型在 Hermes 上比在 OpenClaw 上更聪明？</span></a>
+      <a href="https://zhuanlan.zhihu.com/p/2023716322018619767" target="_blank" rel="noopener"><span>Claude Code 完全拆解——从 52 万行源码看 AI 编程助手的架构设计</span></a>
     </div>
     <a class="row-action" href="https://www.zhihu.com/column/c_2009193453284771808" target="_blank" rel="noopener">View All Writings <i class="fa-solid fa-arrow-right" aria-hidden="true"></i></a>
   </section>
 </div>
 
-<div class="archive-sections">
-  {% include open-source.md %}
+<div class="detail-sections">
+  <section id="projects" class="detail-section">
+    <div class="section-heading">
+      <span>01</span>
+      <h2>Project Notes</h2>
+    </div>
+    <div class="project-note-grid">
+      <article class="project-note">
+        <small>2026 · Lead</small>
+        <h3>AI Comic Generation · Storyboard Automation</h3>
+        <p>Built a staged LLM pipeline for script parsing, narrative slicing, scene analysis, and shot generation. The system moves storyboard generation from single-prompt output into a reusable workflow with cross-episode character and scene memory.</p>
+      </article>
+      <article class="project-note">
+        <small>2025-2026 · Direction Lead</small>
+        <h3>Short Drama Editing · Character Identity</h3>
+        <p>Reframed the bottleneck from isolated highlight detection to cross-episode identity stability. The rebuilt path supports entity alignment, retrieval, scheduling, and cache reuse for more continuous generated edits.</p>
+      </article>
+      <article class="project-note">
+        <small>2024 · Core Algorithm Engineer</small>
+        <h3>Enterprise RAG & Safety Review</h3>
+        <p>Designed hierarchical document chunking, multi-stage retrieval, dynamic threshold filtering, and prompt-assisted safety review. Internal tests reached about 90% recall and answer accuracy.</p>
+      </article>
+    </div>
+  </section>
 
-  {% include_relative _includes/projects.md %}
+  <section id="open-source" class="detail-section">
+    <div class="section-heading">
+      <span>02</span>
+      <h2>Open Source</h2>
+      <a href="{{ site.github_link }}" target="_blank" rel="noopener">GitHub <i class="fa-solid fa-arrow-right" aria-hidden="true"></i></a>
+    </div>
+    <div class="project-grid">
+      {% for project in site.data.projects.highlight limit:6 %}
+      <article class="project-card">
+        <div class="project-header">
+          <a href="{{ project.url }}" class="project-title" target="_blank" rel="noopener">{{ project.name }}</a>
+          <span class="project-stars">
+            <svg viewBox="0 0 16 16" aria-hidden="true">
+              <path d="M8 .25a.75.75 0 0 1 .673.418l1.882 3.815 4.21.612a.75.75 0 0 1 .416 1.279l-3.046 2.97.719 4.192a.751.751 0 0 1-1.088.791L8 12.347l-3.766 1.98a.75.75 0 0 1-1.088-.79l.72-4.194L.818 6.374a.75.75 0 0 1 .416-1.28l4.21-.611L7.327.668A.75.75 0 0 1 8 .25Z"></path>
+            </svg>
+            {{ project.stars }}
+          </span>
+        </div>
+        <p class="project-description">{{ project.description }}</p>
+        <div class="project-meta">
+          <span class="project-language">
+            <span class="lang-dot lang-{{ project.language | downcase }}"></span>
+            {{ project.language }}
+          </span>
+          {% if project.updated %}
+          <span class="project-updated">Updated {{ project.updated | date: "%b %Y" }}</span>
+          {% endif %}
+        </div>
+      </article>
+      {% endfor %}
+    </div>
+    <div class="contribution-strip">
+      <strong>Kotaemon Contributor</strong>
+      <span>Top contributor experience in an open-source RAG document chat project, alongside tools such as Open-OmniSearch and GraphRAG visualization work.</span>
+    </div>
+  </section>
 
-  {% include_relative _includes/publications.md %}
+  <section id="publications" class="detail-section">
+    <div class="section-heading">
+      <span>03</span>
+      <h2>Publications</h2>
+    </div>
+    <div class="publication-list">
+      {% for link in site.data.publications.main %}
+      <article class="publication-card">
+        {% if link.image %}
+        <img src="{{ link.image }}" alt="{{ link.title }} preview">
+        {% endif %}
+        <div>
+          <a href="{{ link.pdf }}" target="_blank" rel="noopener">{{ link.title }}</a>
+          <p>{{ link.authors | strip_html }}</p>
+          <small>{{ link.conference | strip_html }} · {{ link.notes }}</small>
+        </div>
+      </article>
+      {% endfor %}
+    </div>
+  </section>
 
-  {% include_relative _includes/competitions.md %}
+  <section id="awards" class="detail-section">
+    <div class="section-heading">
+      <span>04</span>
+      <h2>Awards</h2>
+    </div>
+    <div class="award-list">
+      <article><strong>2nd Prize</strong><span>Legal Case Retrieval Task, Challenge of AI in Law (CAIL) 2021</span></article>
+      <article><strong>3rd Prize</strong><span>Information Extraction Task, Challenge of AI in Law (CAIL) 2021</span></article>
+      <article><strong>3rd Prize</strong><span>Judicial Examination Task, Challenge of AI in Law (CAIL) 2021</span></article>
+      <article><strong>1st Prize</strong><span>Subway Passenger Flow Prediction, Guangxi Collegiate AI Design Competition 2020</span></article>
+      <article><strong>2nd Prize</strong><span>CSI Index Prediction, Guangxi Collegiate AI Design Competition 2019</span></article>
+    </div>
+  </section>
 </div>

@@ -1,52 +1,52 @@
-# Open Source Projects — Claude Code Plugins & Skills
+# Open Source Projects — active personal repositories
 
 highlight:
   - name: claude-buddy
     url: https://github.com/KKenny0/claude-buddy
-    description: "🐾 Claude Code Plugin — virtual pet companion for coding sessions. Tamagotchi meets developer workflow with real-time mood & stats"
-    stars: 4
+    description: "Claude Code plugin with an always-visible virtual pet companion, native statusline reactions, and optional tmux ASCII sidebar."
+    stars: 5
     language: JavaScript
-    updated: "2026-04-04"
+    updated: "2026-04-27"
     highlight: true
 
-  - name: git-daily-note-updater-skill
-    url: https://github.com/KKenny0/git-daily-note-updater-skill
-    description: "Generate structured Obsidian daily notes from Git commit history automatically"
-    stars: 3
+  - name: Lode
+    url: https://github.com/KKenny0/Lode
+    description: "Development activity recorder for Claude Code: daily notes, architecture docs, changelogs, and weekly outlines."
+    stars: 2
     language: Python
-    updated: "2026-03-27"
+    updated: "2026-04-27"
     highlight: true
 
-  - name: self-distiller-skill
-    url: https://github.com/KKenny0/self-distiller-skill
-    description: "Distill yourself into an AI persona and talk to yourself. Text mode out of the box; voice mode adds cognitive depth"
-    stars: 1
-    language: Python
-    updated: "2026-04-02"
-    highlight: true
-
-  - name: forge
-    url: https://github.com/KKenny0/forge
-    description: "Agentic skills framework — combines structured brainstorming, planning, and execution into a unified Claude Code skill pack"
-    stars: 1
-    language: Python
-    updated: "2026-03-31"
-    highlight: true
-
-  - name: worklog-monthly-review-skill
-    url: https://github.com/KKenny0/worklog-monthly-review-skill
-    description: "Pipeline for structuring daily notes into monthly worklogs and generating analysis-ready summaries"
-    stars: 1
-    language: Python
-    updated: "2026-04-01"
+  - name: ConDuct
+    url: https://github.com/KKenny0/ConDuct
+    description: "Sandbox runtime for multi-agent orchestration, focused on structured execution boundaries for cooperating agents."
+    stars: 0
+    language: Agent
+    updated: "2026-04-27"
     highlight: true
 
   - name: Fun-Hacker-News
     url: https://github.com/KKenny0/Fun-Hacker-News
-    description: "AI-powered Hacker News digest — auto-fetches and analyzes daily AI/Agent-related posts with commentary"
+    description: "AI-focused Hacker News digest that fetches and analyzes daily AI and agent-related posts with commentary."
     stars: 1
     language: Python
-    updated: "2026-04-01"
+    updated: "2026-04-27"
+    highlight: true
+
+  - name: Taku
+    url: https://github.com/KKenny0/Taku
+    description: "Structured AI-assisted development sprint workflow for planning, execution, and review in agentic coding sessions."
+    stars: 2
+    language: Workflow
+    updated: "2026-04-24"
+    highlight: true
+
+  - name: ConPact
+    url: https://github.com/KKenny0/ConPact
+    description: "Multi-Agent Contract Protocol for structured file-based coordination between coding agents."
+    stars: 1
+    language: Python
+    updated: "2026-04-16"
     highlight: true
 
 # Projects I've contributed to

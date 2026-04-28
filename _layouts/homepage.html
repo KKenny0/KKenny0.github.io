@@ -62,7 +62,7 @@
         <div class="profile-meta">
           <span>
             <i class="fa-regular fa-circle-dot" aria-hidden="true"></i>
-            Changsha, China
+            Shenzhen, China
           </span>
           {% if site.email %}
           <a href="mailto:{{ site.email }}">
@@ -80,12 +80,10 @@
         </a>  
         {% endif %}
 
-        {% if site.cv_link %}
-        <a href="{{ site.cv_link }}">
-          <i class="ai ai-cv" aria-hidden="true"></i>
-          <span>Resume</span>
-        </a>
-        {% endif %}
+        <span class="social-text">
+          <i class="fa-regular fa-newspaper" aria-hidden="true"></i>
+          <span>肯玩 AI</span>
+        </span>
 
         {% if site.github_link %}
         <a href="{{ site.github_link }}">
@@ -131,9 +129,10 @@
       <nav class="top-nav" aria-label="Primary navigation">
         <div>
           <a href="#about">About</a>
-          <a href="#interests">Interests</a>
           <a href="#work">Work</a>
           <a href="#writings">Writings</a>
+          <a href="#open-source">Open Source</a>
+          <a href="#awards">Awards</a>
         </div>
         {% if site.cv_link %}
         <a class="resume-link" href="{{ site.cv_link }}">
