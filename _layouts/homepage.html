@@ -16,6 +16,16 @@
 
     <link rel="icon" media="(prefers-color-scheme:dark)" href="{{ site.favicon_dark }}" type="image/png" />
     <link rel="icon" media="(prefers-color-scheme:light)" href="{{ site.favicon }}" type="image/png" />
+    <script>
+      (function() {
+        try {
+          var mode = localStorage.getItem("theme-mode") || "auto";
+          var prefersDark = window.matchMedia && window.matchMedia("(prefers-color-scheme: dark)").matches;
+          document.documentElement.dataset.themeMode = mode;
+          document.documentElement.dataset.theme = mode === "auto" ? (prefersDark ? "dark" : "light") : mode;
+        } catch (error) {}
+      })();
+    </script>
     <script src="./assets/js/favicon-switcher.js" type="application/javascript"></script>
 
     <link rel=stylesheet href=https://cdnjs.cloudflare.com/ajax/libs/academicons/1.8.6/css/academicons.min.css integrity="sha256-uFVgMKfistnJAfoCUQigIl+JfUaP47GrRKjf6CTPVmw=" crossorigin=anonymous>
@@ -134,12 +144,18 @@
           <a href="#open-source">Open Source</a>
           <a href="#awards">Awards</a>
         </div>
-        {% if site.cv_link %}
-        <a class="resume-link" href="{{ site.cv_link }}">
-          Resume
-          <i class="fa-solid fa-arrow-down" aria-hidden="true"></i>
-        </a>
-        {% endif %}
+        <div class="nav-actions">
+          <button class="theme-toggle" type="button" data-theme-toggle aria-label="Theme: Auto">
+            <i class="fa-solid fa-circle-half-stroke" aria-hidden="true"></i>
+            <span>Auto</span>
+          </button>
+          {% if site.cv_link %}
+          <a class="resume-link" href="{{ site.cv_link }}">
+            Resume
+            <i class="fa-solid fa-arrow-down" aria-hidden="true"></i>
+          </a>
+          {% endif %}
+        </div>
       </nav>
 
       {{ content }}
@@ -157,6 +173,7 @@
     </div>
     </main>
     <script src="{{ "/assets/js/scale.fix.js" | relative_url }}"></script>
+    <script src="./assets/js/theme-toggle.js"></script>
     {% if site.google_analytics %}
     <script>
       (function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){
