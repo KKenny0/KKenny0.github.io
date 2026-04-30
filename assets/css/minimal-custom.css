@@ -460,24 +460,24 @@ position {
 }
 
 .line-garden {
-  min-height: 210px;
+  min-height: 218px;
   overflow: visible;
   animation: riseIn 720ms 80ms ease both;
 }
 
 .line-garden svg {
   display: block;
-  width: 112%;
+  width: 100%;
   height: auto;
-  transform: translateX(-5%);
 }
 
 .line-drawing {
   fill: none;
   stroke: #89a7a0;
-  stroke-width: 1.45;
+  stroke-width: 1.35;
   stroke-linecap: round;
   stroke-linejoin: round;
+  opacity: 0.82;
 }
 
 .line-drawing.primary {
@@ -490,7 +490,9 @@ position {
 
 .line-drawing.guide {
   stroke: #a7beb8;
-  stroke-dasharray: 4 9;
+  stroke-width: 1.05;
+  stroke-dasharray: 3 9;
+  opacity: 0.52;
 }
 
 .line-drawing path {
