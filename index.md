@@ -239,11 +239,11 @@ layout: homepage
       <h2>Awards</h2>
     </div>
     <div class="award-list">
-      <article><strong>2nd Prize</strong><span>Legal Case Retrieval Task, Challenge of AI in Law (CAIL) 2021</span></article>
-      <article><strong>3rd Prize</strong><span>Information Extraction Task, Challenge of AI in Law (CAIL) 2021</span></article>
-      <article><strong>3rd Prize</strong><span>Judicial Examination Task, Challenge of AI in Law (CAIL) 2021</span></article>
-      <article><strong>1st Prize</strong><span>Subway Passenger Flow Prediction, Guangxi Collegiate AI Design Competition 2020</span></article>
-      <article><strong>2nd Prize</strong><span>CSI Index Prediction, Guangxi Collegiate AI Design Competition 2019</span></article>
+      <article class="award-silver"><strong>2nd Prize</strong><span>Legal Case Retrieval Task, Challenge of AI in Law (CAIL) 2021</span></article>
+      <article class="award-bronze"><strong>3rd Prize</strong><span>Information Extraction Task, Challenge of AI in Law (CAIL) 2021</span></article>
+      <article class="award-bronze"><strong>3rd Prize</strong><span>Judicial Examination Task, Challenge of AI in Law (CAIL) 2021</span></article>
+      <article class="award-gold"><strong>1st Prize</strong><span>Subway Passenger Flow Prediction, Guangxi Collegiate AI Design Competition 2020</span></article>
+      <article class="award-silver"><strong>2nd Prize</strong><span>CSI Index Prediction, Guangxi Collegiate AI Design Competition 2019</span></article>
     </div>
   </section>
 </div>
