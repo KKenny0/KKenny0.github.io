@@ -359,6 +359,8 @@ position {
   letter-spacing: 0.08em;
   text-decoration: none;
   text-transform: uppercase;
+  border-bottom: 2px solid transparent;
+  padding-bottom: 2px;
 }
 
 .top-nav a:hover {
@@ -417,16 +419,6 @@ position {
 
 .hero-copy {
   animation: riseIn 620ms ease both;
-}
-
-.hero-kicker {
-  margin: 0 0 12px;
-  color: var(--accent-dark);
-  font-family: var(--mono);
-  font-size: 0.78rem;
-  font-weight: 700;
-  letter-spacing: 0.12em;
-  text-transform: uppercase;
 }
 
 .hero-name {
@@ -1362,10 +1354,6 @@ section small {
 
   .hero-title {
     font-size: 1.55rem;
-  }
-
-  .hero-kicker {
-    font-size: 0.72rem;
   }
 
   .section-heading {
