@@ -224,7 +224,7 @@ header h1 {
   margin: 0 0 6px;
   color: var(--text);
   font-family: var(--serif);
-  font-size: 2rem;
+  font-size: 2.4rem;
   font-weight: 500;
   line-height: 1.12;
   letter-spacing: 0;
@@ -309,15 +309,15 @@ position {
 
 .line-note svg {
   display: block;
-  width: 48px;
-  height: 72px;
+  width: 56px;
+  height: 84px;
   margin-bottom: 8px;
 }
 
 .line-note path {
   fill: none;
   stroke: var(--accent);
-  stroke-width: 1;
+  stroke-width: 1.5;
   stroke-linecap: round;
   stroke-dasharray: 180;
   stroke-dashoffset: 180;
@@ -365,6 +365,12 @@ position {
   color: var(--accent-dark);
 }
 
+.top-nav a.active {
+  color: var(--accent-dark);
+  border-bottom: 2px solid var(--accent);
+  padding-bottom: 2px;
+}
+
 .nav-actions {
   display: inline-flex;
   align-items: center;
@@ -402,7 +408,7 @@ position {
 
 .intro-hero {
   display: grid;
-  grid-template-columns: 335px minmax(560px, 1fr);
+  grid-template-columns: auto minmax(400px, 1fr);
   gap: 34px;
   align-items: center;
   padding-bottom: 34px;
@@ -435,12 +441,12 @@ position {
 }
 
 .hero-title {
-  max-width: 360px;
+  max-width: 400px;
   margin: 0;
   color: var(--accent-dark);
   font-family: var(--serif);
-  font-size: clamp(1.75rem, 2.4vw, 2.35rem);
-  line-height: 1.18;
+  font-size: clamp(1.5rem, 2vw, 2rem);
+  line-height: 1.2;
 }
 
 .title-rule {
@@ -473,11 +479,11 @@ position {
 
 .line-drawing {
   fill: none;
-  stroke: #89a7a0;
-  stroke-width: 1.35;
+  stroke: #6d8f88;
+  stroke-width: 1.8;
   stroke-linecap: round;
   stroke-linejoin: round;
-  opacity: 0.82;
+  opacity: 0.92;
 }
 
 .line-drawing.primary {
@@ -489,10 +495,10 @@ position {
 }
 
 .line-drawing.guide {
-  stroke: #a7beb8;
-  stroke-width: 1.05;
+  stroke: #8aa8a1;
+  stroke-width: 1.15;
   stroke-dasharray: 3 9;
-  opacity: 0.52;
+  opacity: 0.72;
 }
 
 .line-drawing path {
@@ -766,6 +772,7 @@ position {
 .project-note {
   min-height: 190px;
   padding: 18px;
+  border-left: 3px solid var(--accent);
 }
 
 .project-note small {
@@ -797,6 +804,7 @@ position {
   align-items: center;
   margin-top: 14px;
   padding: 16px 18px;
+  background: linear-gradient(135deg, var(--accent-soft), var(--card-bg));
 }
 
 .contribution-strip strong {
@@ -822,6 +830,7 @@ position {
   gap: 18px;
   align-items: start;
   padding: 16px;
+  background: var(--accent-soft);
 }
 
 .publication-card img {
@@ -864,10 +873,11 @@ position {
   gap: 16px;
   align-items: center;
   padding: 12px 16px;
+  border-left: 3px solid var(--sand);
 }
 
 .award-list strong {
-  color: var(--accent-dark);
+  color: var(--sand);
   font-family: var(--mono);
   font-size: 0.72rem;
   text-transform: uppercase;
@@ -1225,10 +1235,29 @@ section small {
     text-align: center;
   }
 
-  .profile-blurb,
-  .profile-blurb::after,
-  .line-note {
+  .profile-blurb {
+    display: block;
+    max-width: none;
+    margin: 12px auto 0;
+    text-align: center;
+    font-size: 0.88rem;
+  }
+
+  .profile-blurb::after {
     display: none;
+  }
+
+  .line-note {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 10px;
+    margin-top: 18px;
+  }
+
+  .line-note svg {
+    width: 36px;
+    height: 54px;
   }
 
   .profile-meta,
@@ -1263,7 +1292,7 @@ section small {
   }
 
   .line-garden {
-    min-height: 0;
+    min-height: 120px;
   }
 
   .feature-row {
@@ -1290,7 +1319,7 @@ section small {
   }
 
   .row-line {
-    display: none;
+    height: 28px;
   }
 }
 

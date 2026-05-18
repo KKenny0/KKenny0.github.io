@@ -4,10 +4,8 @@ layout: homepage
 
 <div class="intro-hero">
   <div class="hero-copy">
-    <p class="hero-kicker">AI Agent Engineer</p>
     <h2 class="hero-title">Building practical AI agents and multimodal workflows.</h2>
     <span class="title-rule" aria-hidden="true"></span>
-    <p class="hero-lede">I turn open-ended model behavior into staged, observable, and reusable systems. Outside of work, I collect small rituals: music, yoga, coffee, good food, long walks, and the sea.</p>
   </div>
 
   <div class="line-garden" aria-label="Line art about music, movement, coffee, food, walking, and the sea">
