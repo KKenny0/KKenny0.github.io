@@ -270,18 +270,18 @@ position {
   white-space: nowrap;
 }
 
-.social-icons a:hover {
-  color: var(--accent-dark) !important;
-}
-
 .social-icons a,
 .social-icons .social-text {
   display: flex;
   align-items: center;
   gap: 12px;
+  width: auto !important;
+  height: auto !important;
+  border-radius: 0 !important;
   color: var(--muted) !important;
   font-size: 0.84rem !important;
   text-decoration: none;
+  transition: color 0.2s ease;
 }
 
 .profile-meta i,
@@ -294,6 +294,12 @@ position {
   transition: color 0.2s ease;
 }
 
+.social-icons a:hover {
+  color: var(--accent-dark) !important;
+  background-color: transparent !important;
+  transform: none !important;
+}
+
 .social-icons a:hover i,
 .social-icons a:hover .social-text i {
   color: var(--accent-dark);
@@ -302,10 +308,6 @@ position {
 .social-icons {
   display: grid;
   gap: 15px;
-}
-
-.social-icons a:hover {
-  color: var(--accent-dark) !important;
 }
 
 .line-note {
@@ -388,10 +390,11 @@ position {
 .theme-toggle,
 .resume-link {
   display: inline-flex;
+  box-sizing: border-box;
   min-height: 30px;
   align-items: center;
   gap: 8px;
-  padding: 0 14px;
+  padding: 4px 14px;
   white-space: nowrap;
   color: var(--muted);
   border: 1px solid var(--line-strong);
