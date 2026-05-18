@@ -2,7 +2,7 @@
 
 highlight:
   - name: claude-buddy
-    url: https://github.com/KKenny0/claude-buddy
+    url: https://kkenny0.github.io/claude-buddy/
     description: "Claude Code plugin with an always-visible virtual pet companion, native statusline reactions, and optional tmux ASCII sidebar."
     stars: 5
     language: JavaScript
@@ -10,7 +10,7 @@ highlight:
     highlight: true
 
   - name: Lode
-    url: https://github.com/KKenny0/Lode
+    url: https://kkenny0.github.io/Lode/
     description: "Development activity recorder for Claude Code: daily notes, architecture docs, changelogs, and weekly outlines."
     stars: 2
     language: Python

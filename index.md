@@ -115,19 +115,19 @@ layout: homepage
     </div>
     <h2>Recent Work</h2>
     <div class="mini-card-grid">
-      <a class="mini-card" href="#projects">
+      <a class="mini-card" href="#ai-comic">
         <strong>AI Comic Generation Pipeline</strong>
         <span>Storyboard automation for long scripts with reusable character and scene context.</span>
         <small>Agent Workflow · 2026</small>
         <i class="fa-solid fa-arrow-right" aria-hidden="true"></i>
       </a>
-      <a class="mini-card" href="#projects">
+      <a class="mini-card" href="#short-drama">
         <strong>Short Drama Identity System</strong>
         <span>Cross-episode character identity, entity alignment, and highlight retrieval for editing.</span>
         <small>Multimodal · 2025-2026</small>
         <i class="fa-solid fa-arrow-right" aria-hidden="true"></i>
       </a>
-      <a class="mini-card" href="#projects">
+      <a class="mini-card" href="#enterprise-rag">
         <strong>Enterprise RAG & Safety Review</strong>
         <span>Document QA and internal LLM safety review with ~90% recall and answer accuracy.</span>
         <small>RAG · 2024</small>
@@ -157,17 +157,17 @@ layout: homepage
       <h2>Project Notes</h2>
     </div>
     <div class="project-note-grid">
-      <article class="project-note">
+      <article class="project-note" id="ai-comic">
         <small>2026 · Lead</small>
         <h3>AI Comic Generation · Storyboard Automation</h3>
         <p>Built a staged LLM pipeline for script parsing, narrative slicing, scene analysis, and shot generation. The system moves storyboard generation from single-prompt output into a reusable workflow with cross-episode character and scene memory.</p>
       </article>
-      <article class="project-note">
+      <article class="project-note" id="short-drama">
         <small>2025-2026 · Direction Lead</small>
         <h3>Short Drama Editing · Character Identity</h3>
         <p>Reframed the bottleneck from isolated highlight detection to cross-episode identity stability. The rebuilt path supports entity alignment, retrieval, scheduling, and cache reuse for more continuous generated edits.</p>
       </article>
-      <article class="project-note">
+      <article class="project-note" id="enterprise-rag">
         <small>2024 · Core Algorithm Engineer</small>
         <h3>Enterprise RAG & Safety Review</h3>
         <p>Designed hierarchical document chunking, multi-stage retrieval, dynamic threshold filtering, and prompt-assisted safety review. Internal tests reached about 90% recall and answer accuracy.</p>

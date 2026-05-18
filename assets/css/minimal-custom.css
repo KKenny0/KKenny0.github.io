@@ -1003,6 +1003,8 @@ a {
 .lang-jupyter { background-color: #d99750; }
 .lang-css { background-color: #7c75a3; }
 .lang-javascript { background-color: #c7a845; }
+.lang-agent { background-color: #8b5cf6; }
+.lang-workflow { background-color: #64748b; }
 
 .project-role {
   padding: 2px 8px;
