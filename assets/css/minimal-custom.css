@@ -884,8 +884,8 @@ header h1 {
 }
 
 .award-list article.award-gold {
-  border-left-color: #c6905e;
-  background: rgba(198, 144, 94, 0.06);
+  border-left-color: #d4a054;
+  background: rgba(212, 160, 84, 0.08);
 }
 
 .award-list article.award-silver {
@@ -894,7 +894,6 @@ header h1 {
 
 .award-list article.award-bronze {
   border-left-color: var(--line-strong);
-  opacity: 0.88;
 }
 
 .award-list strong {
