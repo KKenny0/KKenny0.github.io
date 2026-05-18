@@ -360,7 +360,7 @@ position {
   gap: clamp(20px, 3vw, 42px);
 }
 
-.top-nav a {
+.top-nav a:not(.resume-link) {
   color: var(--muted);
   font-family: var(--mono);
   font-size: 0.78rem;
@@ -371,11 +371,11 @@ position {
   padding-bottom: 2px;
 }
 
-.top-nav a:hover {
+.top-nav a:not(.resume-link):hover {
   color: var(--accent-dark);
 }
 
-.top-nav a.active {
+.top-nav a:not(.resume-link).active {
   color: var(--accent-dark);
   border-bottom: 2px solid var(--accent);
   padding-bottom: 2px;
