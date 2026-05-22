@@ -141,12 +141,19 @@ layout: homepage
       <i class="fa-regular fa-pen-to-square"></i>
     </div>
     <h2>Writings</h2>
-    <div class="writing-lines">
-      <a href="https://zhuanlan.zhihu.com/p/2031687123431051328" target="_blank" rel="noopener"><span>Claude Code Compact 机制研究：从上下文压缩到可恢复代理记忆</span></a>
-      <a href="https://zhuanlan.zhihu.com/p/2026240034802528822" target="_blank" rel="noopener"><span>为什么同样的模型在 Hermes 上比在 OpenClaw 上更聪明？</span></a>
-      <a href="https://zhuanlan.zhihu.com/p/2023716322018619767" target="_blank" rel="noopener"><span>Claude Code 完全拆解——从 52 万行源码看 AI 编程助手的架构设计</span></a>
+    <div class="writing-cards">
+      {% for article in site.data.writings.articles %}
+      <a class="writing-card" href="{{ article.url }}" target="_blank" rel="noopener">
+        <span class="writing-card-title">{{ article.title }}</span>
+        <span class="writing-card-teaser">{{ article.teaser }}</span>
+        <span class="writing-card-meta">
+          <span class="writing-card-date">{{ article.date }}</span>
+          <span class="writing-card-source">{{ article.source }}</span>
+        </span>
+      </a>
+      {% endfor %}
+      <a class="writing-cta" href="{{ site.data.writings.collection_url }}" target="_blank" rel="noopener">{{ site.data.writings.collection_label }} <i class="fa-solid fa-arrow-right" aria-hidden="true"></i></a>
     </div>
-    <a class="row-action" href="https://www.zhihu.com/column/c_2009193453284771808" target="_blank" rel="noopener">View All Writings <i class="fa-solid fa-arrow-right" aria-hidden="true"></i></a>
   </section>
 </div>
 
@@ -183,7 +190,7 @@ layout: homepage
     </div>
     <div class="project-grid">
       {% for project in site.data.projects.highlight limit:6 %}
-      <article class="project-card">
+      <article class="project-card{% if forloop.first %} hero-card{% endif %}">
         <div class="project-header">
           <a href="{{ project.url }}" class="project-title" target="_blank" rel="noopener">{{ project.name }}</a>
           <span class="project-stars">

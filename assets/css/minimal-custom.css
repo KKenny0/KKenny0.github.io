@@ -672,42 +672,84 @@ header h1 {
 }
 
 .writings-row {
+  grid-template-columns: 44px 130px minmax(0, 1fr);
   align-items: start;
 }
 
-.writing-lines {
+/* Writing article cards */
+.writing-cards {
   display: grid;
-  gap: 10px;
-}
-
-.writing-lines a {
-  display: grid;
-  grid-template-columns: 5px minmax(0, 1fr) auto;
   gap: 12px;
-  align-items: center;
-  color: var(--text);
-  font-size: 0.8rem;
-  line-height: 1.45;
+}
+
+.writing-card {
+  display: grid;
+  gap: 6px;
+  padding: 14px 16px;
+  border: 1px solid var(--line);
+  border-left: 3px solid var(--accent);
+  border-radius: 6px;
+  background: var(--card-bg);
   text-decoration: none;
+  transition: transform 180ms ease, border-color 180ms ease, box-shadow 180ms ease;
 }
 
-.writing-lines a::before {
-  content: "";
-  width: 5px;
-  height: 5px;
-  border-radius: 50%;
-  background: var(--accent);
+.writing-card:hover {
+  transform: translateY(-2px);
+  border-color: var(--line-strong);
+  box-shadow: var(--hover-shadow);
 }
 
-.writing-lines span {
-  grid-column: 2;
+.writing-card-title {
+  color: var(--text);
+  font-family: var(--serif);
+  font-size: 0.92rem;
+  font-weight: 600;
+  line-height: 1.35;
 }
 
-.writing-lines time {
-  grid-column: 3;
+.writing-card-teaser {
+  color: var(--muted);
+  font-size: 0.8rem;
+  line-height: 1.5;
+}
+
+.writing-card-meta {
+  display: flex;
+  gap: 10px;
+  align-items: center;
   color: var(--faint);
   font-family: var(--mono);
   font-size: 0.7rem;
+}
+
+.writing-card-source {
+  display: inline-flex;
+  min-height: 18px;
+  align-items: center;
+  padding: 0 6px;
+  color: var(--accent-dark);
+  border: 1px solid var(--line-strong);
+  border-radius: 3px;
+  font-family: var(--mono);
+  font-size: 0.64rem;
+}
+
+.writing-cta {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  justify-self: end;
+  color: var(--accent-dark);
+  font-family: var(--mono);
+  font-size: 0.7rem;
+  letter-spacing: 0.05em;
+  text-decoration: none;
+  text-transform: uppercase;
+}
+
+.writing-cta:hover {
+  color: var(--accent);
 }
 
 .detail-sections {
@@ -960,6 +1002,23 @@ a {
   transform: translateY(-2px);
   border-color: var(--line-strong);
   box-shadow: var(--hover-shadow);
+}
+
+/* Hero project card — featured / most prominent */
+.project-card.hero-card {
+  grid-column: 1 / -1;
+  padding: 24px;
+  border-left: 3px solid var(--accent);
+  background: linear-gradient(135deg, var(--accent-soft), var(--card-bg));
+}
+
+.project-card.hero-card .project-title {
+  font-size: 1.15rem;
+}
+
+.project-card.hero-card .project-description {
+  font-size: 0.88rem;
+  max-width: 600px;
 }
 
 .project-header {
@@ -1411,17 +1470,16 @@ button:focus-visible,
     height: 38px;
   }
 
-  .writing-lines a {
-    grid-template-columns: 5px minmax(0, 1fr);
-    gap: 10px;
+  .writing-card {
+    padding: 12px 14px;
   }
 
-  .writing-lines span {
-    white-space: normal;
+  .writing-card-title {
+    font-size: 0.86rem;
   }
 
-  .writing-lines time {
-    grid-column: 2;
+  .writing-card-teaser {
+    font-size: 0.76rem;
   }
 
   .publication-card img {
