@@ -1,28 +1,28 @@
 # Open Source Projects — active personal repositories
 
 highlight:
-  - name: claude-buddy
-    url: https://kkenny0.github.io/claude-buddy/
-    description: "Claude Code plugin with an always-visible virtual pet companion, native statusline reactions, and optional tmux ASCII sidebar."
+  - name: BuddyBar
+    url: https://github.com/KKenny0/buddybar
+    description: "Virtual pet statusline for Claude Code -- watches your rhythm, coaches your pace, grows with you."
     stars: 5
     language: JavaScript
-    updated: "2026-04-27"
+    updated: "2026-05-22"
     highlight: true
 
   - name: Lode
-    url: https://kkenny0.github.io/Lode/
-    description: "Development activity recorder for Claude Code: daily notes, architecture docs, changelogs, and weekly outlines."
+    url: https://github.com/KKenny0/Lode
+    description: "Developer workflow memory for AI-assisted engineering. Preserves intent, decisions, risks, and recycles them into daily notes, weekly reports, and architecture docs."
     stars: 2
     language: Python
-    updated: "2026-04-27"
+    updated: "2026-05-22"
     highlight: true
 
-  - name: ConDuct
-    url: https://github.com/KKenny0/ConDuct
-    description: "Sandbox runtime for multi-agent orchestration, focused on structured execution boundaries for cooperating agents."
+  - name: Loom
+    url: https://github.com/KKenny0/loom-research
+    description: "CLI that turns web sources into structured research reports with evidence tags, source citations, and automated compliance checks."
     stars: 0
-    language: Agent
-    updated: "2026-04-27"
+    language: TypeScript
+    updated: "2026-05-22"
     highlight: true
 
   - name: Fun-Hacker-News
@@ -41,12 +41,12 @@ highlight:
     updated: "2026-04-24"
     highlight: true
 
-  - name: ConPact
-    url: https://github.com/KKenny0/ConPact
-    description: "Multi-Agent Contract Protocol for structured file-based coordination between coding agents."
-    stars: 1
-    language: Python
-    updated: "2026-04-16"
+  - name: Stateport
+    url: https://github.com/KKenny0/stateport
+    description: "Local continuity layer for agentic work. Turns interrupted sessions into replayable continuation points via Agent Capsules."
+    stars: 0
+    language: JavaScript
+    updated: "2026-05-22"
     highlight: true
 
 # Projects I've contributed to
