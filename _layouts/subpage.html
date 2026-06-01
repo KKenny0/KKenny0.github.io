@@ -14,7 +14,7 @@
       <section class="content-panel">
       {% include top-nav.html %}
 
-      <div class="subpage-content">
+      <div class="subpage-content" data-page="{{ page.url | remove: '/' }}">
         {{ content }}
       </div>
 
