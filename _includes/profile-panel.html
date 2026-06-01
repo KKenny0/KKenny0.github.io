@@ -1,0 +1,85 @@
+<header class="profile-panel">
+
+  {% if site.avatar %}
+  <a class="image avatar profile-avatar"><img src="{{ site.avatar }}" alt="Kenny Wu avatar" /></a>
+  {% endif %}
+
+  <h1>{{ site.title }}</h1>
+
+  {% if site.position %}
+  <span class="position-label">{{ site.position }}</span>
+  {% endif %}
+
+  <p class="profile-blurb">Context in, clarity out. Building language machines, agent workflows, and tools for thought.</p>
+
+  <div class="profile-status">
+    <span class="status-dot" aria-hidden="true"></span>
+    <span>Currently: shipping agentic tools & writing about them</span>
+  </div>
+
+  <div class="profile-meta">
+    <span>
+      <i class="fa-regular fa-circle-dot" aria-hidden="true"></i>
+      Shenzhen, China
+    </span>
+    {% if site.email %}
+    <a href="mailto:{{ site.email }}">
+      <i class="fa-regular fa-envelope" aria-hidden="true"></i>
+      {{ site.email }}
+    </a>
+    {% endif %}
+  </div>
+
+  <div class="social-icons" aria-label="Social links">
+  {% if site.google_scholar %}
+  <a href="{{ site.google_scholar }}">
+    <i class="ai ai-google-scholar" aria-hidden="true"></i>
+    <span>Google Scholar</span>
+  </a>
+  {% endif %}
+
+  <a href="https://mp.weixin.qq.com/s/z8tvfCR_AxxqujDo5GnkXQ" target="_blank" rel="noopener">
+    <i class="fa-regular fa-newspaper" aria-hidden="true"></i>
+    <span>肯玩 AI</span>
+  </a>
+
+  {% if site.github_link %}
+  <a href="{{ site.github_link }}">
+    <i class="fab fa-github" aria-hidden="true"></i>
+    <span>GitHub</span>
+  </a>
+  {% endif %}
+
+  {% if site.linkedin %}
+  <a href="{{ site.linkedin }}">
+    <i class="fab fa-linkedin" aria-hidden="true"></i>
+    <span>LinkedIn</span>
+  </a>
+  {% endif %}
+
+  {% if site.twitter %}
+  <a href="{{ site.twitter }}">
+    <i class="fab fa-x-twitter" aria-hidden="true"></i>
+    <span>X</span>
+  </a>
+  {% endif %}
+
+  {% if site.zhihu_link %}
+  <a href="{{ site.zhihu_link }}" title="知乎">
+    <i class="fa-regular fa-pen-to-square" aria-hidden="true"></i>
+    <span>Zhihu</span>
+  </a>
+  {% endif %}
+  </div>
+
+  <div class="line-note" aria-hidden="true">
+    <svg viewBox="0 0 48 72">
+      <path d="M25 5 C8 11 8 31 25 36 C42 41 40 61 22 67" />
+      <path d="M17 22 C22 18 28 18 33 22" />
+      <path d="M15 52 C20 49 26 49 31 53" />
+    </svg>
+    <span>line animation</span>
+    <small>subtle, continuous, calm</small>
+  </div>
+
+</header>

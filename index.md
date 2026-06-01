@@ -88,7 +88,7 @@ layout: homepage
       <i class="fa-regular fa-user"></i>
     </div>
     <h2>About</h2>
-    <p>AI engineer building language machines and tools for thought in Shenzhen. Research → prototype → ship → write.</p>
+    <p>AI engineer building language machines and tools for thought in Shenzhen. Research, prototype, ship, write.</p>
   </section>
 
   <section id="interests" class="feature-row compact-row">
@@ -115,19 +115,19 @@ layout: homepage
     </div>
     <h2>Recent Work</h2>
     <div class="mini-card-grid">
-      <a class="mini-card" href="#ai-comic">
+      <a class="mini-card" href="/work/">
         <strong>AI Comic Generation Pipeline</strong>
         <span>Storyboard automation for long scripts with reusable character and scene context.</span>
         <small>Agent Workflow · 2026</small>
         <i class="fa-solid fa-arrow-right" aria-hidden="true"></i>
       </a>
-      <a class="mini-card" href="#short-drama">
+      <a class="mini-card" href="/work/">
         <strong>Short Drama Identity System</strong>
         <span>Cross-episode character identity, entity alignment, and highlight retrieval for editing.</span>
         <small>Multimodal · 2025-2026</small>
         <i class="fa-solid fa-arrow-right" aria-hidden="true"></i>
       </a>
-      <a class="mini-card" href="#enterprise-rag">
+      <a class="mini-card" href="/work/">
         <strong>Enterprise RAG & Safety Review</strong>
         <span>Document QA and internal LLM safety review with ~90% recall and answer accuracy.</span>
         <small>RAG · 2024</small>
@@ -136,11 +136,34 @@ layout: homepage
     </div>
   </section>
 
-  <section id="writings-preview" class="feature-row writings-row">
+  <section class="feature-row highlight-row">
+    <div class="feature-icon" aria-hidden="true">
+      <i class="fa-solid fa-terminal"></i>
+    </div>
+    <h2>Open Source</h2>
+    <div class="highlight-card">
+      {% for project in site.data.projects.highlight limit:1 %}
+      <a href="{{ project.url }}" class="highlight-project-link" target="_blank" rel="noopener">
+        <strong>{{ project.name }}</strong>
+        <span>{{ project.description }}</span>
+        <span class="highlight-meta">
+          <span class="project-language"><span class="lang-dot lang-{{ project.language | downcase }}"></span>{{ project.language }}</span>
+          <span class="project-stars">
+            <svg viewBox="0 0 16 16" aria-hidden="true"><path d="M8 .25a.75.75 0 0 1 .673.418l1.882 3.815 4.21.612a.75.75 0 0 1 .416 1.279l-3.046 2.97.719 4.192a.751.751 0 0 1-1.088.791L8 12.347l-3.766 1.98a.75.75 0 0 1-1.088-.79l.72-4.194L.818 6.374a.75.75 0 0 1 .416-1.28l4.21-.611L7.327.668A.75.75 0 0 1 8 .25Z"></path></svg>
+            {{ project.stars }}
+          </span>
+        </span>
+      </a>
+      {% endfor %}
+      <a class="row-action" href="/open-source/">All projects <i class="fa-solid fa-arrow-right" aria-hidden="true"></i></a>
+    </div>
+  </section>
+
+  <section class="feature-row writings-row">
     <div class="feature-icon" aria-hidden="true">
       <i class="fa-regular fa-pen-to-square"></i>
     </div>
-    <h2>Writings</h2>
+    <h2>Latest Writing</h2>
     <div class="writing-cards">
       {% for article in site.data.writings.articles limit:1 %}
       <a class="writing-card" href="{{ article.url }}" target="_blank" rel="noopener">
@@ -152,126 +175,7 @@ layout: homepage
         </span>
       </a>
       {% endfor %}
-      <a class="writing-cta" href="#writings" style="margin-top:4px;">More writings <i class="fa-solid fa-arrow-down" aria-hidden="true"></i></a>
+      <a class="writing-cta" href="/writings/">More writings <i class="fa-solid fa-arrow-right" aria-hidden="true"></i></a>
     </div>
-  </section>
-</div>
-
-<div class="detail-sections">
-  <section id="open-source" class="detail-section">
-    <div class="section-heading">
-      <span>01</span>
-      <h2>Open Source</h2>
-      <a href="{{ site.github_link }}" target="_blank" rel="noopener">GitHub <i class="fa-solid fa-arrow-right" aria-hidden="true"></i></a>
-    </div>
-    <div class="project-grid">
-      {% for project in site.data.projects.highlight limit:6 %}
-      <article class="project-card{% if forloop.first %} hero-card{% endif %}">
-        <div class="project-header">
-          <a href="{{ project.url }}" class="project-title" target="_blank" rel="noopener">{{ project.name }}</a>
-          <span class="project-stars">
-            <svg viewBox="0 0 16 16" aria-hidden="true">
-              <path d="M8 .25a.75.75 0 0 1 .673.418l1.882 3.815 4.21.612a.75.75 0 0 1 .416 1.279l-3.046 2.97.719 4.192a.751.751 0 0 1-1.088.791L8 12.347l-3.766 1.98a.75.75 0 0 1-1.088-.79l.72-4.194L.818 6.374a.75.75 0 0 1 .416-1.28l4.21-.611L7.327.668A.75.75 0 0 1 8 .25Z"></path>
-            </svg>
-            {{ project.stars }}
-          </span>
-        </div>
-        <p class="project-description">{{ project.description }}</p>
-        {% if forloop.first %}
-        <code class="cli-snippet">$ buddy status
-🐶 Buddy is watching your rhythm. Session #47.</code>
-        {% endif %}
-        <div class="project-meta">
-          <span class="project-language">
-            <span class="lang-dot lang-{{ project.language | downcase }}"></span>
-            {{ project.language }}
-          </span>
-          {% if project.updated %}
-          <span class="project-updated">Updated {{ project.updated | date: "%b %Y" }}</span>
-          {% endif %}
-        </div>
-      </article>
-      {% endfor %}
-    </div>
-    <div class="contribution-strip">
-      <strong>Kotaemon Contributor</strong>
-      <span>Top contributor experience in an open-source RAG document chat project, alongside tools such as Open-OmniSearch and GraphRAG visualization work.</span>
-    </div>
-  </section>
-
-  <section id="writings" class="detail-section">
-    <div class="section-heading">
-      <span>02</span>
-      <h2>Writings</h2>
-    </div>
-    <div class="writing-cards">
-      {% for article in site.data.writings.articles %}
-      <a class="writing-card" href="{{ article.url }}" target="_blank" rel="noopener">
-        <span class="writing-card-title">{{ article.title }}</span>
-        <span class="writing-card-teaser">{{ article.teaser }}</span>
-        <span class="writing-card-meta">
-          <span class="writing-card-date">{{ article.date }}</span>
-          <span class="writing-card-source">{{ article.source }}</span>
-        </span>
-      </a>
-      {% endfor %}
-      <a class="writing-cta" href="{{ site.data.writings.collection_url }}" target="_blank" rel="noopener">{{ site.data.writings.collection_label }} <i class="fa-solid fa-arrow-right" aria-hidden="true"></i></a>
-    </div>
-  </section>
-
-  <section id="projects" class="detail-section">
-    <div class="section-heading">
-      <span>03</span>
-      <h2>Project Notes</h2>
-    </div>
-    <div class="project-note-grid">
-      <article class="project-note" id="ai-comic">
-        <small>2026 · Lead</small>
-        <h3>AI Comic Generation · Storyboard Automation</h3>
-        <p>Built a staged LLM pipeline for script parsing, narrative slicing, scene analysis, and shot generation. The system moves storyboard generation from single-prompt output into a reusable workflow with cross-episode character and scene memory.</p>
-      </article>
-      <article class="project-note" id="short-drama">
-        <small>2025-2026 · Direction Lead</small>
-        <h3>Short Drama Editing · Character Identity</h3>
-        <p>Reframed the bottleneck from isolated highlight detection to cross-episode identity stability. The rebuilt path supports entity alignment, retrieval, scheduling, and cache reuse for more continuous generated edits.</p>
-      </article>
-      <article class="project-note" id="enterprise-rag">
-        <small>2024 · Core Algorithm Engineer</small>
-        <h3>Enterprise RAG & Safety Review</h3>
-        <p>Designed hierarchical document chunking, multi-stage retrieval, dynamic threshold filtering, and prompt-assisted safety review. Internal tests reached about 90% recall and answer accuracy.</p>
-      </article>
-    </div>
-  </section>
-
-  <section id="background" class="detail-section">
-    <div class="section-heading">
-      <span>04</span>
-      <h2>Background</h2>
-    </div>
-
-    <h3 style="margin: 0 0 14px; color: var(--text); font-family: var(--serif); font-size: 1.15rem; font-weight: 500;">Publications</h3>
-    <div class="publication-list">
-      {% for link in site.data.publications.main %}
-      <article class="publication-card">
-        {% if link.image %}
-        <img src="{{ link.image }}" alt="{{ link.title }} preview">
-        {% endif %}
-        <div>
-          <a href="{{ link.pdf }}" target="_blank" rel="noopener">{{ link.title }}</a>
-          <p>{{ link.authors | strip_html }}</p>
-          <small>{{ link.conference | strip_html }} · {{ link.notes }}</small>
-        </div>
-      </article>
-      {% endfor %}
-    </div>
-
-    <h3 style="margin: 28px 0 14px; color: var(--text); font-family: var(--serif); font-size: 1.15rem; font-weight: 500;">Awards</h3>
-    <ul class="compact-award-list">
-      <li><strong>1st Prize</strong> — Subway Passenger Flow Prediction, Guangxi Collegiate AI Design Competition 2020</li>
-      <li><strong>2nd Prize</strong> — Legal Case Retrieval Task, Challenge of AI in Law (CAIL) 2021</li>
-      <li><strong>2nd Prize</strong> — CSI Index Prediction, Guangxi Collegiate AI Design Competition 2019</li>
-      <li><strong>3rd Prize</strong> — Information Extraction Task, Challenge of AI in Law (CAIL) 2021</li>
-      <li><strong>3rd Prize</strong> — Judicial Examination Task, Challenge of AI in Law (CAIL) 2021</li>
-    </ul>
   </section>
 </div>

@@ -8,13 +8,15 @@
       <span class="ambient-orbit orbit-one"></span>
       <span class="ambient-orbit orbit-two"></span>
     </div>
-    <main class="page-shell" aria-label="Kenny Wu personal homepage">
+    <main class="page-shell" aria-label="{{ page.title }} — Kenny Wu">
       <div class="wrapper">
       {% include profile-panel.html %}
       <section class="content-panel">
       {% include top-nav.html %}
 
-      {{ content }}
+      <div class="subpage-content">
+        {{ content }}
+      </div>
 
       <br>
 
