@@ -15,13 +15,13 @@ canonical: https://kkenny0.github.io/
 google_scholar: https://scholar.google.com/citations?user=q9Z8cmIAAAAJ&hl=en
 github_link: https://github.com/KKenny0
 zhihu_link: https://www.zhihu.com/people/kenny-wu-56
-cv_link: ./assets/files/curriculum_vitae.pdf
+cv_link: /assets/files/curriculum_vitae.pdf
 
-# Images (e.g., your profile picture and your website's favicon) 
-# "favicon" and "favicon_dark" are used for the light and dark modes, respectively. 
-avatar: ./assets/img/awkward-neck-profile-avatar-v2.png
-favicon: ./assets/img/awkward-neck-profile-avatar-v2.png
-favicon_dark: ./assets/img/awkward-neck-profile-avatar-v2.png
+# Images (e.g., your profile picture and your website's favicon)
+# "favicon" and "favicon_dark" are used for the light and dark modes, respectively.
+avatar: /assets/img/awkward-neck-profile-avatar-v2.png
+favicon: /assets/img/awkward-neck-profile-avatar-v2.png
+favicon_dark: /assets/img/awkward-neck-profile-avatar-v2.png
 
 # Footnote
 # You may use the option to disable the footnote, "Powered by Jekyll and Minimal Light theme."
