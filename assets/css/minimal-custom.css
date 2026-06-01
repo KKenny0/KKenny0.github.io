@@ -257,6 +257,31 @@ header h1 {
   border-bottom: 1px dashed var(--line-strong);
 }
 
+.profile-status {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  max-width: 210px;
+  margin: 0 0 8px;
+  color: var(--muted);
+  font-size: 0.78rem;
+  line-height: 1.5;
+}
+
+.status-dot {
+  flex-shrink: 0;
+  width: 6px;
+  height: 6px;
+  border-radius: 50%;
+  background: var(--accent);
+  animation: pulse 2.4s ease-in-out infinite;
+}
+
+@keyframes pulse {
+  0%, 100% { opacity: 1; }
+  50% { opacity: 0.35; }
+}
+
 .profile-meta {
   display: grid;
   gap: 15px;
@@ -1061,6 +1086,52 @@ a {
   line-height: 1.55;
 }
 
+.cli-snippet {
+  display: block;
+  margin-top: 10px;
+  margin-bottom: 12px;
+  padding: 8px 12px;
+  color: var(--text);
+  border: 1px solid var(--line);
+  border-radius: 4px;
+  background: var(--chip-bg);
+  font-family: var(--mono);
+  font-size: 0.76rem;
+  line-height: 1.5;
+  white-space: pre-wrap;
+}
+
+.compact-award-list {
+  margin: 0;
+  padding: 0;
+  list-style: none;
+  display: grid;
+  gap: 8px;
+}
+
+.compact-award-list li {
+  display: flex;
+  gap: 10px;
+  align-items: baseline;
+  padding: 6px 0;
+  border-bottom: 1px solid var(--line);
+  color: var(--muted);
+  font-size: 0.84rem;
+  line-height: 1.45;
+}
+
+.compact-award-list li:last-child {
+  border-bottom: none;
+}
+
+.compact-award-list strong {
+  flex-shrink: 0;
+  color: var(--sand);
+  font-family: var(--mono);
+  font-size: 0.72rem;
+  text-transform: uppercase;
+}
+
 .project-meta {
   display: flex;
   flex-wrap: wrap;
@@ -1335,6 +1406,13 @@ button:focus-visible,
 
   .profile-blurb::after {
     display: none;
+  }
+
+  .profile-status {
+    max-width: none;
+    justify-content: center;
+    text-align: center;
+    font-size: 0.72rem;
   }
 
   .line-note {

@@ -1,14 +1,14 @@
 # Basic Information 
 title: Kenny Wu
 position: AI Engineer
-affiliation: Camera Company
+affiliation: Shenzhen
 email: jdlow@live.cn
 
 # Search Engine Optimization (SEO)
 # The following information is used to improve the website traffic from search engines, e.g., Google.
-keywords: AI NLP LLM RAG Computer Vision
-description: AI Engineer specializing in LLM, RAG, and Computer Vision. Building intelligent systems that see, understand, and create.
-canonical: https://kenny0.github.io/
+keywords: AI NLP LLM RAG agents tools-for-thought
+description: Building language machines, agent workflows, and tools for thought. Context in, clarity out.
+canonical: https://kkenny0.github.io/
 
 # Links 
 # If you don't need one of them, you may delete the corresponding line.

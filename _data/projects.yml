@@ -3,7 +3,7 @@
 highlight:
   - name: BuddyBar
     url: https://github.com/KKenny0/buddybar
-    description: "Virtual pet statusline for Claude Code -- watches your rhythm, coaches your pace, grows with you."
+    description: "Your coding rhythm deserves a companion, not a dashboard. A pet that grows with your sessions."
     stars: 5
     language: JavaScript
     updated: "2026-05-22"
@@ -11,7 +11,7 @@ highlight:
 
   - name: Lode
     url: https://github.com/KKenny0/Lode
-    description: "Developer workflow memory for AI-assisted engineering. Preserves intent, decisions, risks, and recycles them into daily notes, weekly reports, and architecture docs."
+    description: "Never lose the thread. Captures intent, decisions, and risks — recycles them into notes, reports, and docs."
     stars: 2
     language: Python
     updated: "2026-05-22"
@@ -19,7 +19,7 @@ highlight:
 
   - name: Loom
     url: https://github.com/KKenny0/loom-research
-    description: "CLI that turns web sources into structured research reports with evidence tags, source citations, and automated compliance checks."
+    description: "Turn noise into evidence. Web sources become structured reports with citations and compliance checks."
     stars: 0
     language: TypeScript
     updated: "2026-05-22"
@@ -27,7 +27,7 @@ highlight:
 
   - name: Fun-Hacker-News
     url: https://github.com/KKenny0/Fun-Hacker-News
-    description: "AI-focused Hacker News digest that fetches and analyzes daily AI and agent-related posts with commentary."
+    description: "A daily AI signal filter. Fetches, analyzes, and digests the AI and agent posts worth reading."
     stars: 1
     language: Python
     updated: "2026-04-27"
@@ -35,7 +35,7 @@ highlight:
 
   - name: Taku
     url: https://github.com/KKenny0/Taku
-    description: "Structured AI-assisted development sprint workflow for planning, execution, and review in agentic coding sessions."
+    description: "Structure for the sprint. Planning, execution, and review in one agentic coding workflow."
     stars: 2
     language: Workflow
     updated: "2026-04-24"
@@ -43,7 +43,7 @@ highlight:
 
   - name: Stateport
     url: https://github.com/KKenny0/stateport
-    description: "Local continuity layer for agentic work. Turns interrupted sessions into replayable continuation points via Agent Capsules."
+    description: "Sessions shouldn't die. Interrupted work becomes replayable continuation points."
     stars: 0
     language: JavaScript
     updated: "2026-05-22"

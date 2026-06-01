@@ -4,7 +4,7 @@ layout: homepage
 
 <div class="intro-hero">
   <div class="hero-copy">
-    <h2 class="hero-title">Building practical AI agents and multimodal workflows.</h2>
+    <h2 class="hero-title">Language machines, agent workflows, and tools for thought.</h2>
     <span class="title-rule" aria-hidden="true"></span>
   </div>
 
@@ -88,7 +88,7 @@ layout: homepage
       <i class="fa-regular fa-user"></i>
     </div>
     <h2>About</h2>
-    <p>AI engineer in Shenzhen, focused on LLM applications, agent workflows, multimodal generation, and RAG systems. I care about turning prompt experiments into reusable, observable, product-grade systems.</p>
+    <p>AI engineer building language machines and tools for thought in Shenzhen. Research → prototype → ship → write.</p>
   </section>
 
   <section id="interests" class="feature-row compact-row">
@@ -136,11 +136,74 @@ layout: homepage
     </div>
   </section>
 
-  <section id="writings" class="feature-row writings-row">
+  <section id="writings-preview" class="feature-row writings-row">
     <div class="feature-icon" aria-hidden="true">
       <i class="fa-regular fa-pen-to-square"></i>
     </div>
     <h2>Writings</h2>
+    <div class="writing-cards">
+      {% for article in site.data.writings.articles limit:1 %}
+      <a class="writing-card" href="{{ article.url }}" target="_blank" rel="noopener">
+        <span class="writing-card-title">{{ article.title }}</span>
+        <span class="writing-card-teaser">{{ article.teaser }}</span>
+        <span class="writing-card-meta">
+          <span class="writing-card-date">{{ article.date }}</span>
+          <span class="writing-card-source">{{ article.source }}</span>
+        </span>
+      </a>
+      {% endfor %}
+      <a class="writing-cta" href="#writings" style="margin-top:4px;">More writings <i class="fa-solid fa-arrow-down" aria-hidden="true"></i></a>
+    </div>
+  </section>
+</div>
+
+<div class="detail-sections">
+  <section id="open-source" class="detail-section">
+    <div class="section-heading">
+      <span>01</span>
+      <h2>Open Source</h2>
+      <a href="{{ site.github_link }}" target="_blank" rel="noopener">GitHub <i class="fa-solid fa-arrow-right" aria-hidden="true"></i></a>
+    </div>
+    <div class="project-grid">
+      {% for project in site.data.projects.highlight limit:6 %}
+      <article class="project-card{% if forloop.first %} hero-card{% endif %}">
+        <div class="project-header">
+          <a href="{{ project.url }}" class="project-title" target="_blank" rel="noopener">{{ project.name }}</a>
+          <span class="project-stars">
+            <svg viewBox="0 0 16 16" aria-hidden="true">
+              <path d="M8 .25a.75.75 0 0 1 .673.418l1.882 3.815 4.21.612a.75.75 0 0 1 .416 1.279l-3.046 2.97.719 4.192a.751.751 0 0 1-1.088.791L8 12.347l-3.766 1.98a.75.75 0 0 1-1.088-.79l.72-4.194L.818 6.374a.75.75 0 0 1 .416-1.28l4.21-.611L7.327.668A.75.75 0 0 1 8 .25Z"></path>
+            </svg>
+            {{ project.stars }}
+          </span>
+        </div>
+        <p class="project-description">{{ project.description }}</p>
+        {% if forloop.first %}
+        <code class="cli-snippet">$ buddy status
+🐶 Buddy is watching your rhythm. Session #47.</code>
+        {% endif %}
+        <div class="project-meta">
+          <span class="project-language">
+            <span class="lang-dot lang-{{ project.language | downcase }}"></span>
+            {{ project.language }}
+          </span>
+          {% if project.updated %}
+          <span class="project-updated">Updated {{ project.updated | date: "%b %Y" }}</span>
+          {% endif %}
+        </div>
+      </article>
+      {% endfor %}
+    </div>
+    <div class="contribution-strip">
+      <strong>Kotaemon Contributor</strong>
+      <span>Top contributor experience in an open-source RAG document chat project, alongside tools such as Open-OmniSearch and GraphRAG visualization work.</span>
+    </div>
+  </section>
+
+  <section id="writings" class="detail-section">
+    <div class="section-heading">
+      <span>02</span>
+      <h2>Writings</h2>
+    </div>
     <div class="writing-cards">
       {% for article in site.data.writings.articles %}
       <a class="writing-card" href="{{ article.url }}" target="_blank" rel="noopener">
@@ -155,12 +218,10 @@ layout: homepage
       <a class="writing-cta" href="{{ site.data.writings.collection_url }}" target="_blank" rel="noopener">{{ site.data.writings.collection_label }} <i class="fa-solid fa-arrow-right" aria-hidden="true"></i></a>
     </div>
   </section>
-</div>
 
-<div class="detail-sections">
   <section id="projects" class="detail-section">
     <div class="section-heading">
-      <span>01</span>
+      <span>03</span>
       <h2>Project Notes</h2>
     </div>
     <div class="project-note-grid">
@@ -182,48 +243,13 @@ layout: homepage
     </div>
   </section>
 
-  <section id="open-source" class="detail-section">
+  <section id="background" class="detail-section">
     <div class="section-heading">
-      <span>02</span>
-      <h2>Open Source</h2>
-      <a href="{{ site.github_link }}" target="_blank" rel="noopener">GitHub <i class="fa-solid fa-arrow-right" aria-hidden="true"></i></a>
+      <span>04</span>
+      <h2>Background</h2>
     </div>
-    <div class="project-grid">
-      {% for project in site.data.projects.highlight limit:6 %}
-      <article class="project-card{% if forloop.first %} hero-card{% endif %}">
-        <div class="project-header">
-          <a href="{{ project.url }}" class="project-title" target="_blank" rel="noopener">{{ project.name }}</a>
-          <span class="project-stars">
-            <svg viewBox="0 0 16 16" aria-hidden="true">
-              <path d="M8 .25a.75.75 0 0 1 .673.418l1.882 3.815 4.21.612a.75.75 0 0 1 .416 1.279l-3.046 2.97.719 4.192a.751.751 0 0 1-1.088.791L8 12.347l-3.766 1.98a.75.75 0 0 1-1.088-.79l.72-4.194L.818 6.374a.75.75 0 0 1 .416-1.28l4.21-.611L7.327.668A.75.75 0 0 1 8 .25Z"></path>
-            </svg>
-            {{ project.stars }}
-          </span>
-        </div>
-        <p class="project-description">{{ project.description }}</p>
-        <div class="project-meta">
-          <span class="project-language">
-            <span class="lang-dot lang-{{ project.language | downcase }}"></span>
-            {{ project.language }}
-          </span>
-          {% if project.updated %}
-          <span class="project-updated">Updated {{ project.updated | date: "%b %Y" }}</span>
-          {% endif %}
-        </div>
-      </article>
-      {% endfor %}
-    </div>
-    <div class="contribution-strip">
-      <strong>Kotaemon Contributor</strong>
-      <span>Top contributor experience in an open-source RAG document chat project, alongside tools such as Open-OmniSearch and GraphRAG visualization work.</span>
-    </div>
-  </section>
 
-  <section id="publications" class="detail-section">
-    <div class="section-heading">
-      <span>03</span>
-      <h2>Publications</h2>
-    </div>
+    <h3 style="margin: 0 0 14px; color: var(--text); font-family: var(--serif); font-size: 1.15rem; font-weight: 500;">Publications</h3>
     <div class="publication-list">
       {% for link in site.data.publications.main %}
       <article class="publication-card">
@@ -238,19 +264,14 @@ layout: homepage
       </article>
       {% endfor %}
     </div>
-  </section>
 
-  <section id="awards" class="detail-section">
-    <div class="section-heading">
-      <span>04</span>
-      <h2>Awards</h2>
-    </div>
-    <div class="award-list">
-      <article class="award-silver"><strong>2nd Prize</strong><span>Legal Case Retrieval Task, Challenge of AI in Law (CAIL) 2021</span></article>
-      <article class="award-bronze"><strong>3rd Prize</strong><span>Information Extraction Task, Challenge of AI in Law (CAIL) 2021</span></article>
-      <article class="award-bronze"><strong>3rd Prize</strong><span>Judicial Examination Task, Challenge of AI in Law (CAIL) 2021</span></article>
-      <article class="award-gold"><strong>1st Prize</strong><span>Subway Passenger Flow Prediction, Guangxi Collegiate AI Design Competition 2020</span></article>
-      <article class="award-silver"><strong>2nd Prize</strong><span>CSI Index Prediction, Guangxi Collegiate AI Design Competition 2019</span></article>
-    </div>
+    <h3 style="margin: 28px 0 14px; color: var(--text); font-family: var(--serif); font-size: 1.15rem; font-weight: 500;">Awards</h3>
+    <ul class="compact-award-list">
+      <li><strong>1st Prize</strong> — Subway Passenger Flow Prediction, Guangxi Collegiate AI Design Competition 2020</li>
+      <li><strong>2nd Prize</strong> — Legal Case Retrieval Task, Challenge of AI in Law (CAIL) 2021</li>
+      <li><strong>2nd Prize</strong> — CSI Index Prediction, Guangxi Collegiate AI Design Competition 2019</li>
+      <li><strong>3rd Prize</strong> — Information Extraction Task, Challenge of AI in Law (CAIL) 2021</li>
+      <li><strong>3rd Prize</strong> — Judicial Examination Task, Challenge of AI in Law (CAIL) 2021</li>
+    </ul>
   </section>
 </div>
