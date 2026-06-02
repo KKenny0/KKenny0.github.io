@@ -603,7 +603,7 @@ header h1 {
   max-width: 460px;
   margin: 0;
   color: var(--text);
-  font-size: 0.84rem;
+  font-size: 0.88rem;
   line-height: 1.65;
 }
 
@@ -647,7 +647,7 @@ header h1 {
   border-radius: 4px;
   background: var(--chip-bg);
   font-family: var(--mono);
-  font-size: 0.7rem;
+  font-size: 0.78rem;
   text-decoration: none;
 }
 
@@ -703,7 +703,7 @@ header h1 {
 
 .mini-card span {
   color: var(--muted);
-  font-size: 0.8rem;
+  font-size: 0.78rem;
   line-height: 1.45;
 }
 
@@ -711,7 +711,7 @@ header h1 {
   align-self: end;
   color: var(--accent-dark);
   font-family: var(--mono);
-  font-size: 0.7rem;
+  font-size: 0.78rem;
 }
 
 .mini-card i {
@@ -752,14 +752,14 @@ header h1 {
 .writing-card-title {
   color: var(--text);
   font-family: var(--serif);
-  font-size: 0.92rem;
+  font-size: 0.88rem;
   font-weight: 600;
   line-height: 1.35;
 }
 
 .writing-card-teaser {
   color: var(--muted);
-  font-size: 0.8rem;
+  font-size: 0.78rem;
   line-height: 1.5;
 }
 
@@ -769,7 +769,7 @@ header h1 {
   align-items: center;
   color: var(--faint);
   font-family: var(--mono);
-  font-size: 0.7rem;
+  font-size: 0.78rem;
 }
 
 .writing-card-source {
@@ -864,14 +864,14 @@ header h1 {
 .highlight-project-link strong {
   color: var(--text);
   font-family: var(--serif);
-  font-size: 0.92rem;
+  font-size: 0.88rem;
   font-weight: 600;
   line-height: 1.35;
 }
 
 .highlight-project-link span {
   color: var(--muted);
-  font-size: 0.8rem;
+  font-size: 0.78rem;
   line-height: 1.5;
 }
 
