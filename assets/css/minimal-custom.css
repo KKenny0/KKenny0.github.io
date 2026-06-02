@@ -174,7 +174,7 @@ body {
   color: var(--text);
   background: var(--body-bg);
   font-family: var(--sans);
-  font-size: 14px;
+  font-size: 16px;
   line-height: 1.65;
   animation: pageIn 480ms ease both;
 }
@@ -781,7 +781,7 @@ header h1 {
   border: 1px solid var(--line-strong);
   border-radius: 3px;
   font-family: var(--mono);
-  font-size: 0.64rem;
+  font-size: 0.7rem;
 }
 
 .writing-cta {
@@ -1639,7 +1639,7 @@ button:focus-visible,
 
 @media (max-width: 520px) {
   body {
-    font-size: 13px;
+    font-size: 14px;
   }
 
   .page-shell {
