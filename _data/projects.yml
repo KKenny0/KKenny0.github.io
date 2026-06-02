@@ -18,7 +18,7 @@ highlight:
     highlight: true
 
   - name: Loom
-    url: https://github.com/KKenny0/loom-research
+    url: https://github.com/KKenny0/loom-skills
     description: "Turn noise into evidence. Web sources become structured reports with citations and compliance checks."
     stars: 0
     language: TypeScript
