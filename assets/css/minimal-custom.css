@@ -7,15 +7,17 @@
   --chip-bg: rgba(255, 255, 255, 0.7);
   --avatar-bg: #fff;
   --text: #202a28;
-  --muted: #5f6d69;
-  --faint: #90a09b;
+  --muted: #4a5c57;
+  --faint: #596a64;
   --line: #dce9e5;
   --line-strong: #bdd5ce;
   --page-border: rgba(188, 210, 204, 0.88);
   --accent: #4b8c80;
   --accent-dark: #236c61;
   --accent-soft: #eef7f4;
-  --sand: #c6905e;
+  --sand: #966535;
+  --line-drawing: #6d8f88;
+  --line-guide: #8aa8a1;
   --shadow: 0 22px 70px rgba(66, 96, 90, 0.12);
   --avatar-shadow: 0 14px 34px rgba(67, 84, 80, 0.08);
   --hover-shadow: 0 12px 34px rgba(68, 97, 91, 0.08);
@@ -66,15 +68,17 @@
   --chip-bg: rgba(255, 255, 255, 0.7);
   --avatar-bg: #fff;
   --text: #202a28;
-  --muted: #5f6d69;
-  --faint: #90a09b;
+  --muted: #4a5c57;
+  --faint: #596a64;
   --line: #dce9e5;
   --line-strong: #bdd5ce;
   --page-border: rgba(188, 210, 204, 0.88);
   --accent: #4b8c80;
   --accent-dark: #236c61;
   --accent-soft: #eef7f4;
-  --sand: #c6905e;
+  --sand: #966535;
+  --line-drawing: #6d8f88;
+  --line-guide: #8aa8a1;
   --shadow: 0 22px 70px rgba(66, 96, 90, 0.12);
   --avatar-shadow: 0 14px 34px rgba(67, 84, 80, 0.08);
   --hover-shadow: 0 12px 34px rgba(68, 97, 91, 0.08);
@@ -102,6 +106,8 @@
   --accent-dark: #a4ded2;
   --accent-soft: #162823;
   --sand: #d6a46e;
+  --line-drawing: #7a9e97;
+  --line-guide: #567068;
   --shadow: 0 28px 90px rgba(0, 0, 0, 0.42);
   --avatar-shadow: 0 18px 42px rgba(0, 0, 0, 0.32);
   --hover-shadow: 0 16px 42px rgba(0, 0, 0, 0.26);
@@ -114,6 +120,14 @@
 
 * {
   box-sizing: border-box;
+}
+
+h1, h2, h3, h4, h5, h6 {
+  text-wrap: balance;
+}
+
+p, .pub-row .periodical, .pub-row .author, .writing-list-body p {
+  text-wrap: pretty;
 }
 
 html {
@@ -166,7 +180,6 @@ body {
   border: 1px solid var(--page-border);
   border-radius: 12px;
   box-shadow: var(--shadow);
-  backdrop-filter: blur(18px);
 }
 
 .wrapper {
@@ -486,7 +499,7 @@ header h1 {
 
 .line-drawing {
   fill: none;
-  stroke: #6d8f88;
+  stroke: var(--line-drawing);
   stroke-width: 1.8;
   stroke-linecap: round;
   stroke-linejoin: round;
@@ -502,7 +515,7 @@ header h1 {
 }
 
 .line-drawing.guide {
-  stroke: #8aa8a1;
+  stroke: var(--line-guide);
   stroke-width: 1.15;
   stroke-dasharray: 3 9;
   opacity: 0.72;
@@ -920,6 +933,7 @@ header h1 {
   padding: 20px 0;
   border-bottom: 1px solid var(--line);
   align-items: baseline;
+  transition: background 180ms ease;
 }
 
 .writing-list-entry:last-child {
@@ -1047,20 +1061,22 @@ header h1 {
   gap: 16px;
   align-items: center;
   padding: 12px 16px;
-  border-left: 3px solid var(--sand);
+  border: 1px solid var(--line);
+  border-radius: 6px;
+  background: var(--card-bg);
 }
 
 .award-list article.award-gold {
-  border-left-color: #d4a054;
-  background: rgba(212, 160, 84, 0.08);
+  border-color: var(--sand);
+  background: rgba(198, 144, 94, 0.08);
 }
 
 .award-list article.award-silver {
-  border-left-color: #8fa8a0;
+  border-color: var(--line-strong);
 }
 
 .award-list article.award-bronze {
-  border-left-color: var(--line-strong);
+  border-color: var(--line);
 }
 
 .award-list strong {
@@ -1077,7 +1093,29 @@ header h1 {
 }
 
 a {
+  color: #2a75a8;
+}
+
+a:hover {
+  color: #1d5f8f;
+}
+
+@media (prefers-color-scheme: dark) {
+  a {
+    color: var(--accent-dark);
+  }
+
+  a:hover {
+    color: var(--accent);
+  }
+}
+
+:root[data-theme="dark"] a {
   color: var(--accent-dark);
+}
+
+:root[data-theme="dark"] a:hover {
+  color: var(--accent);
 }
 
 .project-grid {
@@ -1321,17 +1359,17 @@ section p {
 }
 
 .badge-gold {
-  background: linear-gradient(135deg, #f1cc63 0%, #f4a985 100%);
-  color: #46351f;
+  background: var(--sand);
+  color: #fff;
 }
 
 .badge-silver {
-  background: linear-gradient(135deg, #ecefed 0%, #b8c4c1 100%);
-  color: #42504d;
+  background: var(--line-strong);
+  color: var(--text);
 }
 
 .badge-bronze {
-  background: linear-gradient(135deg, #be7740 0%, #9e623b 100%);
+  background: #8b6f52;
   color: #fff;
 }
 
@@ -1358,7 +1396,14 @@ section small {
 a:focus-visible,
 button:focus-visible,
 .mini-card:focus-visible,
-.project-card a:focus-visible {
+.project-card a:focus-visible,
+.writing-card:focus-visible,
+.writing-cta:focus-visible,
+.row-action:focus-visible,
+.resume-link:focus-visible,
+.highlight-project-link:focus-visible,
+.publication-card a:focus-visible,
+.pub-row .links a:focus-visible {
   outline: 2px solid var(--accent);
   outline-offset: 2px;
   border-radius: 3px;
@@ -1623,11 +1668,17 @@ button:focus-visible,
 
 /* ── Per-page visual accents ── */
 
-/* Work: left accent bar on entries */
+/* Work: accent background tint on entries */
 [data-page="work"] .work-entry {
-  border-left: 3px solid var(--accent);
-  padding-left: 18px;
-  margin-left: -21px;
+  border: 1px solid var(--line);
+  border-radius: 6px;
+  padding: 28px 18px;
+  margin-bottom: 14px;
+  background: var(--accent-soft);
+}
+
+[data-page="work"] .work-entry:last-child {
+  margin-bottom: 0;
 }
 
 [data-page="work"] .subpage-title {
@@ -1653,7 +1704,8 @@ button:focus-visible,
 }
 
 [data-page="writings"] .writing-list-entry:hover {
-  box-shadow: inset 4px 0 0 var(--accent);
+  background: var(--accent-soft);
+  border-radius: 4px;
 }
 
 /* Background: academic tone, warm accent on awards */
