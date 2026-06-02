@@ -18,6 +18,16 @@
   --sand: #966535;
   --line-drawing: #6d8f88;
   --line-guide: #8aa8a1;
+  --sp-1: 4px;
+  --sp-2: 8px;
+  --sp-3: 12px;
+  --sp-4: 16px;
+  --sp-5: 20px;
+  --sp-6: 24px;
+  --sp-7: 32px;
+  --sp-8: 40px;
+  --sp-9: 48px;
+  --sp-10: 64px;
   --shadow: 0 22px 70px rgba(66, 96, 90, 0.12);
   --avatar-shadow: 0 14px 34px rgba(67, 84, 80, 0.08);
   --hover-shadow: 0 12px 34px rgba(68, 97, 91, 0.08);
@@ -206,7 +216,7 @@ footer {
   display: flex;
   min-height: 100%;
   flex-direction: column;
-  padding: 46px 58px 38px;
+  padding: var(--sp-9) var(--sp-10) var(--sp-8);
   border-right: 1px solid var(--line);
   color: var(--muted);
 }
@@ -215,7 +225,7 @@ footer {
   display: block;
   width: 150px;
   height: 150px;
-  margin: 0 auto 30px;
+  margin: 0 auto var(--sp-7);
   overflow: hidden;
   border: 1px solid var(--line);
   border-radius: 50%;
@@ -383,7 +393,7 @@ header h1 {
 
 .content-panel {
   min-width: 0;
-  padding: 38px 46px 34px;
+  padding: var(--sp-8) var(--sp-9) var(--sp-7);
 }
 
 .top-nav {
@@ -405,7 +415,7 @@ header h1 {
   font-weight: 500;
   text-decoration: none;
   border-bottom: 2px solid transparent;
-  padding-bottom: 2px;
+  padding: var(--sp-2) 0;
 }
 
 .top-nav a:not(.resume-link):hover {
@@ -428,7 +438,7 @@ header h1 {
 .resume-link {
   display: inline-flex;
   box-sizing: border-box;
-  min-height: 30px;
+  min-height: 36px;
   align-items: center;
   gap: 8px;
   padding: 4px 14px;
@@ -459,9 +469,9 @@ header h1 {
 .intro-hero {
   display: grid;
   grid-template-columns: auto minmax(400px, 1fr);
-  gap: 34px;
+  gap: var(--sp-8);
   align-items: center;
-  padding-bottom: 34px;
+  padding-bottom: var(--sp-8);
   border-bottom: 1px solid var(--line);
 }
 
@@ -538,10 +548,10 @@ header h1 {
 .feature-row {
   display: grid;
   grid-template-columns: 44px 130px minmax(0, 1fr) 130px;
-  gap: 20px;
+  gap: var(--sp-4);
   align-items: center;
   min-height: 76px;
-  padding: 18px 0;
+  padding: var(--sp-5) 0;
   border-bottom: 1px solid var(--line);
 }
 
@@ -577,7 +587,8 @@ header h1 {
   justify-self: end;
   display: inline-flex;
   align-items: center;
-  gap: 10px;
+  gap: var(--sp-3);
+  padding: var(--sp-2) 0;
   color: var(--accent-dark);
   font-family: var(--mono);
   font-size: 0.7rem;
@@ -637,7 +648,7 @@ header h1 {
 .mini-card-grid {
   display: grid;
   grid-template-columns: repeat(3, minmax(0, 1fr));
-  gap: 16px;
+  gap: var(--sp-4);
 }
 
 .mini-card {
@@ -694,7 +705,7 @@ header h1 {
 /* Writing article cards */
 .writing-cards {
   display: grid;
-  gap: 12px;
+  gap: var(--sp-3);
 }
 
 .writing-card {
@@ -1121,8 +1132,8 @@ a:hover {
 .project-grid {
   display: grid;
   grid-template-columns: repeat(2, minmax(0, 1fr));
-  gap: 16px;
-  margin: 18px 0 24px;
+  gap: var(--sp-4);
+  margin: var(--sp-5) 0 var(--sp-6);
 }
 
 .project-card {
@@ -1486,7 +1497,7 @@ button:focus-visible,
     display: block;
     width: 100% !important;
     min-height: auto;
-    padding: 28px;
+    padding: var(--sp-7);
     border-right: 0;
     border-bottom: 1px solid var(--line);
     text-align: center;
@@ -1554,7 +1565,7 @@ button:focus-visible,
   .content-panel {
     display: block;
     width: 100% !important;
-    padding: 28px;
+    padding: var(--sp-7);
   }
 
   .top-nav {
