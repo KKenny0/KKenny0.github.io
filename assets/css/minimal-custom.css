@@ -128,16 +128,40 @@
     linear-gradient(180deg, #07100e 0%, var(--page-bg) 100%);
 }
 
-* {
+*,
+*::before,
+*::after {
   box-sizing: border-box;
 }
 
 h1, h2, h3, h4, h5, h6 {
   text-wrap: balance;
+  overflow-wrap: break-word;
 }
 
 p, .pub-row .periodical, .pub-row .author, .writing-list-body p {
   text-wrap: pretty;
+  overflow-wrap: break-word;
+}
+
+/* Prevent grid/flex children from overflowing */
+.mini-card,
+.writing-card,
+.project-card,
+.publication-card,
+.highlight-project-link,
+.work-entry,
+.writing-list-entry,
+.pub-row {
+  min-width: 0;
+  overflow-wrap: break-word;
+}
+
+/* CSS feature fallbacks for older browsers */
+@supports not (color: color-mix(in srgb, red 50%, blue)) {
+  .ambient-orbit {
+    border-color: rgba(75, 140, 128, 0.18);
+  }
 }
 
 html {

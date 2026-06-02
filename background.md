@@ -12,7 +12,7 @@ permalink: /background/
   {% for link in site.data.publications.main %}
   <article class="publication-card">
     {% if link.image %}
-    <img src="{{ link.image }}" alt="{{ link.title }} preview">
+    <img src="{{ link.image }}" alt="{{ link.title }} preview" loading="lazy" width="132" height="88">
     {% endif %}
     <div>
       <a href="{{ link.pdf }}" target="_blank" rel="noopener">{{ link.title }}</a>

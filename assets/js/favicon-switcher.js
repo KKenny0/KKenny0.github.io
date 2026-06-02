@@ -1,64 +1,64 @@
-;(function(mod){
-function collectLinks() {
-  return Array.prototype.slice.apply(
-    document.head.querySelectorAll('link[rel*="icon"]')
-  )
-}
-
-function applyLink(source, target) {
-  target.setAttribute('type', source.getAttribute('type'))
-  target.setAttribute('href', source.getAttribute('href'))
-}
-
-// eslint-disable-next-line no-unused-vars
-function initSwitcher(delay) {
-  // Exit if media queries aren't supported
-  if (typeof window.matchMedia !== 'function') {
-    return function noop() {}
+;(function () {
+  function collectLinks() {
+    return Array.prototype.slice.apply(
+      document.head.querySelectorAll('link[rel*="icon"]')
+    )
   }
 
-  var links = collectLinks()
-  var current = document.createElement('link')
-  var prevMatch
+  function applyLink(source, target) {
+    target.setAttribute('type', source.getAttribute('type'))
+    target.setAttribute('href', source.getAttribute('href'))
+  }
 
-  current.setAttribute('rel', 'shortcut icon')
-  document.head.appendChild(current)
+  function initSwitcher() {
+    if (typeof window.matchMedia !== 'function') {
+      return function noop() {}
+    }
 
-  function faviconApplyLoop() {
-    var matched
+    var links = collectLinks()
+    var current = document.createElement('link')
+    current.setAttribute('rel', 'shortcut icon')
+    document.head.appendChild(current)
 
-    links.forEach(function(link) {
-      if (window.matchMedia(link.media).matches) {
-        matched = link
+    function matchFavicon() {
+      var matched
+      links.forEach(function (link) {
+        if (window.matchMedia(link.media).matches) {
+          matched = link
+        }
+      })
+      if (matched) {
+        applyLink(matched, current)
       }
-    })
-
-    if (! matched) {
-      return
     }
 
-    if (matched.media !== prevMatch) {
-      prevMatch = matched.media
-      applyLink(matched, current)
+    // Apply once on load
+    matchFavicon()
+
+    // Listen for OS theme changes instead of polling
+    var query = window.matchMedia('(prefers-color-scheme: dark)')
+    if (query.addEventListener) {
+      query.addEventListener('change', matchFavicon)
+    } else if (query.addListener) {
+      query.addListener(matchFavicon)
+    }
+
+    // Remove original link elements (they're managed by the switcher now)
+    links.forEach(function (link) {
+      document.head.removeChild(link)
+    })
+
+    return function unsubscribe() {
+      if (query.removeEventListener) {
+        query.removeEventListener('change', matchFavicon)
+      } else if (query.removeListener) {
+        query.removeListener(matchFavicon)
+      }
+      links.forEach(function (link) {
+        document.head.appendChild(link)
+      })
     }
   }
 
-  var intervalId = setInterval(faviconApplyLoop, delay || 300)
-
-  function unsubscribe() {
-    clearInterval(intervalId)
-    links.forEach(function(link) {
-      document.head.appendChild(link)
-    })
-  }
-
-  faviconApplyLoop()
-  links.forEach(function(link) {
-    document.head.removeChild(link)
-  })
-
-  return unsubscribe
-}
-
-initSwitcher()
+  initSwitcher()
 })()
