@@ -1639,7 +1639,7 @@ button:focus-visible,
 
 @media (max-width: 520px) {
   body {
-    font-size: 14px;
+    font-size: 15px;
   }
 
   .page-shell {
@@ -1720,10 +1720,8 @@ button:focus-visible,
   letter-spacing: -0.02em;
 }
 
-/* Open Source: monospace title, accent hover on cards */
+/* Open Source: accent hover on cards */
 [data-page="open-source"] .subpage-title {
-  font-family: var(--mono);
-  font-weight: 500;
   letter-spacing: -0.01em;
 }
 
