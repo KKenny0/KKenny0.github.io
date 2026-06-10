@@ -1,0 +1,30 @@
+---
+import BaseLayout from "../layouts/BaseLayout.astro";
+import { writings } from "../data/writings";
+---
+
+<BaseLayout title="Writings" page="writings">
+  <h1 class="subpage-title">Writings</h1>
+  <p class="subpage-lead">Long-form notes on AI engineering, agent systems, and tools for thought.</p>
+
+  <div class="writing-list">
+    {writings.articles.map((article) => (
+      <article class="writing-list-entry">
+        <div class="writing-list-date">
+          <span>{article.date}</span>
+          <span class="writing-card-source">{article.source}</span>
+        </div>
+        <div class="writing-list-body">
+          <a href={article.url} target="_blank" rel="noopener">
+            <strong>{article.title}</strong>
+          </a>
+          <p>{article.teaser}</p>
+        </div>
+      </article>
+    ))}
+  </div>
+
+  <a class="writing-cta" href={writings.collection_url} target="_blank" rel="noopener" style="margin-top: 24px; display: inline-flex;">
+    {writings.collection_label} <i class="fa-solid fa-arrow-right"></i>
+  </a>
+</BaseLayout>

@@ -1,0 +1,16 @@
+export const site = {
+  title: "Kenny Wu",
+  position: "AI Engineer",
+  affiliation: "Shenzhen",
+  email: "jdlow@live.cn",
+  description: "Building language machines, agent workflows, and tools for thought. Context in, clarity out.",
+  keywords: "AI NLP LLM RAG agents tools-for-thought",
+  canonical: "https://kkenny0.github.io/",
+  avatar: "/assets/img/awkward-neck-profile-avatar-v2.png",
+  favicon: "/assets/img/awkward-neck-profile-avatar-v2.png",
+  favicon_dark: "/assets/img/awkward-neck-profile-avatar-v2.png",
+  google_scholar: "https://scholar.google.com/citations?user=q9Z8cmIAAAAJ&hl=en",
+  github_link: "https://github.com/KKenny0",
+  zhihu_link: "https://www.zhihu.com/people/kenny-wu-56",
+  cv_link: "/assets/files/curriculum_vitae.pdf",
+};

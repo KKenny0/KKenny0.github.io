@@ -1,0 +1,49 @@
+---
+import BaseLayout from "../layouts/BaseLayout.astro";
+---
+
+<BaseLayout title="Work" page="work">
+  <h1 class="subpage-title">Work</h1>
+  <p class="subpage-lead">Projects I've built, shipped, and learned from.</p>
+
+  <div class="work-entries">
+    <article class="work-entry">
+      <div class="work-entry-header">
+        <h2>AI Comic Generation</h2>
+        <span class="work-entry-role">Lead · 2026</span>
+      </div>
+      <p>Built a staged LLM pipeline for script parsing, narrative slicing, scene analysis, and shot generation. The system moves storyboard generation from single-prompt output into a reusable workflow with cross-episode character and scene memory.</p>
+      <div class="work-entry-tags">
+        <span>Agent Workflow</span>
+        <span>LLM Pipeline</span>
+        <span>Multimodal</span>
+      </div>
+    </article>
+
+    <article class="work-entry">
+      <div class="work-entry-header">
+        <h2>Short Drama Editing · Character Identity</h2>
+        <span class="work-entry-role">Direction Lead · 2025-2026</span>
+      </div>
+      <p>Reframed the bottleneck from isolated highlight detection to cross-episode identity stability. The rebuilt path supports entity alignment, retrieval, scheduling, and cache reuse for more continuous generated edits.</p>
+      <div class="work-entry-tags">
+        <span>Multimodal</span>
+        <span>Identity Systems</span>
+        <span>Video Processing</span>
+      </div>
+    </article>
+
+    <article class="work-entry">
+      <div class="work-entry-header">
+        <h2>Enterprise RAG & Safety Review</h2>
+        <span class="work-entry-role">Core Algorithm Engineer · 2024</span>
+      </div>
+      <p>Designed hierarchical document chunking, multi-stage retrieval, dynamic threshold filtering, and prompt-assisted safety review. Internal tests reached about 90% recall and answer accuracy.</p>
+      <div class="work-entry-tags">
+        <span>RAG</span>
+        <span>NLP</span>
+        <span>Safety</span>
+      </div>
+    </article>
+  </div>
+</BaseLayout>
