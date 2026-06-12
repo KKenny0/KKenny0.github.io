@@ -31,6 +31,7 @@ const pageTitle = page ? `${title} — ${site.title}` : `${site.title} | ${site.
     (function () {
       try {
         var mode = localStorage.getItem("theme-mode") || "auto";
+        if (mode !== "auto" && mode !== "light" && mode !== "dark") mode = "auto";
         var prefersDark = window.matchMedia && window.matchMedia("(prefers-color-scheme: dark)").matches;
         document.documentElement.dataset.themeMode = mode;
         document.documentElement.dataset.theme = mode === "auto" ? (prefersDark ? "dark" : "light") : mode;
@@ -74,51 +75,76 @@ const pageTitle = page ? `${title} — ${site.title}` : `${site.title} | ${site.
 
   <script>
     // Theme toggle: auto -> light -> dark -> auto
+    const root = document.documentElement;
+    const themeQuery = matchMedia("(prefers-color-scheme: dark)");
+    const storageKey = "theme-mode";
+    const themeModes = ["auto", "light", "dark"] as const;
+    type ThemeMode = (typeof themeModes)[number];
+
+    const isThemeMode = (mode: string | undefined): mode is ThemeMode =>
+      Boolean(mode && themeModes.includes(mode as ThemeMode));
+
+    const readStoredMode = (): ThemeMode => {
+      const stored = localStorage.getItem(storageKey) || root.dataset.themeMode;
+      return isThemeMode(stored || undefined) ? stored as ThemeMode : "auto";
+    };
+
+    const resolvedTheme = (mode: ThemeMode) =>
+      mode === "auto" ? (themeQuery.matches ? "dark" : "light") : mode;
+
     const toggle = document.querySelector("[data-theme-toggle]");
-    if (toggle instanceof HTMLButtonElement) {
-      const root = document.documentElement;
-      const updateLabel = (mode: string) => {
-        const icons: Record<string, string> = {
-          auto: "fa-solid fa-circle-half-stroke",
-          light: "fa-regular fa-sun",
-          dark: "fa-regular fa-moon",
-        };
-        const icon = toggle.querySelector("i");
-        const label = toggle.querySelector("span");
-        if (icon) icon.className = icons[mode];
-        if (label) label.textContent = mode.charAt(0).toUpperCase() + mode.slice(1);
-        toggle.setAttribute("aria-label", `Theme: ${mode}`);
+    const lightIcon = document.querySelector<HTMLLinkElement>('link[rel="icon"][media="(prefers-color-scheme:light)"]');
+    const darkIcon = document.querySelector<HTMLLinkElement>('link[rel="icon"][media="(prefers-color-scheme:dark)"]');
+
+    const syncFavicon = () => {
+      if (!lightIcon || !darkIcon) return;
+      const isDark = root.dataset.theme === "dark";
+      lightIcon.disabled = isDark;
+      darkIcon.disabled = !isDark;
+    };
+
+    const updateLabel = (mode: ThemeMode) => {
+      if (!(toggle instanceof HTMLButtonElement)) return;
+
+      const icons: Record<ThemeMode, string> = {
+        auto: "fa-solid fa-circle-half-stroke",
+        light: "fa-regular fa-sun",
+        dark: "fa-regular fa-moon",
       };
+      const labels: Record<ThemeMode, string> = {
+        auto: "Auto",
+        light: "Light",
+        dark: "Dark",
+      };
+      const icon = toggle.querySelector("i");
+      const label = toggle.querySelector("span");
+      if (icon) icon.className = icons[mode];
+      if (label) label.textContent = labels[mode];
+      toggle.setAttribute("aria-label", `Theme: ${labels[mode]}`);
+    };
 
-      // Sync initial state
-      const initial = (root.dataset.themeMode as string) || "auto";
-      updateLabel(initial);
+    const applyTheme = (mode: ThemeMode, persist = false) => {
+      root.dataset.themeMode = mode;
+      root.dataset.theme = resolvedTheme(mode);
+      if (persist) localStorage.setItem(storageKey, mode);
+      updateLabel(mode);
+      syncFavicon();
+    };
 
+    applyTheme(readStoredMode());
+
+    if (toggle instanceof HTMLButtonElement) {
       toggle.addEventListener("click", () => {
-        const current = (root.dataset.themeMode as string) || "auto";
-        const next = current === "auto" ? "light" : current === "light" ? "dark" : "auto";
-        root.dataset.themeMode = next;
-        root.dataset.theme = next === "auto" ? (matchMedia("(prefers-color-scheme: dark)").matches ? "dark" : "light") : next;
-        localStorage.setItem("theme-mode", next);
-        updateLabel(next);
+        const current = readStoredMode();
+        const next: ThemeMode = current === "auto" ? "light" : current === "light" ? "dark" : "auto";
+        applyTheme(next, true);
       });
     }
 
-    // Favicon switcher
-    const lightIcon = document.querySelector<HTMLLinkElement>('link[rel="icon"][media="(prefers-color-scheme:light)"]');
-    const darkIcon = document.querySelector<HTMLLinkElement>('link[rel="icon"][media="(prefers-color-scheme:dark)"]');
-    if (lightIcon && darkIcon) {
-      const mq = matchMedia("(prefers-color-scheme: dark)");
-      const sync = () => {
-        const mode = document.documentElement.dataset.theme;
-        const isDark = mode === "dark" || (mode !== "light" && mq.matches);
-        lightIcon.disabled = isDark;
-        darkIcon.disabled = !isDark;
-      };
-      sync();
-      mq.addEventListener("change", sync);
-      new MutationObserver(sync).observe(document.documentElement, { attributes: true, attributeFilter: ["data-theme"] });
-    }
+    themeQuery.addEventListener("change", () => {
+      const current = readStoredMode();
+      if (current === "auto") applyTheme("auto");
+    });
   </script>
 </body>
 </html>
