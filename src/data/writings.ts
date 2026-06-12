@@ -1,6 +1,27 @@
 export const writings = {
   articles: [
     {
+      title: "ChatGPT 的 Dreaming记忆做了什么",
+      url: "https://zhuanlan.zhihu.com/p/2046699626565219617",
+      date: "2026-06",
+      teaser: "以 ChatGPT 记忆功能为起点，分析 AI 记忆系统面临的三重困境：存储、检索与遗忘的工程挑战。",
+      source: "知乎",
+    },
+    {
+      title: "Beyond the Prompt：Claude Code 深度指南",
+      url: "https://zhuanlan.zhihu.com/p/2044166992513520802",
+      date: "2026-05",
+      teaser: "从验证、规划、配置三个维度整理 Claude Code 进阶使用模式，覆盖日常开发到团队协作的完整工作流。",
+      source: "知乎",
+    },
+    {
+      title: "Claude Code: Session, Context 和 Memory 管理机制深度解析",
+      url: "https://zhuanlan.zhihu.com/p/2036754568097296982",
+      date: "2026-05",
+      teaser: "基于源码分析 Claude Code 的 Session/Context/Memory 三层架构设计，理解 AI 编程助手如何管理工作状态。",
+      source: "知乎",
+    },
+    {
       title: "Claude Code Compact 机制研究：从上下文压缩到可恢复代理记忆",
       url: "https://zhuanlan.zhihu.com/p/2031687123431051328",
       date: "2026-05",

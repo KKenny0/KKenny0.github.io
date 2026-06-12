@@ -25,12 +25,12 @@ const navItems = [
     ))}
   </div>
   <div class="nav-actions">
-    <button class="theme-toggle" type="button" data-theme-toggle aria-label="Theme: Auto">
+    <button class="nav-btn theme-toggle" type="button" data-theme-toggle aria-label="Theme: Auto">
       <i class="fa-solid fa-circle-half-stroke" aria-hidden="true"></i>
       <span>Auto</span>
     </button>
     {site.cv_link && (
-      <a class="resume-link" href={site.cv_link}>
+      <a class="nav-btn resume-link" href={site.cv_link}>
         Resume
         <i class="fa-solid fa-arrow-down" aria-hidden="true"></i>
       </a>
