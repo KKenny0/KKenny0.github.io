@@ -1,6 +1,7 @@
 ---
 import BaseLayout from "../layouts/BaseLayout.astro";
 import { projects } from "../data/projects";
+import { site } from "../data/site";
 ---
 
 <BaseLayout title="Open Source" page="open-source">
@@ -40,5 +41,11 @@ import { projects } from "../data/projects";
   <div class="contribution-strip">
     <strong>Kotaemon Contributor</strong>
     <span>Top contributor experience in an open-source RAG document chat project, alongside tools such as Open-OmniSearch and GraphRAG visualization work.</span>
+  </div>
+
+  <div class="support-strip">
+    <strong>Support the work</strong>
+    <span>Stars, issues, sharing, and sponsorship all help these tools keep moving.</span>
+    <a class="row-action" href={site.support_link}>Support <i class="fa-solid fa-arrow-right" aria-hidden="true"></i></a>
   </div>
 </BaseLayout>

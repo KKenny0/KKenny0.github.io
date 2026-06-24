@@ -117,6 +117,7 @@ p, .pub-row .periodical, .pub-row .author, .writing-list-body p {
 .mini-card,
 .writing-card,
 .project-card,
+.payment-card,
 .publication-card,
 .highlight-project-link,
 .work-entry,
@@ -136,6 +137,26 @@ body {
   font-size: 0.95rem;
   line-height: 1.7;
   background: var(--page-bg);
+}
+
+.skip-link {
+  position: fixed;
+  top: 12px;
+  left: 12px;
+  z-index: 10;
+  padding: 8px 10px;
+  color: var(--surface);
+  background: var(--text);
+  border: 1.5px solid var(--line-strong);
+  font-family: var(--mono);
+  font-size: var(--text-xs);
+  text-decoration: none;
+  transform: translateY(-180%);
+  transition: transform var(--duration-fast) var(--ease-out-expo);
+}
+
+.skip-link:focus {
+  transform: translateY(0);
 }
 
 /* ── Page shell — hard edges, no shadow ── */
@@ -1163,6 +1184,202 @@ header h1 {
   line-height: 1.55;
 }
 
+/* ── Support page ── */
+[data-page="support"] {
+  max-width: 820px;
+}
+
+.support-section {
+  padding: var(--sp-6) 0;
+  border-top: 1.5px solid var(--line);
+}
+
+.support-section:first-of-type {
+  border-top: 0;
+  padding-top: 0;
+}
+
+.support-section-header {
+  display: grid;
+  gap: 6px;
+  max-width: 620px;
+  margin-bottom: var(--sp-4);
+}
+
+.support-kicker,
+.platform-tag {
+  color: var(--accent);
+  font-family: var(--mono);
+  font-size: var(--text-xs);
+  font-weight: 700;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+}
+
+.support-section h2,
+.payment-card h3 {
+  margin: 0;
+  color: var(--text);
+  font-family: var(--serif);
+  font-size: var(--text-xl);
+  font-weight: 700;
+  line-height: 1.2;
+  letter-spacing: -0.02em;
+}
+
+.support-section p,
+.payment-card p {
+  margin: 0;
+  color: var(--muted);
+  font-size: var(--text-sm);
+  line-height: 1.7;
+}
+
+.payment-grid {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: var(--sp-3);
+}
+
+.payment-card {
+  display: grid;
+  gap: var(--sp-4);
+  align-content: start;
+  padding: var(--sp-4);
+  border: 1.5px solid var(--line);
+  background: var(--card-bg);
+}
+
+.payment-card-copy {
+  display: grid;
+  gap: 6px;
+}
+
+.platform-tag {
+  display: inline-flex;
+  align-items: center;
+  gap: 7px;
+  color: var(--muted);
+}
+
+.platform-dot {
+  width: 7px;
+  height: 7px;
+  border-radius: 50%;
+  background: var(--accent);
+}
+
+.platform-dot.alipay { background: #1677ff; }
+.platform-dot.wechat { background: #07c160; }
+
+.payment-qr-frame {
+  display: grid;
+  place-items: center;
+  margin: 0;
+  padding: var(--sp-3);
+  border: 1.5px solid var(--line);
+  background: oklch(100% 0 0);
+}
+
+.payment-qr {
+  display: block;
+  width: min(100%, 260px);
+  height: auto;
+}
+
+.sponsor-panel {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) auto;
+  gap: var(--sp-4);
+  align-items: center;
+  padding: var(--sp-4);
+  border: 1.5px solid var(--line);
+  background: var(--chip-bg);
+}
+
+.sponsor-panel > div {
+  display: grid;
+  gap: 6px;
+}
+
+.sponsor-panel strong {
+  color: var(--text);
+  font-family: var(--serif);
+  font-size: var(--text-base);
+  line-height: 1.35;
+}
+
+.support-action {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
+  min-height: 40px;
+  padding: 0 12px;
+  color: var(--surface);
+  background: var(--text);
+  border: 1.5px solid var(--line-strong);
+  font-family: var(--mono);
+  font-size: var(--text-xs);
+  font-weight: 700;
+  letter-spacing: 0.06em;
+  text-decoration: none;
+  text-transform: uppercase;
+  transition: transform var(--duration-fast) var(--ease-out-expo), color var(--duration-fast);
+}
+
+.support-action:active {
+  transform: scale(0.96);
+}
+
+.support-action.inactive {
+  color: var(--muted);
+  background: transparent;
+}
+
+.support-list {
+  display: grid;
+  gap: var(--sp-2);
+  margin: 0;
+  padding: 0;
+  list-style: none;
+}
+
+.support-list li {
+  padding: var(--sp-3) 0;
+  border-top: 1px solid var(--line);
+  color: var(--muted);
+  font-size: var(--text-sm);
+  line-height: 1.65;
+}
+
+.support-list li:first-child {
+  border-top: 0;
+}
+
+.support-strip {
+  display: grid;
+  grid-template-columns: 170px minmax(0, 1fr) auto;
+  gap: 14px;
+  align-items: center;
+  margin-top: 12px;
+  padding: 14px 16px;
+  border: 1.5px solid var(--line);
+  background: var(--chip-bg);
+}
+
+.support-strip strong {
+  color: var(--text);
+  font-family: var(--serif);
+  font-size: var(--text-base);
+}
+
+.support-strip span {
+  color: var(--muted);
+  font-size: var(--text-sm);
+  line-height: 1.55;
+}
+
 /* ── Compact award list ── */
 .compact-award-list {
   margin: 0;
@@ -1309,6 +1526,7 @@ a:hover {
 /* ── Focus visible ── */
 a:focus-visible,
 button:focus-visible,
+.support-action:focus-visible,
 .mini-card:focus-visible,
 .project-card a:focus-visible,
 .writing-card:focus-visible,
@@ -1483,8 +1701,10 @@ button:focus-visible,
   }
   .mini-card-grid,
   .project-grid,
+  .payment-grid,
   .publication-card,
   .contribution-strip,
+  .support-strip,
   .award-list article,
   .pub-row,
   .writing-list-entry {
@@ -1545,6 +1765,12 @@ button:focus-visible,
   .publication-card img {
     width: 100%;
     height: auto;
+  }
+  .sponsor-panel {
+    grid-template-columns: 1fr;
+  }
+  .support-action {
+    justify-self: start;
   }
 }
 
