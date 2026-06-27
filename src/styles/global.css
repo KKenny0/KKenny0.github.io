@@ -28,10 +28,10 @@
   --shadow-avatar: none;
   --shadow-hover: none;
 
-  /* Typography — serif display, mono body */
+  /* Typography: serif display, sans body, mono details */
   --mono: 'JetBrains Mono', ui-monospace, 'IBM Plex Mono', Menlo, monospace;
-  --sans: 'JetBrains Mono', ui-monospace, Menlo, monospace;
-  --serif: Georgia, 'Times New Roman', 'Iowan Old Style', serif;
+  --sans: ui-sans-serif, -apple-system, BlinkMacSystemFont, 'SF Pro Text', 'PingFang SC', 'Noto Sans SC', sans-serif;
+  --serif: 'Iowan Old Style', Georgia, 'Times New Roman', 'Songti SC', 'Noto Serif SC', serif;
   --text-xs: 0.75rem;
   --text-sm: 0.85rem;
   --text-base: 0.95rem;
@@ -133,10 +133,12 @@ body {
   margin: 0;
   min-height: 100vh;
   color: var(--text);
-  font-family: var(--mono);
+  font-family: var(--sans);
   font-size: 0.95rem;
   line-height: 1.7;
   background: var(--page-bg);
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
 }
 
 .skip-link {
@@ -242,7 +244,6 @@ header h1 {
   max-width: 220px;
   margin: var(--sp-6) 0;
   color: var(--muted);
-  font-family: var(--mono);
   font-size: var(--text-sm);
   line-height: 1.7;
 }
@@ -260,6 +261,17 @@ header h1 {
   gap: 10px;
 }
 
+.profile-status {
+  display: flex;
+  align-items: flex-start;
+  gap: 8px;
+  margin: 0 0 var(--sp-4);
+  color: var(--muted);
+  font-family: var(--mono);
+  font-size: var(--text-sm);
+  line-height: 1.6;
+}
+
 .profile-meta {
   display: grid;
   gap: 10px;
@@ -272,6 +284,7 @@ header h1 {
   align-items: center;
   gap: 8px;
   color: var(--muted);
+  font-family: var(--mono);
   font-size: var(--text-sm);
   text-decoration: none;
   white-space: nowrap;
@@ -304,6 +317,7 @@ header h1 {
   align-items: center;
   gap: 8px;
   color: var(--muted);
+  font-family: var(--mono);
   font-size: var(--text-sm);
   text-decoration: none;
   transition: color var(--duration-fast) var(--ease-out-expo);
@@ -353,11 +367,13 @@ header h1 {
 .line-note span {
   display: block;
   color: var(--muted);
+  font-family: var(--mono);
   font-size: var(--text-xs);
 }
 
 .line-note small {
   color: var(--faint);
+  font-family: var(--mono);
   font-size: var(--text-xs);
 }
 
@@ -467,8 +483,20 @@ header h1 {
 .title-rule {
   display: block;
   width: 36px;
-  margin: var(--sp-5) 0 var(--sp-5);
+  margin: var(--sp-5) 0 var(--sp-4);
   border-bottom: 2.5px solid var(--accent);
+}
+
+.hero-lead {
+  max-width: 440px;
+  margin: 0 0 var(--sp-4);
+  color: var(--muted);
+  font-size: var(--text-base);
+  line-height: 1.65;
+}
+
+.hero-action {
+  justify-self: start;
 }
 
 .line-garden {
@@ -1093,21 +1121,6 @@ header h1 {
   font-size: var(--text-xs);
 }
 
-/* ── CLI snippet ── */
-.cli-snippet {
-  display: block;
-  margin-top: 8px;
-  margin-bottom: 10px;
-  padding: 8px 10px;
-  color: var(--text);
-  border: 1.5px solid var(--line);
-  background: var(--chip-bg);
-  font-family: var(--mono);
-  font-size: var(--text-xs);
-  line-height: 1.5;
-  white-space: pre-wrap;
-}
-
 /* ── Publications ── */
 .publication-list {
   display: grid;
@@ -1224,7 +1237,6 @@ header h1 {
   font-size: var(--text-xl);
   font-weight: 700;
   line-height: 1.2;
-  letter-spacing: -0.02em;
 }
 
 .support-section p,
@@ -1532,6 +1544,7 @@ button:focus-visible,
 .writing-card:focus-visible,
 .writing-cta:focus-visible,
 .row-action:focus-visible,
+.support-action:focus-visible,
 .highlight-project-link:focus-visible,
 .publication-card a:focus-visible,
 .pub-row .links a:focus-visible {
@@ -1665,6 +1678,11 @@ button:focus-visible,
     gap: 10px 16px;
     margin: 12px auto 0;
   }
+  .profile-status {
+    justify-content: center;
+    margin: 12px auto 0;
+    text-align: left;
+  }
   .line-note {
     display: flex;
     align-items: center;
@@ -1715,6 +1733,18 @@ button:focus-visible,
   }
 }
 
+@media (max-width: 640px) {
+  .top-nav {
+    align-items: flex-start;
+    gap: 10px;
+    flex-wrap: wrap;
+  }
+  .nav-actions,
+  .top-nav div {
+    flex-wrap: wrap;
+  }
+}
+
 /* ── Responsive: mobile ── */
 @media (max-width: 520px) {
   body { font-size: 0.9rem; }
@@ -1732,16 +1762,7 @@ button:focus-visible,
   .content-panel {
     padding: 18px 16px 28px;
   }
-  .top-nav {
-    align-items: flex-start;
-    gap: 10px;
-    flex-wrap: wrap;
-  }
-  .nav-actions {
-    flex-wrap: wrap;
-  }
   .top-nav div {
-    flex-wrap: wrap;
     gap: 10px 16px;
   }
   .hero-title {

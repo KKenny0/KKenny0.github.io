@@ -9,6 +9,8 @@ import { writings } from "../data/writings";
     <div class="hero-copy">
       <h2 class="hero-title">Language machines, agent workflows, and tools for thought.</h2>
       <span class="title-rule" aria-hidden="true"></span>
+      <p class="hero-lead">I build agent workflows and AI tools that turn messy context into usable systems.</p>
+      <a class="row-action hero-action" href="/work/">View work <i class="fa-solid fa-arrow-right"></i></a>
     </div>
 
     <div class="line-garden" aria-label="Line art about music, movement, coffee, food, walking, and the sea">
@@ -95,24 +97,6 @@ import { writings } from "../data/writings";
       <span></span>
     </section>
 
-    <section class="feature-row compact-row">
-      <div class="feature-icon" aria-hidden="true">
-        <i class="fa-regular fa-heart"></i>
-      </div>
-      <h2>Interests</h2>
-      <div class="interest-list">
-        <span>Music</span>
-        <span>Yoga & Movement</span>
-        <span>Coffee</span>
-        <span>Food</span>
-        <span>Walking</span>
-        <span>The Sea</span>
-      </div>
-      <svg class="row-line" viewBox="0 0 200 40" aria-hidden="true">
-        <path d="M4 24 C30 5 44 36 70 18 S110 4 132 25 S168 37 196 10" />
-      </svg>
-    </section>
-
     <section class="feature-row work-row">
       <div class="feature-icon" aria-hidden="true">
         <i class="fa-solid fa-code"></i>
@@ -137,6 +121,26 @@ import { writings } from "../data/writings";
           <small>RAG · 2024</small>
           <i class="fa-solid fa-arrow-right"></i>
         </a>
+      </div>
+    </section>
+
+    <section class="feature-row writings-row">
+      <div class="feature-icon" aria-hidden="true">
+        <i class="fa-regular fa-pen-to-square"></i>
+      </div>
+      <h2>Latest Writing</h2>
+      <div class="writing-cards">
+        {writings.articles.slice(0, 1).map((article) => (
+          <a class="writing-card" href={article.url} target="_blank" rel="noopener">
+            <span class="writing-card-title">{article.title}</span>
+            <span class="writing-card-teaser">{article.teaser}</span>
+            <span class="writing-card-meta">
+              <span class="writing-card-date">{article.date}</span>
+              <span class="writing-card-source">{article.source}</span>
+            </span>
+          </a>
+        ))}
+        <a class="writing-cta" href="/writings/">More writings <i class="fa-solid fa-arrow-right"></i></a>
       </div>
     </section>
 
@@ -168,24 +172,22 @@ import { writings } from "../data/writings";
       </div>
     </section>
 
-    <section class="feature-row writings-row">
+    <section class="feature-row compact-row">
       <div class="feature-icon" aria-hidden="true">
-        <i class="fa-regular fa-pen-to-square"></i>
+        <i class="fa-regular fa-heart"></i>
       </div>
-      <h2>Latest Writing</h2>
-      <div class="writing-cards">
-        {writings.articles.slice(0, 1).map((article) => (
-          <a class="writing-card" href={article.url} target="_blank" rel="noopener">
-            <span class="writing-card-title">{article.title}</span>
-            <span class="writing-card-teaser">{article.teaser}</span>
-            <span class="writing-card-meta">
-              <span class="writing-card-date">{article.date}</span>
-              <span class="writing-card-source">{article.source}</span>
-            </span>
-          </a>
-        ))}
-        <a class="writing-cta" href="/writings/">More writings <i class="fa-solid fa-arrow-right"></i></a>
+      <h2>Interests</h2>
+      <div class="interest-list">
+        <span>Music</span>
+        <span>Yoga & Movement</span>
+        <span>Coffee</span>
+        <span>Food</span>
+        <span>Walking</span>
+        <span>The Sea</span>
       </div>
+      <svg class="row-line" viewBox="0 0 200 40" aria-hidden="true">
+        <path d="M4 24 C30 5 44 36 70 18 S110 4 132 25 S168 37 196 10" />
+      </svg>
     </section>
   </div>
 </BaseLayout>

@@ -1,19 +1,19 @@
 export const projects = {
   highlight: [
     {
-      name: "BuddyBar",
-      url: "https://github.com/KKenny0/buddybar",
-      description: "Your coding rhythm deserves a companion, not a dashboard. A pet that grows with your sessions.",
-      stars: 5,
-      language: "JavaScript",
-      updated: "2026-05-22",
-    },
-    {
       name: "Lode",
       url: "https://github.com/KKenny0/Lode",
       description: "Never lose the thread. Captures intent, decisions, and risks — recycles them into notes, reports, and docs.",
       stars: 2,
       language: "Python",
+      updated: "2026-05-22",
+    },
+    {
+      name: "BuddyBar",
+      url: "https://github.com/KKenny0/buddybar",
+      description: "Your coding rhythm deserves a companion, not a dashboard. A pet that grows with your sessions.",
+      stars: 5,
+      language: "JavaScript",
       updated: "2026-05-22",
     },
     {

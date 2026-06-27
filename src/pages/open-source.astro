@@ -21,10 +21,6 @@ import { site } from "../data/site";
           </span>
         </div>
         <p class="project-description">{project.description}</p>
-        {i === 0 && (
-          <code class="cli-snippet">$ buddy status
-🐶 Buddy is watching your rhythm. Session #47.</code>
-        )}
         <div class="project-meta">
           <span class="project-language">
             <span class={`lang-dot lang-${project.language.toLowerCase()}`}></span>
