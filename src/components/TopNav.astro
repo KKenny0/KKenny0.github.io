@@ -1,41 +1,27 @@
 ---
-import { site } from "../data/site";
-
-interface Props {
-  currentPath: string;
-}
-
+interface Props { currentPath: string; }
 const { currentPath } = Astro.props;
-
 const navItems = [
-  { href: "/", label: "About", match: "/" },
-  { href: "/work/", label: "Work", match: "/work/" },
-  { href: "/open-source/", label: "Open Source", match: "/open-source/" },
-  { href: "/writings/", label: "Writings", match: "/writings/" },
-  { href: site.support_link, label: "Support", match: "/support/" },
-  { href: "/background/", label: "Background", match: "/background/" },
-  { href: site.support_link, label: "Support", match: "/support/" },
+  { href: "/projects/", label: "Projects" },
+  { href: "/notes/", label: "Notes" },
+  { href: "/about/", label: "About" },
 ];
 ---
 
-<nav class="top-nav" aria-label="Primary navigation">
-  <div>
+<header class="site-masthead">
+  <a class="site-identity" href="/" aria-label="Kenny Ponders home">
+    <span>Kenny Ponders</span>
+    <small lang="zh">肯玩 AI</small>
+  </a>
+  <nav class="primary-nav" aria-label="Primary navigation">
     {navItems.map((item) => (
-      <a href={item.href} class={currentPath === item.match ? "active" : undefined}>
-        {item.label}
-      </a>
+      <a href={item.href} class={currentPath.startsWith(item.href) ? "active" : undefined}>{item.label}</a>
     ))}
-  </div>
-  <div class="nav-actions">
-    <button class="nav-btn theme-toggle" type="button" data-theme-toggle aria-label="Theme: Auto">
-      <i class="fa-solid fa-circle-half-stroke" aria-hidden="true"></i>
-      <span>Auto</span>
+  </nav>
+  <div class="masthead-actions">
+    <button class="text-control index-trigger" type="button" data-command-open aria-label="Open site index">
+      Index <kbd>/</kbd>
     </button>
-    {site.cv_link && (
-      <a class="nav-btn resume-link" href={site.cv_link}>
-        Resume
-        <i class="fa-solid fa-arrow-down" aria-hidden="true"></i>
-      </a>
-    )}
+    <button class="text-control theme-toggle" type="button" data-theme-toggle aria-label="Theme: Auto">Auto</button>
   </div>
-</nav>
+</header>

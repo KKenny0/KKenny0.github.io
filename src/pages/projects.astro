@@ -1,0 +1,28 @@
+---
+import BaseLayout from "../layouts/BaseLayout.astro";
+import { practices, projects } from "../data/projects";
+---
+
+<BaseLayout title="Projects" description="Local-first tools, agent workflows, and visual systems built by Kenny Ponders.">
+  <header class="page-heading"><span class="eyebrow">Maker index · 2026</span><h1>Projects organized by the question behind them.</h1><p>Not every repository belongs on the same shelf. These are grouped by the kind of failure they are trying to repair.</p></header>
+  <div class="project-practices">
+    {practices.map((practice) => (
+      <section class="project-practice" id={practice.id}>
+        <header><span>{practice.index}</span><div><h2>{practice.title}</h2><p>{practice.description}</p></div></header>
+        <div class="project-index">
+          {projects.filter((project) => project.practice === practice.id).map((project) => (
+            <article class:list={["project-entry", project.featured && "featured"]}>
+              <div class="project-entry-meta"><span>{project.year}</span><small>{project.status}</small></div>
+              <div class="project-entry-body">
+                <h3><a href={project.url} target="_blank" rel="noopener">{project.name} ↗</a></h3>
+                <p class="project-thesis">{project.thesis}</p>
+                <dl><div><dt>Problem</dt><dd>{project.problem}</dd></div><div><dt>Proof</dt><dd>{project.proof}</dd></div></dl>
+              </div>
+              {project.image && <img src={project.image} alt={`${project.name} project artifact`} loading="lazy" />}
+            </article>
+          ))}
+        </div>
+      </section>
+    ))}
+  </div>
+</BaseLayout>

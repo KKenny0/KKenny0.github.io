@@ -1,10 +1,10 @@
 export const site = {
-  title: "Kenny Wu",
+  title: "Kenny Ponders",
   position: "AI Engineer",
   affiliation: "Shenzhen",
   email: "jdlow@live.cn",
-  description: "Building language machines, agent workflows, and tools for thought. Context in, clarity out.",
-  keywords: "AI NLP LLM RAG agents tools-for-thought",
+  description: "Local-first tools, agent workflows, and visual forms for thought by Kenny Ponders.",
+  keywords: "AI agents local-first tools-for-thought context memory agent-workflows",
   canonical: "https://kkenny0.github.io/",
   support_link: "/support/",
   github_sponsors_link: "https://github.com/sponsors/KKenny0",

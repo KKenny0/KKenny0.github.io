@@ -1,17 +1,13 @@
 ---
 import { site } from "../data/site";
-import ProfilePanel from "../components/ProfilePanel.astro";
 import TopNav from "../components/TopNav.astro";
 import "../styles/global.css";
 
-interface Props {
-  title?: string;
-  page?: string;
-}
-
-const { title = "Home", page = "" } = Astro.props;
-const pageTitle = page ? `${title} — ${site.title}` : `${site.title} | ${site.affiliation}`;
+interface Props { title?: string; description?: string; }
+const { title, description = site.description } = Astro.props;
+const pageTitle = title ? `${title} · Kenny Ponders` : "Kenny Ponders · AI tools, agent workflows, and forms for thought";
 const canonicalUrl = new URL(Astro.url.pathname, site.canonical).toString();
+const socialImageUrl = new URL(site.avatar, site.canonical).toString();
 ---
 
 <!DOCTYPE html>
@@ -19,133 +15,110 @@ const canonicalUrl = new URL(Astro.url.pathname, site.canonical).toString();
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1" />
-  <meta name="description" content={site.description} />
+  <meta name="description" content={description} />
   <meta name="keywords" content={site.keywords} />
   <link rel="canonical" href={canonicalUrl} />
   <title>{pageTitle}</title>
-
-  <link rel="icon" media="(prefers-color-scheme:dark)" href={site.favicon_dark} type="image/png" />
-  <link rel="icon" media="(prefers-color-scheme:light)" href={site.favicon} type="image/png" />
-
-  <!-- Theme init (before paint) -->
+  <link rel="icon" href={site.favicon} type="image/png" />
   <script is:inline>
-    (function () {
+    (() => {
       try {
-        var mode = localStorage.getItem("theme-mode") || "auto";
-        if (mode !== "auto" && mode !== "light" && mode !== "dark") mode = "auto";
-        var prefersDark = window.matchMedia && window.matchMedia("(prefers-color-scheme: dark)").matches;
+        const mode = localStorage.getItem("theme-mode") || "auto";
+        const dark = matchMedia("(prefers-color-scheme: dark)").matches;
         document.documentElement.dataset.themeMode = mode;
-        document.documentElement.dataset.theme = mode === "auto" ? (prefersDark ? "dark" : "light") : mode;
-      } catch (e) {}
+        document.documentElement.dataset.theme = mode === "auto" ? (dark ? "dark" : "light") : mode;
+      } catch {}
     })();
   </script>
-
-  <!-- Fonts -->
   <link rel="preconnect" href="https://fonts.googleapis.com" />
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
-  <link href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:ital,wght@0,400;0,500;0,700;1,400&display=swap" rel="stylesheet" />
-
-  <!-- Icons -->
-  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css" crossorigin="anonymous" referrerpolicy="no-referrer" />
-  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/academicons/1.8.6/css/academicons.min.css" crossorigin="anonymous" />
-
-  <!-- SEO -->
+  <link href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@400;600&family=Literata:ital,opsz,wght@0,7..72,400;0,7..72,600;1,7..72,500&display=swap" rel="stylesheet" />
   <meta property="og:title" content={pageTitle} />
-  <meta property="og:description" content={site.description} />
+  <meta property="og:description" content={description} />
   <meta property="og:type" content="website" />
   <meta property="og:url" content={canonicalUrl} />
-  <meta property="og:image" content={site.avatar} />
+  <meta property="og:image" content={socialImageUrl} />
   <meta name="twitter:card" content="summary" />
   <meta name="twitter:title" content={pageTitle} />
-  <meta name="twitter:description" content={site.description} />
-  <meta name="twitter:image" content={site.avatar} />
+  <meta name="twitter:description" content={description} />
+  <meta name="twitter:image" content={socialImageUrl} />
 </head>
 <body>
   <a class="skip-link" href="#main-content">Skip to main content</a>
-  <main class="page-shell" aria-label={page ? `${title} — ${site.title}` : `${site.title} personal homepage`}>
-    <div class="wrapper">
-      <ProfilePanel />
-      <section class="content-panel" id="main-content">
-        <TopNav currentPath={Astro.url.pathname} />
-        <div class={page ? "subpage-content" : ""} data-page={page || undefined}>
-          <slot />
-        </div>
-        <footer class="page-footer"></footer>
-      </section>
+  <div class="site-frame">
+    <TopNav currentPath={Astro.url.pathname} />
+    <main id="main-content"><slot /></main>
+    <footer class="site-footer">
+      <div><strong>Kenny Ponders</strong><span>AI engineer in Shenzhen</span></div>
+      <p>Building local-first tools, agent workflows, and forms for thought.</p>
+      <nav aria-label="Footer links">
+        <a href={site.github_link} target="_blank" rel="noopener">GitHub</a>
+        <a href={site.zhihu_link} target="_blank" rel="noopener">Zhihu</a>
+        <a href={`mailto:${site.email}`}>Email</a>
+        <a href="/support/">Support</a>
+      </nav>
+    </footer>
+  </div>
+
+  <div class="command-palette" data-command-palette hidden>
+    <div class="command-dialog" role="dialog" aria-modal="true" aria-labelledby="command-title">
+      <div class="command-search">
+        <span id="command-title">Maker index</span>
+        <input data-command-input type="search" placeholder="Filter projects, notes, and pages" aria-label="Filter site index" />
+        <button type="button" data-command-close aria-label="Close site index">Esc</button>
+      </div>
+      <nav aria-label="Site index">
+        <a href="/" data-command-item><span>01</span>Studio<small>Home</small></a>
+        <a href="/projects/" data-command-item><span>02</span>Projects<small>Capture · Think · Make</small></a>
+        <a href="/notes/" data-command-item><span>03</span>Notes<small>Context · Memory · Agents</small></a>
+        <a href="/about/" data-command-item><span>04</span>About<small>Work · Research · CV</small></a>
+      </nav>
     </div>
-  </main>
+  </div>
 
   <script>
-    // Theme toggle: auto -> light -> dark -> auto
     const root = document.documentElement;
-    const themeQuery = matchMedia("(prefers-color-scheme: dark)");
-    const storageKey = "theme-mode";
-    const themeModes = ["auto", "light", "dark"] as const;
-    type ThemeMode = (typeof themeModes)[number];
-
-    const isThemeMode = (mode: string | undefined): mode is ThemeMode =>
-      Boolean(mode && themeModes.includes(mode as ThemeMode));
-
-    const readStoredMode = (): ThemeMode => {
-      const stored = localStorage.getItem(storageKey) || root.dataset.themeMode;
-      return isThemeMode(stored || undefined) ? stored as ThemeMode : "auto";
+    const query = matchMedia("(prefers-color-scheme: dark)");
+    const themeButton = document.querySelector<HTMLButtonElement>("[data-theme-toggle]");
+    const modes = ["auto", "light", "dark"] as const;
+    type Mode = typeof modes[number];
+    const readMode = (): Mode => {
+      const value = localStorage.getItem("theme-mode") || root.dataset.themeMode || "auto";
+      return modes.includes(value as Mode) ? value as Mode : "auto";
     };
-
-    const resolvedTheme = (mode: ThemeMode) =>
-      mode === "auto" ? (themeQuery.matches ? "dark" : "light") : mode;
-
-    const toggle = document.querySelector("[data-theme-toggle]");
-    const lightIcon = document.querySelector<HTMLLinkElement>('link[rel="icon"][media="(prefers-color-scheme:light)"]');
-    const darkIcon = document.querySelector<HTMLLinkElement>('link[rel="icon"][media="(prefers-color-scheme:dark)"]');
-
-    const syncFavicon = () => {
-      if (!lightIcon || !darkIcon) return;
-      const isDark = root.dataset.theme === "dark";
-      lightIcon.disabled = isDark;
-      darkIcon.disabled = !isDark;
-    };
-
-    const updateLabel = (mode: ThemeMode) => {
-      if (!(toggle instanceof HTMLButtonElement)) return;
-
-      const icons: Record<ThemeMode, string> = {
-        auto: "fa-solid fa-circle-half-stroke",
-        light: "fa-regular fa-sun",
-        dark: "fa-regular fa-moon",
-      };
-      const labels: Record<ThemeMode, string> = {
-        auto: "Auto",
-        light: "Light",
-        dark: "Dark",
-      };
-      const icon = toggle.querySelector("i");
-      const label = toggle.querySelector("span");
-      if (icon) icon.className = icons[mode];
-      if (label) label.textContent = labels[mode];
-      toggle.setAttribute("aria-label", `Theme: ${labels[mode]}`);
-    };
-
-    const applyTheme = (mode: ThemeMode, persist = false) => {
+    const applyMode = (mode: Mode, persist = false) => {
       root.dataset.themeMode = mode;
-      root.dataset.theme = resolvedTheme(mode);
-      if (persist) localStorage.setItem(storageKey, mode);
-      updateLabel(mode);
-      syncFavicon();
+      root.dataset.theme = mode === "auto" ? (query.matches ? "dark" : "light") : mode;
+      if (persist) localStorage.setItem("theme-mode", mode);
+      if (themeButton) {
+        themeButton.textContent = mode[0].toUpperCase() + mode.slice(1);
+        themeButton.setAttribute("aria-label", `Theme: ${themeButton.textContent}`);
+      }
     };
+    applyMode(readMode());
+    themeButton?.addEventListener("click", () => {
+      const current = readMode();
+      applyMode(current === "auto" ? "light" : current === "light" ? "dark" : "auto", true);
+    });
+    query.addEventListener("change", () => { if (readMode() === "auto") applyMode("auto"); });
 
-    applyTheme(readStoredMode());
-
-    if (toggle instanceof HTMLButtonElement) {
-      toggle.addEventListener("click", () => {
-        const current = readStoredMode();
-        const next: ThemeMode = current === "auto" ? "light" : current === "light" ? "dark" : "auto";
-        applyTheme(next, true);
+    const palette = document.querySelector<HTMLElement>("[data-command-palette]");
+    const input = document.querySelector<HTMLInputElement>("[data-command-input]");
+    const openPalette = () => { if (palette) { palette.hidden = false; document.body.classList.add("command-open"); input?.focus(); } };
+    const closePalette = () => { if (palette) { palette.hidden = true; document.body.classList.remove("command-open"); } };
+    document.querySelector("[data-command-open]")?.addEventListener("click", openPalette);
+    document.querySelector("[data-command-close]")?.addEventListener("click", closePalette);
+    palette?.addEventListener("click", (event) => { if (event.target === palette) closePalette(); });
+    input?.addEventListener("input", () => {
+      const value = input.value.trim().toLowerCase();
+      document.querySelectorAll<HTMLElement>("[data-command-item]").forEach((item) => {
+        item.hidden = Boolean(value && !item.innerText.toLowerCase().includes(value));
       });
-    }
-
-    themeQuery.addEventListener("change", () => {
-      const current = readStoredMode();
-      if (current === "auto") applyTheme("auto");
+    });
+    document.addEventListener("keydown", (event) => {
+      const typing = event.target instanceof HTMLInputElement || event.target instanceof HTMLTextAreaElement;
+      if (event.key === "/" && !typing) { event.preventDefault(); palette?.hidden ? openPalette() : closePalette(); }
+      if (event.key === "Escape") closePalette();
     });
   </script>
 </body>

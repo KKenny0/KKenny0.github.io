@@ -1,0 +1,18 @@
+---
+interface Props { target: string; label: string; }
+const { target, label } = Astro.props;
+---
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <meta http-equiv="refresh" content={`0; url=${target}`} />
+  <link rel="canonical" href={target} />
+  <title>Moved · Kenny Ponders</title>
+</head>
+<body>
+  <p>This page moved to <a href={target}>{label}</a>.</p>
+  <script is:inline define:vars={{ target }}>location.replace(target);</script>
+</body>
+</html>

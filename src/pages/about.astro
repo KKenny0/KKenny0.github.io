@@ -1,0 +1,28 @@
+---
+import BaseLayout from "../layouts/BaseLayout.astro";
+import { publications } from "../data/publications";
+import { site } from "../data/site";
+---
+
+<BaseLayout title="About" description="Background, selected professional work, and research by Kenny Wu.">
+  <header class="about-heading">
+    <img src={site.avatar} alt="Kenny Wu" width="180" height="180" />
+    <div><span class="eyebrow">Kenny Wu · Kenny Ponders</span><h1>An AI engineer interested in what survives the model call.</h1><p>Based in Shenzhen. I move between language systems, multimodal workflows, local-first software, and tools for thought.</p></div>
+  </header>
+
+  <section class="about-section"><span class="section-number">01</span><div><h2>Current questions</h2><ul class="question-list"><li>What deserves to become durable context?</li><li>How should an agent expose its decisions without creating more noise?</li><li>Which constraints turn model capability into a reliable artifact?</li></ul></div></section>
+
+  <section class="about-section"><span class="section-number">02</span><div><h2>Selected professional work</h2>
+    <div class="experience-list">
+      <article><header><h3>AI comic generation</h3><span>Lead · 2026</span></header><p>Staged LLM workflows for narrative slicing, scene analysis, shot generation, and reusable character and scene memory.</p></article>
+      <article><header><h3>Short-drama identity systems</h3><span>Direction lead · 2025–2026</span></header><p>Cross-episode entity alignment, retrieval, scheduling, and cache reuse for more continuous generated edits.</p></article>
+      <article><header><h3>Enterprise RAG and safety review</h3><span>Core algorithm engineer · 2024</span></header><p>Hierarchical chunking, multi-stage retrieval, dynamic thresholding, and prompt-assisted internal safety review.</p></article>
+    </div>
+  </div></section>
+
+  <section class="about-section"><span class="section-number">03</span><div><h2>Research</h2>
+    <div class="research-list">{publications.main.map((pub) => <article><span>{pub.conference}</span><h3><a href={pub.pdf} target="_blank" rel="noopener">{pub.title} ↗</a></h3><p set:html={pub.authors} /></article>)}</div>
+  </div></section>
+
+  <section class="about-section about-contact"><span class="section-number">04</span><div><h2>Elsewhere</h2><p>For collaboration, difficult context problems, or a thoughtful disagreement:</p><div><a href={`mailto:${site.email}`}>{site.email}</a><a href={site.cv_link}>Curriculum vitae ↓</a></div></div></section>
+</BaseLayout>

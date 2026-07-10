@@ -1,0 +1,18 @@
+---
+import BaseLayout from "../layouts/BaseLayout.astro";
+import { writings } from "../data/writings";
+---
+
+<BaseLayout title="Notes" description="Field notes on agent memory, context engineering, coding agents, and tools for thought.">
+  <header class="page-heading"><span class="eyebrow">Field notes</span><h1>Writing toward a clearer model of the work.</h1><p>Source-level notes on agent memory, context engineering, coding tools, and the systems around the model.</p></header>
+  <div class="notes-index">
+    {writings.articles.map((article, index) => (
+      <article class="note-entry">
+        <div><span>{String(index + 1).padStart(2, "0")}</span><small>{article.date}<br />{article.source}</small></div>
+        <div><h2><a href={article.url} target="_blank" rel="noopener">{article.title} ↗</a></h2><p lang="zh">{article.teaser}</p></div>
+        <span class="topic-mark">{index < 2 ? "memory" : index < 4 ? "context" : "agents"}</span>
+      </article>
+    ))}
+  </div>
+  <a class="section-link" href={writings.collection_url} target="_blank" rel="noopener">Open the full column ↗</a>
+</BaseLayout>

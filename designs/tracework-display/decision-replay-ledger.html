@@ -1,0 +1,376 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Tracework · Decision Replay Ledger</title>
+  <!--
+    Assumptions:
+    - This is a 1600 × 1000 portfolio display artifact, not a product screenshot.
+    - It must remain legible when rendered around 475px wide.
+    - Copy is derived from Tracework's real public product boundary and commands.
+    Context:
+    - Tracework dark tokens: near-black blue canvas, quiet teal, citrus evidence mark.
+    - Kenny's portfolio: editorial hierarchy, thin rules, vermilion annotations.
+    Reasoning:
+    - One decision record expresses the mechanism more clearly than a feature grid.
+    - The commands are evidence, not decorative terminal texture.
+  -->
+  <style>
+    :root {
+      --canvas: oklch(15% 0.012 220);
+      --surface: oklch(19% 0.014 220);
+      --surface-strong: oklch(24% 0.016 220);
+      --ink: oklch(92% 0.01 210);
+      --muted: oklch(70% 0.016 210);
+      --faint: oklch(52% 0.018 210);
+      --line: oklch(36% 0.018 220);
+      --teal: oklch(78% 0.08 192);
+      --teal-deep: oklch(43% 0.09 196);
+      --citrus: oklch(82% 0.11 92);
+      --vermilion: oklch(66% 0.14 32);
+      --sans: -apple-system, BlinkMacSystemFont, "Segoe UI", "PingFang SC", sans-serif;
+      --mono: "Cascadia Code", "SFMono-Regular", Consolas, monospace;
+    }
+
+    * { box-sizing: border-box; }
+
+    html, body {
+      margin: 0;
+      width: 1600px;
+      height: 1000px;
+      overflow: hidden;
+      color: var(--ink);
+      background: var(--canvas);
+      font-family: var(--sans);
+      -webkit-font-smoothing: antialiased;
+    }
+
+    body { position: relative; }
+
+    .ledger {
+      position: relative;
+      display: grid;
+      grid-template-rows: auto 1fr auto;
+      width: 100%;
+      height: 100%;
+      padding: 62px 72px 58px;
+      isolation: isolate;
+    }
+
+    .ledger::before,
+    .ledger::after {
+      content: "";
+      position: absolute;
+      z-index: -1;
+      pointer-events: none;
+    }
+
+    .ledger::before {
+      inset: 0;
+      background-size: 100% 125px;
+      background-image: linear-gradient(to bottom, transparent 124px, oklch(36% 0.018 220 / 32%) 125px);
+    }
+
+    .ledger::after {
+      top: 0;
+      bottom: 0;
+      left: 39.5%;
+      width: 1px;
+      background: oklch(36% 0.018 220 / 34%);
+    }
+
+    .mast {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      padding-bottom: 34px;
+      border-bottom: 1px solid var(--line);
+    }
+
+    .brand {
+      display: flex;
+      align-items: center;
+      gap: 16px;
+      font-size: 24px;
+      font-weight: 700;
+      letter-spacing: -0.02em;
+    }
+
+    .brand-mark {
+      width: 14px;
+      height: 36px;
+      background: var(--teal);
+    }
+
+    .mast-meta {
+      display: flex;
+      gap: 34px;
+      color: var(--faint);
+      font-family: var(--mono);
+      font-size: 15px;
+      letter-spacing: 0.08em;
+      text-transform: uppercase;
+    }
+
+    .mast-meta strong { color: var(--teal); font-weight: 500; }
+
+    .content {
+      display: grid;
+      grid-template-columns: 0.86fr 1.45fr;
+      gap: 78px;
+      padding: 58px 0 42px;
+      min-height: 0;
+    }
+
+    .thesis {
+      display: flex;
+      flex-direction: column;
+      justify-content: space-between;
+      min-width: 0;
+    }
+
+    .kicker {
+      color: var(--vermilion);
+      font-family: var(--mono);
+      font-size: 17px;
+      letter-spacing: 0.12em;
+      text-transform: uppercase;
+    }
+
+    h1 {
+      max-width: 560px;
+      margin: 30px 0 0;
+      color: var(--teal);
+      font-size: 106px;
+      font-weight: 720;
+      line-height: 0.94;
+      letter-spacing: -0.065em;
+      text-wrap: balance;
+    }
+
+    .thesis-copy {
+      max-width: 520px;
+      margin: 30px 0 0;
+      color: var(--muted);
+      font-size: 25px;
+      line-height: 1.45;
+      text-wrap: pretty;
+    }
+
+    .boundary {
+      display: grid;
+      grid-template-columns: 116px 1fr;
+      gap: 22px;
+      padding-top: 24px;
+      border-top: 1px solid var(--line);
+    }
+
+    .boundary span {
+      color: var(--citrus);
+      font-family: var(--mono);
+      font-size: 15px;
+      letter-spacing: 0.08em;
+      text-transform: uppercase;
+    }
+
+    .boundary p {
+      margin: 0;
+      color: var(--muted);
+      font-size: 18px;
+      line-height: 1.55;
+    }
+
+    .record {
+      display: grid;
+      grid-template-rows: auto 1fr auto;
+      min-width: 0;
+      border: 1px solid var(--line);
+      background: oklch(17% 0.013 220 / 88%);
+    }
+
+    .record-head {
+      display: grid;
+      grid-template-columns: 1fr auto;
+      gap: 20px;
+      align-items: center;
+      min-height: 74px;
+      padding: 0 30px;
+      border-bottom: 1px solid var(--line);
+      font-family: var(--mono);
+      font-size: 15px;
+      letter-spacing: 0.08em;
+      text-transform: uppercase;
+    }
+
+    .record-head span { color: var(--teal); }
+    .record-head small { color: var(--faint); font: inherit; }
+
+    .record-body { display: grid; }
+
+    .record-row {
+      display: grid;
+      grid-template-columns: 148px 1fr 44px;
+      gap: 24px;
+      align-items: start;
+      min-height: 126px;
+      padding: 27px 30px 24px;
+      border-bottom: 1px solid var(--line);
+    }
+
+    .record-row:last-child { border-bottom: 0; }
+
+    .record-label {
+      padding-top: 6px;
+      color: var(--faint);
+      font-family: var(--mono);
+      font-size: 15px;
+      letter-spacing: 0.08em;
+      text-transform: uppercase;
+    }
+
+    .record-value strong {
+      display: block;
+      color: var(--ink);
+      font-size: 29px;
+      font-weight: 650;
+      letter-spacing: -0.025em;
+      line-height: 1.18;
+    }
+
+    .record-value p {
+      margin: 10px 0 0;
+      color: var(--muted);
+      font-size: 18px;
+      line-height: 1.45;
+    }
+
+    .record-row.decision { background: oklch(43% 0.08 196 / 10%); }
+    .record-row.decision .record-label,
+    .record-row.decision .record-value strong { color: var(--teal); }
+    .record-row.rejected .record-label { color: var(--vermilion); }
+    .record-row.evidence .record-label { color: var(--citrus); }
+
+    .status {
+      display: grid;
+      place-items: center;
+      width: 34px;
+      height: 34px;
+      border: 1px solid var(--line);
+      color: var(--faint);
+      font-family: var(--mono);
+      font-size: 15px;
+    }
+
+    .decision .status { border-color: var(--teal-deep); color: var(--teal); }
+    .evidence .status { color: var(--citrus); }
+
+    .outputs {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      border-top: 1px solid var(--line);
+    }
+
+    .output {
+      display: grid;
+      grid-template-columns: auto 1fr;
+      gap: 12px;
+      min-height: 84px;
+      padding: 20px 22px;
+      border-right: 1px solid var(--line);
+    }
+
+    .output:last-child { border-right: 0; }
+    .output span { color: var(--teal); font-family: var(--mono); font-size: 14px; }
+    .output strong { font-size: 18px; font-weight: 600; }
+    .output small { grid-column: 2; color: var(--faint); font-size: 14px; }
+
+    .commands {
+      display: grid;
+      grid-template-columns: 1.1fr 1fr 1fr;
+      border-top: 1px solid var(--line);
+      border-bottom: 1px solid var(--line);
+    }
+
+    .command {
+      display: grid;
+      grid-template-columns: auto 1fr;
+      gap: 16px;
+      align-items: baseline;
+      min-height: 74px;
+      padding: 23px 26px;
+      border-right: 1px solid var(--line);
+    }
+
+    .command:last-child { border-right: 0; }
+    .command code { color: var(--teal); font-family: var(--mono); font-size: 17px; }
+    .command span { color: var(--faint); font-size: 15px; }
+
+    .footer-note {
+      position: absolute;
+      right: 72px;
+      bottom: 20px;
+      color: var(--faint);
+      font-family: var(--mono);
+      font-size: 12px;
+      letter-spacing: 0.08em;
+      text-transform: uppercase;
+    }
+  </style>
+</head>
+<body>
+  <main class="ledger" data-screen-label="Tracework decision replay ledger">
+    <header class="mast">
+      <div class="brand"><span class="brand-mark"></span><span>Tracework</span></div>
+      <div class="mast-meta"><span>Local evidence vault</span><strong>Decision replay / 01</strong></div>
+    </header>
+
+    <section class="content">
+      <div class="thesis">
+        <div>
+          <span class="kicker">Question the record</span>
+          <h1>Why this path?</h1>
+          <p class="thesis-copy">A durable work trace keeps the decision, rejected alternatives, and evidence inspectable after the session ends.</p>
+        </div>
+        <div class="boundary">
+          <span>Boundary</span>
+          <p>No hosted service. No activity scoring. Local Markdown and JSON remain the source of truth.</p>
+        </div>
+      </div>
+
+      <article class="record" aria-label="Example Tracework decision record">
+        <header class="record-head"><span>Session 07 · Storage boundary</span><small>Captured · cited</small></header>
+        <div class="record-body">
+          <div class="record-row decision">
+            <span class="record-label">Decision</span>
+            <div class="record-value"><strong>Keep evidence local</strong><p>Write the human-readable record before any optional external action.</p></div>
+            <span class="status">✓</span>
+          </div>
+          <div class="record-row rejected">
+            <span class="record-label">Rejected</span>
+            <div class="record-value"><strong>Cloud-only session history</strong><p>Convenient to query, but incompatible with the privacy and inspection boundary.</p></div>
+            <span class="status">×</span>
+          </div>
+          <div class="record-row evidence">
+            <span class="record-label">Evidence</span>
+            <div class="record-value"><strong>Capture trail + privacy promise</strong><p>Raw entries, source refs, risks, artifacts, and next steps remain available for review.</p></div>
+            <span class="status">↗</span>
+          </div>
+        </div>
+        <footer class="outputs">
+          <div class="output"><span>01</span><strong>Report</strong><small>what changed</small></div>
+          <div class="output"><span>02</span><strong>Recall</strong><small>what carries forward</small></div>
+          <div class="output"><span>03</span><strong>Roadmap</strong><small>how decisions evolved</small></div>
+        </footer>
+      </article>
+    </section>
+
+    <footer class="commands">
+      <div class="command"><code>/tracework:capture</code><span>record the why</span></div>
+      <div class="command"><code>/tracework:query</code><span>question the record</span></div>
+      <div class="command"><code>/tracework:roadmap</code><span>see decisions evolve</span></div>
+    </footer>
+    <span class="footer-note">Agentic coding decision replay · 2026</span>
+  </main>
+</body>
+</html>
