@@ -1,0 +1,67 @@
+---
+const practices = [
+  {
+    name: "Listen",
+    note: "Make room for a different rhythm.",
+    image: "/assets/img/practices/listen.png",
+    alt: "Kenny listening to music in a rattan chair",
+  },
+  {
+    name: "Read",
+    note: "Follow an idea back to its source.",
+    image: "/assets/img/practices/read.png",
+    alt: "Kenny reading and annotating a book",
+  },
+  {
+    name: "Walk",
+    note: "Let the problem loosen while moving.",
+    image: "/assets/img/practices/walk.png",
+    alt: "Kenny taking a relaxed walk",
+  },
+  {
+    name: "Return",
+    note: "Come back to strength, balance, and breath.",
+    image: "/assets/img/practices/return.png",
+    alt: "Kenny balancing in a yoga pose beside a kettlebell",
+  },
+];
+---
+
+<section class="personal-practices" aria-labelledby="personal-practices-title" data-personal-practices>
+  <span class="section-number">02</span>
+  <div>
+    <header class="personal-practices-intro">
+      <h2 id="personal-practices-title">Outside the terminal</h2>
+      <p>Small practices that keep attention open and the work connected to a life beyond the screen.</p>
+    </header>
+    <div class="personal-practices-grid">
+      {practices.map((practice) => (
+        <figure class="practice-figure" data-practice-figure>
+          <div class="practice-figure-art">
+            <img src={practice.image} alt={practice.alt} width="1254" height="1254" loading="lazy" />
+          </div>
+          <figcaption><strong>{practice.name}</strong><span>{practice.note}</span></figcaption>
+        </figure>
+      ))}
+    </div>
+  </div>
+</section>
+
+<script>
+  const group = document.querySelector<HTMLElement>("[data-personal-practices]");
+  const figures = Array.from(document.querySelectorAll<HTMLElement>("[data-practice-figure]"));
+  const reduceMotion = matchMedia("(prefers-reduced-motion: reduce)").matches;
+
+  if (group && figures.length && !reduceMotion && "IntersectionObserver" in window) {
+    group.dataset.motionReady = "true";
+    const observer = new IntersectionObserver((entries) => {
+      entries.forEach((entry) => {
+        if (!entry.isIntersecting) return;
+        (entry.target as HTMLElement).classList.add("is-visible");
+        observer.unobserve(entry.target);
+      });
+    }, { threshold: 0.16, rootMargin: "0px 0px -8%" });
+
+    figures.forEach((figure) => observer.observe(figure));
+  }
+</script>
