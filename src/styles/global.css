@@ -471,7 +471,7 @@ p { text-wrap: pretty; }
 }
 .tracework-back:hover { color: var(--blue); }
 .tracework-hero-meta { display: flex; flex-wrap: wrap; gap: 10px 24px; margin-top: 54px; color: var(--red); font-family: var(--mono); font-size: 10px; letter-spacing: 0.08em; text-transform: uppercase; }
-.tracework-hero-copy h1 { margin: 20px 0 0; font-family: var(--serif); font-size: clamp(5rem, 12vw, 11rem); font-weight: 500; line-height: 0.82; letter-spacing: -0.07em; }
+.tracework-hero-copy h1 { margin: 20px 0 0; font-family: var(--serif); font-size: clamp(4.5rem, 10vw, 9.5rem); font-weight: 500; line-height: 0.82; letter-spacing: -0.07em; white-space: nowrap; overflow-wrap: normal; }
 .tracework-hero-subtitle { max-width: 580px; margin: 28px 0 0; color: var(--blue); font-family: var(--serif); font-size: clamp(1.5rem, 3vw, 2.8rem); font-style: italic; line-height: 1.14; letter-spacing: -0.025em; }
 .tracework-hero-aside { grid-column: 8 / -1; align-self: end; min-width: 0; padding-bottom: 4px; }
 .tracework-hero-aside > p { max-width: 36ch; margin: 0; color: var(--muted); font-size: 18px; line-height: 1.75; }
@@ -799,7 +799,7 @@ p { text-wrap: pretty; }
   .tracework-cta { padding-inline: 16px; }
   .tracework-hero { padding-top: 36px; padding-bottom: 70px; }
   .tracework-hero-meta { gap: 8px 16px; margin-top: 42px; font-size: 9px; }
-  .tracework-hero-copy h1 { font-size: clamp(4.8rem, 25vw, 8rem); }
+  .tracework-hero-copy h1 { font-size: clamp(3.75rem, 18vw, 8rem); }
   .tracework-hero-subtitle { max-width: 14ch; font-size: 2rem; }
   .tracework-hero-actions { align-items: flex-start; flex-direction: column; gap: 8px; }
   .tracework-loop { margin-top: 52px; padding: 18px 14px; }
