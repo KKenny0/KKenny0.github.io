@@ -60,6 +60,7 @@ export const projects = [
     thesis: "Find the frame that makes a question clear.",
     problem: "Research agents can summarize quickly while losing provenance, disagreement, and boundary conditions.",
     proof: "Three route-specific workflows that select, stress-test, and compose an evidence-grounded Chinese longform article.",
+    detailUrl: "/projects/weave/",
     url: "https://github.com/KKenny0/weave",
     featured: false,
   },

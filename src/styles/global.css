@@ -360,6 +360,95 @@ p { text-wrap: pretty; }
 .project-entry-body dd { margin: 0; color: var(--muted); font-size: 13px; }
 .project-entry > img { width: 100%; max-height: 220px; object-fit: cover; object-position: top; outline: 1px solid var(--line); outline-offset: -1px; }
 
+.weave-page { overflow: hidden; }
+.weave-hero {
+  display: grid;
+  grid-template-columns: repeat(12, minmax(0, 1fr));
+  gap: 20px;
+  padding: clamp(48px, 7vw, 92px) clamp(24px, 6vw, 84px) clamp(64px, 8vw, 112px);
+  border-bottom: 1px solid var(--line-strong);
+}
+.weave-hero-copy { grid-column: 1 / 8; min-width: 0; }
+.weave-back {
+  display: inline-flex;
+  align-items: center;
+  min-height: 40px;
+  color: var(--muted);
+  font-family: var(--mono);
+  font-size: 11px;
+  letter-spacing: 0.06em;
+  text-decoration: none;
+  text-transform: uppercase;
+}
+.weave-back:hover { color: var(--blue); }
+.weave-hero-meta { display: flex; flex-wrap: wrap; gap: 10px 24px; margin-top: 54px; color: var(--red); font-family: var(--mono); font-size: 10px; letter-spacing: 0.08em; text-transform: uppercase; }
+.weave-hero-copy h1 { margin: 20px 0 0; font-family: var(--serif); font-size: clamp(5rem, 12vw, 11rem); font-weight: 500; line-height: 0.82; letter-spacing: -0.07em; }
+.weave-hero-subtitle { max-width: 580px; margin: 28px 0 0; color: var(--blue); font-family: var(--serif); font-size: clamp(1.5rem, 3vw, 2.8rem); font-style: italic; line-height: 1.14; letter-spacing: -0.025em; }
+.weave-hero-aside { grid-column: 8 / -1; align-self: end; min-width: 0; padding-bottom: 4px; }
+.weave-hero-aside > p { max-width: 36ch; margin: 0; color: var(--muted); font-size: 18px; line-height: 1.75; }
+.weave-hero-actions { display: flex; flex-wrap: wrap; align-items: center; gap: 14px 24px; margin-top: 28px; }
+.weave-link { display: inline-flex; align-items: center; min-height: 40px; color: var(--blue); border-bottom: 1px solid currentColor; font-family: var(--mono); font-size: 11px; letter-spacing: 0.04em; text-decoration: none; text-transform: uppercase; }
+.weave-link--quiet { color: var(--muted); border-bottom-color: var(--line-strong); }
+.weave-hero-note { color: var(--faint); font-family: var(--serif); font-size: 13px; }
+.weave-board {
+  grid-column: 1 / -1;
+  margin-top: clamp(52px, 7vw, 90px);
+  padding: clamp(20px, 3vw, 34px);
+  background: var(--blue-soft);
+  border-top: 1px solid var(--blue);
+  border-bottom: 1px solid var(--line-strong);
+}
+.weave-board-heading { display: flex; justify-content: space-between; gap: 24px; color: var(--blue); font-family: var(--mono); font-size: 10px; letter-spacing: 0.08em; text-transform: uppercase; }
+.weave-board-heading span:last-child { color: var(--faint); text-align: right; }
+.weave-board-flow { display: flex; align-items: stretch; gap: clamp(8px, 1.6vw, 18px); margin-top: 28px; }
+.weave-board-node { display: flex; flex: 1 1 0; min-width: 0; min-height: 112px; flex-direction: column; justify-content: space-between; padding: 16px; background: var(--paper); border: 1px solid var(--line); }
+.weave-board-node strong { color: var(--ink); font-family: var(--mono); font-size: clamp(0.85rem, 1.6vw, 1.2rem); font-weight: 600; letter-spacing: -0.04em; overflow-wrap: anywhere; }
+.weave-board-node span { color: var(--muted); font-size: 12px; line-height: 1.35; }
+.weave-board-node--candidate { background: transparent; border-color: var(--blue); }
+.weave-board-node--winner { background: var(--ink); border-color: var(--ink); }
+.weave-board-node--winner strong,
+.weave-board-node--winner span { color: var(--paper); }
+.weave-board-arrow { display: inline-flex; align-items: center; color: var(--red); font-family: var(--mono); font-size: 14px; }
+.weave-board-caption { max-width: 62ch; margin: 24px 0 0; color: var(--muted); font-family: var(--serif); font-size: 14px; }
+.weave-question,
+.weave-routes,
+.weave-gates,
+.weave-boundary,
+.weave-cta { padding: clamp(76px, 9vw, 124px) clamp(24px, 6vw, 84px); border-bottom: 1px solid var(--line); }
+.weave-question { display: grid; grid-template-columns: 1fr 4fr; gap: 30px; }
+.weave-section-label { color: var(--red); font-family: var(--mono); font-size: 10px; font-weight: 600; letter-spacing: 0.08em; text-transform: uppercase; }
+.weave-question > div { max-width: 76ch; }
+.weave-question h2,
+.weave-section-intro h2,
+.weave-cta h2 { max-width: 780px; margin: 0; font-family: var(--serif); font-size: clamp(2.2rem, 4.6vw, 4.8rem); font-weight: 500; line-height: 1.02; letter-spacing: -0.04em; }
+.weave-question p { max-width: 66ch; margin: 24px 0 0; color: var(--muted); line-height: 1.8; }
+.weave-section-intro { display: grid; grid-template-columns: 1fr 4fr; gap: 30px; align-items: start; margin-bottom: clamp(44px, 6vw, 72px); }
+.weave-section-intro > div { display: grid; grid-template-columns: 2fr 1fr; gap: 36px; align-items: end; }
+.weave-section-intro > div > p { max-width: 34ch; margin: 0; color: var(--muted); }
+.weave-route-list,
+.weave-gate-list { border-top: 1px solid var(--line-strong); }
+.weave-route { display: grid; grid-template-columns: 0.45fr 1.25fr 1.8fr 1.5fr; gap: 24px; align-items: baseline; padding: 24px 0; border-bottom: 1px solid var(--line); }
+.weave-route > strong { color: var(--red); font-family: var(--mono); font-size: 11px; font-weight: 600; }
+.weave-route h3 { margin: 0; font-family: var(--serif); font-size: clamp(1.5rem, 2.5vw, 2.4rem); font-weight: 500; letter-spacing: -0.025em; }
+.weave-route p { margin: 0; color: var(--muted); font-size: 13px; }
+.weave-route-heading { padding-block: 12px; color: var(--faint); font-family: var(--mono); font-size: 9px; letter-spacing: 0.08em; text-transform: uppercase; }
+.weave-gate-list { margin: 0; padding: 0; list-style: none; counter-reset: weave-gates; }
+.weave-gate-list li { display: grid; grid-template-columns: 0.45fr 1.25fr 3fr; gap: 24px; align-items: baseline; padding: 24px 0; border-bottom: 1px solid var(--line); }
+.weave-gate-list li > span { color: var(--red); font-family: var(--mono); font-size: 11px; }
+.weave-gate-list strong { font-family: var(--serif); font-size: clamp(1.25rem, 2.3vw, 2rem); font-weight: 500; }
+.weave-gate-list p { max-width: 58ch; margin: 0; color: var(--muted); font-size: 14px; }
+.weave-boundary { background: var(--paper-deep); }
+.weave-boundary-grid { display: grid; grid-template-columns: 1fr 1fr; gap: clamp(42px, 9vw, 120px); }
+.weave-boundary-mark { display: block; margin-bottom: 18px; color: var(--blue); font-family: var(--mono); font-size: 10px; font-weight: 600; letter-spacing: 0.08em; text-transform: uppercase; }
+.weave-boundary-grid > div:last-child .weave-boundary-mark { color: var(--red); }
+.weave-boundary ul { margin: 0; padding: 0; list-style: none; border-top: 1px solid var(--line-strong); }
+.weave-boundary li { padding: 16px 0; border-bottom: 1px solid var(--line); color: var(--muted); font-size: 14px; }
+.weave-cta { display: grid; grid-template-columns: 1fr 4fr; gap: 30px; border-bottom: 0; }
+.weave-cta > div > p { max-width: 54ch; margin: 22px 0 0; color: var(--muted); font-size: 17px; }
+.weave-cta-links { display: flex; flex-wrap: wrap; gap: 14px 28px; margin-top: 34px; }
+.weave-page[data-motion-ready="true"] .weave-reveal { opacity: 0; transform: translateY(14px); }
+.weave-page[data-motion-ready="true"] .weave-reveal.is-visible { opacity: 1; transform: translateY(0); transition: opacity 420ms var(--ease), transform 420ms var(--ease); }
+
 .notes-index { padding-top: 40px; }
 .note-entry { position: relative; display: grid; grid-template-columns: 0.7fr 2.5fr 0.8fr; gap: 30px; padding: 38px 0; border-bottom: 1px solid var(--line); }
 .note-entry > div:first-child { display: flex; gap: 24px; color: var(--muted); font-family: var(--mono); font-size: 10px; text-transform: uppercase; }
@@ -542,10 +631,55 @@ p { text-wrap: pretty; }
   .project-entry-body h3 a { transition: color 140ms linear, background-color 140ms linear, transform 180ms var(--ease); }
   .practice-figure img { transition: transform 160ms var(--ease); }
   .practice-figure:hover img { transform: translateY(-3px); }
+  .weave-link { transition: color 140ms linear, border-color 140ms linear, transform 180ms var(--ease); }
+  .weave-link:hover { color: var(--ink); border-color: var(--ink); transform: translateX(3px); }
+  .weave-board-node--candidate { transition: border-color 140ms linear, transform 180ms var(--ease); }
+  .weave-board-node--candidate:hover { border-color: var(--red); transform: translateY(-3px); }
 }
 
 @media (prefers-reduced-motion: reduce) {
   html { scroll-behavior: auto; }
   *, *::before, *::after { animation: none !important; transition: none !important; }
   .hero-practice-mark { opacity: 1; transform: none; }
+  .weave-page[data-motion-ready="true"] .weave-reveal { opacity: 1; transform: none; }
+}
+
+@media (max-width: 920px) {
+  .weave-hero-copy,
+  .weave-hero-aside { grid-column: 1 / -1; }
+  .weave-hero-aside { margin-top: 18px; }
+  .weave-hero-aside > p { max-width: 52ch; }
+}
+
+@media (max-width: 720px) {
+  .weave-hero,
+  .weave-question,
+  .weave-routes,
+  .weave-gates,
+  .weave-boundary,
+  .weave-cta { padding-inline: 16px; }
+  .weave-hero { padding-top: 36px; padding-bottom: 70px; }
+  .weave-hero-meta { gap: 8px 16px; margin-top: 42px; font-size: 9px; }
+  .weave-hero-copy h1 { font-size: clamp(4.8rem, 25vw, 8rem); }
+  .weave-hero-subtitle { max-width: 14ch; font-size: 2rem; }
+  .weave-hero-actions { align-items: flex-start; flex-direction: column; gap: 8px; }
+  .weave-board { margin-top: 52px; padding: 18px 14px; }
+  .weave-board-heading { align-items: flex-start; flex-direction: column; gap: 6px; }
+  .weave-board-heading span:last-child { text-align: left; }
+  .weave-board-flow { align-items: stretch; flex-direction: column; gap: 8px; }
+  .weave-board-node { min-height: 82px; }
+  .weave-board-arrow { justify-content: center; transform: rotate(90deg); }
+  .weave-question,
+  .weave-cta { grid-template-columns: 1fr; gap: 24px; }
+  .weave-section-intro { grid-template-columns: 1fr; gap: 16px; }
+  .weave-section-intro > div { grid-template-columns: 1fr; gap: 16px; }
+  .weave-route-heading { display: none; }
+  .weave-route { grid-template-columns: 34px 1fr; gap: 8px 16px; padding: 22px 0; }
+  .weave-route h3 { grid-column: 2; }
+  .weave-route p { grid-column: 2; }
+  .weave-gate-list li { grid-template-columns: 34px 1fr; gap: 8px 16px; padding: 22px 0; }
+  .weave-gate-list strong,
+  .weave-gate-list p { grid-column: 2; }
+  .weave-boundary-grid { grid-template-columns: 1fr; gap: 48px; }
+  .weave-cta > div > p { font-size: 16px; }
 }

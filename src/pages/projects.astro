@@ -14,7 +14,7 @@ import { practices, projects } from "../data/projects";
             <article class:list={["project-entry", project.featured && "featured"]}>
               <div class="project-entry-meta"><span>{project.year}</span><small>{project.status}</small></div>
               <div class="project-entry-body">
-                <h3><a href={project.url} target="_blank" rel="noopener">{project.name} ↗</a></h3>
+                <h3><a href={project.detailUrl ?? project.url} target={project.detailUrl ? undefined : "_blank"} rel={project.detailUrl ? undefined : "noopener"}>{project.name} {project.detailUrl ? "↘" : "↗"}</a></h3>
                 <p class="project-thesis">{project.thesis}</p>
                 <dl><div><dt>Problem</dt><dd>{project.problem}</dd></div><div><dt>Proof</dt><dd>{project.proof}</dd></div></dl>
               </div>

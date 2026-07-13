@@ -48,8 +48,8 @@ const currentProject = projects.find((project) => project.slug === "clipplane")!
           <div class="practice-panel" data-practice-panel={practice.id} hidden={index !== 0}>
             <span class="margin-label">Projects in this practice</span>
             {projects.filter((project) => project.practice === practice.id).map((project) => (
-              <a href={project.url} target="_blank" rel="noopener">
-                <strong>{project.name}</strong><span>{project.thesis}</span><small>{project.status} ↗</small>
+              <a href={project.detailUrl ?? project.url} target={project.detailUrl ? undefined : "_blank"} rel={project.detailUrl ? undefined : "noopener"}>
+                <strong>{project.name}</strong><span>{project.thesis}</span><small>{project.status} {project.detailUrl ? "↘" : "↗"}</small>
               </a>
             ))}
           </div>

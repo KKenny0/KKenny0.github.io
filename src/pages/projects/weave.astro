@@ -1,0 +1,139 @@
+---
+import BaseLayout from "../../layouts/BaseLayout.astro";
+---
+
+<BaseLayout title="weave" description="A research skill that selects the frame before it writes the article.">
+  <article class="weave-page">
+    <section class="weave-hero" aria-labelledby="weave-title">
+      <div class="weave-hero-copy">
+        <a class="weave-back" href="/projects/">← Projects</a>
+        <div class="weave-hero-meta"><span>02 / Think</span><span>Research skill</span><span>Claude Code + Codex</span></div>
+        <h1 id="weave-title">weave</h1>
+        <p class="weave-hero-subtitle">Find the frame that makes a question clear.</p>
+      </div>
+
+      <div class="weave-hero-aside">
+        <p>When a smooth summary hides where the ground is weak, weave keeps the evidence visible and lets the material choose its shape.</p>
+        <div class="weave-hero-actions">
+          <a class="weave-link" href="https://github.com/KKenny0/weave" target="_blank" rel="noopener">Read the repository ↗</a>
+          <span class="weave-hero-note" lang="zh-CN">证据先行，取景框决定文章</span>
+        </div>
+      </div>
+
+      <div class="weave-board weave-reveal" data-weave-reveal aria-label="weave moves from material to a selected frame and article">
+        <div class="weave-board-heading"><span>Frame Decision</span><span>the article is the last step</span></div>
+        <div class="weave-board-flow">
+          <div class="weave-board-node"><strong>x</strong><span>material</span></div>
+          <span class="weave-board-arrow" aria-hidden="true">→</span>
+          <div class="weave-board-node"><strong>E</strong><span>evidence</span></div>
+          <span class="weave-board-arrow" aria-hidden="true">→</span>
+          <div class="weave-board-node weave-board-node--candidate"><strong>f₁ · f₂ · f₃</strong><span>candidate frames</span></div>
+          <span class="weave-board-arrow" aria-hidden="true">→</span>
+          <div class="weave-board-node weave-board-node--winner"><strong>f*</strong><span>selected frame</span></div>
+          <span class="weave-board-arrow" aria-hidden="true">→</span>
+          <div class="weave-board-node"><strong>f*(x)</strong><span>article</span></div>
+        </div>
+        <p class="weave-board-caption">A frame earns its place when it changes what the article keeps, how it moves, and where it stops.</p>
+      </div>
+    </section>
+
+    <section class="weave-question weave-reveal" data-weave-reveal aria-labelledby="weave-question-title">
+      <span class="weave-section-label">01 / The question</span>
+      <div>
+        <h2 id="weave-question-title">A readable answer can still hide its ground.</h2>
+        <p>Research agents are good at making scattered material sound coherent. The dangerous part is what disappears in the smoothing: disagreement, weak evidence, and the boundary where a claim stops working.</p>
+        <p>weave treats the article as a view over evidence, not as a summary of everything the model can say.</p>
+      </div>
+    </section>
+
+    <section class="weave-routes weave-reveal" data-weave-reveal aria-labelledby="weave-routes-title">
+      <div class="weave-section-intro">
+        <span class="weave-section-label">02 / Three routes</span>
+        <div>
+          <h2 id="weave-routes-title">The material changes the lens.</h2>
+          <p>One pipeline, three ways into a question. The route decides what counts as evidence before any frame is allowed to lead.</p>
+        </div>
+      </div>
+      <div class="weave-route-list">
+        <div class="weave-route weave-route-heading" aria-hidden="true"><span>Route</span><span>Input</span><span>Reads for</span><span>Leaves you with</span></div>
+        <div class="weave-route"><strong>01</strong><h3>deep-read</h3><p>Papers, articles, interviews, reports</p><p>Evidence-grounded Chinese longform</p></div>
+        <div class="weave-route"><strong>02</strong><h3>source-dive</h3><p>Repositories, frameworks, technical projects</p><p>Behavior paths, state owners, failure boundaries</p></div>
+        <div class="weave-route"><strong>03</strong><h3>survey</h3><p>Domains and research directions</p><p>A map whose structure follows the source set</p></div>
+      </div>
+    </section>
+
+    <section class="weave-gates weave-reveal" data-weave-reveal aria-labelledby="weave-gates-title">
+      <div class="weave-section-intro">
+        <span class="weave-section-label">03 / Frame gates</span>
+        <div>
+          <h2 id="weave-gates-title">A frame is useful only when it earns the crop.</h2>
+          <p>Candidate count is not the goal. A frame survives only when it is faithful, specific, selective, honest about its limits, and meaningfully different from the alternatives.</p>
+        </div>
+      </div>
+      <ol class="weave-gate-list">
+        <li><span>01</span><strong>Evidence fidelity</strong><p>Every load-bearing part can be traced back to the evidence model.</p></li>
+        <li><span>02</span><strong>Specificity</strong><p>It cannot be moved unchanged onto the next source or neighboring topic.</p></li>
+        <li><span>03</span><strong>Selection effect</strong><p>It changes the evidence, chapter order, causal story, or predicted boundary.</p></li>
+        <li><span>04</span><strong>Boundary honesty</strong><p>It names the condition, counterexample, or evidence gap that limits it.</p></li>
+        <li><span>05</span><strong>Distinctness</strong><p>It is not a synonym wearing a different title.</p></li>
+      </ol>
+    </section>
+
+    <section class="weave-boundary weave-reveal" data-weave-reveal aria-labelledby="weave-boundary-title">
+      <div class="weave-section-intro">
+        <span class="weave-section-label">04 / Boundary</span>
+        <div>
+          <h2 id="weave-boundary-title">The honest part is part of the product.</h2>
+          <p>weave does not promise a perfect view. It makes the crop inspectable, then leaves the edge visible.</p>
+        </div>
+      </div>
+      <div class="weave-boundary-grid">
+        <div>
+          <span class="weave-boundary-mark">It does</span>
+          <ul>
+            <li>Collect sources before composing.</li>
+            <li>Reserve evidence and test the selected frame against it.</li>
+            <li>Separate verified behavior from static inference.</li>
+          </ul>
+        </div>
+        <div>
+          <span class="weave-boundary-mark">It does not</span>
+          <ul>
+            <li>Turn one thin source into a field-wide claim.</li>
+            <li>Keep a frame alive just to manufacture a choice.</li>
+            <li>Replace the archived Loom thinking and vault utilities.</li>
+          </ul>
+        </div>
+      </div>
+    </section>
+
+    <section class="weave-cta weave-reveal" data-weave-reveal aria-labelledby="weave-cta-title">
+      <span class="weave-section-label">05 / Continue</span>
+      <div>
+        <h2 id="weave-cta-title">Bring a question with a little weight.</h2>
+        <p>Install the skill, give it your material, and see which frame the evidence can actually carry.</p>
+        <div class="weave-cta-links">
+          <a class="weave-link" href="https://github.com/KKenny0/weave" target="_blank" rel="noopener">Open weave on GitHub ↗</a>
+          <a class="weave-link weave-link--quiet" href="/projects/">Back to the project index ↗</a>
+        </div>
+      </div>
+    </section>
+  </article>
+</BaseLayout>
+
+<script>
+  const page = document.querySelector<HTMLElement>(".weave-page");
+  const revealItems = Array.from(document.querySelectorAll<HTMLElement>("[data-weave-reveal]"));
+  if (page && "IntersectionObserver" in window && !matchMedia("(prefers-reduced-motion: reduce)").matches) {
+    page.dataset.motionReady = "true";
+    const observer = new IntersectionObserver((entries) => {
+      entries.forEach((entry) => {
+        if (entry.isIntersecting) {
+          entry.target.classList.add("is-visible");
+          observer.unobserve(entry.target);
+        }
+      });
+    }, { threshold: 0.14 });
+    revealItems.forEach((item) => observer.observe(item));
+  }
+</script>
