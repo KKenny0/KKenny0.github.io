@@ -1,0 +1,142 @@
+---
+import BaseLayout from "../../layouts/BaseLayout.astro";
+---
+
+<BaseLayout title="Tracework" description="An evidence-backed memory layer for agent work: capture the why, report the work, and replay decisions later.">
+  <article class="tracework-page">
+    <section class="tracework-hero" aria-labelledby="tracework-title">
+      <div class="tracework-hero-copy">
+        <a class="tracework-back" href="/projects/">← Projects</a>
+        <div class="tracework-hero-meta"><span>01 / Capture</span><span>Codex + Claude plugin</span><span>Local-first</span></div>
+        <h1 id="tracework-title">Tracework</h1>
+        <p class="tracework-hero-subtitle">Replay why the work took this path.</p>
+      </div>
+
+      <div class="tracework-hero-aside">
+        <p>Git can show changed files. It cannot, by itself, explain the decision, rejected path, or risk boundary that made the work take this shape.</p>
+        <div class="tracework-hero-actions">
+          <a class="tracework-link" href="https://github.com/KKenny0/Tracework" target="_blank" rel="noopener">Read the repository ↗</a>
+          <a class="tracework-link tracework-link--quiet" href="https://kkenny0.github.io/Tracework/" target="_blank" rel="noopener">Open the documentation ↗</a>
+        </div>
+      </div>
+
+      <div class="tracework-loop tracework-reveal" data-tracework-reveal aria-label="Decision Replay Loop from an agent session to a supported why">
+        <div class="tracework-loop-heading"><span>Decision Replay Loop</span><span>the report is a view over evidence</span></div>
+        <div class="tracework-loop-flow">
+          <div class="tracework-loop-node"><strong>session</strong><span>goal · choice · risk · next step</span></div>
+          <span class="tracework-loop-arrow" aria-hidden="true">→</span>
+          <div class="tracework-loop-node"><strong>signals</strong><span>lite · standard · deep</span></div>
+          <span class="tracework-loop-arrow" aria-hidden="true">→</span>
+          <div class="tracework-loop-node tracework-loop-node--candidate"><strong>raw record</strong><span>entries · artifacts · decisions</span></div>
+          <span class="tracework-loop-arrow" aria-hidden="true">→</span>
+          <div class="tracework-loop-node"><strong>report surfaces</strong><span>Daily · Weekly · Monthly · Roadmap</span></div>
+          <span class="tracework-loop-arrow" aria-hidden="true">→</span>
+          <div class="tracework-loop-node tracework-loop-node--winner"><strong>why</strong><span>only when the evidence can carry it</span></div>
+        </div>
+        <p class="tracework-loop-caption">Reports are views over the raw record. Query can replay what local evidence supports; it cannot manufacture history.</p>
+      </div>
+    </section>
+
+    <section class="tracework-question tracework-reveal" data-tracework-reveal aria-labelledby="tracework-question-title">
+      <span class="tracework-section-label">01 / The question</span>
+      <div>
+        <h2 id="tracework-question-title">Git can tell you what changed. It cannot tell you why the path was chosen.</h2>
+        <p>The missing layer is not another activity stream. It is the decision context around the change: the alternatives that were rejected, the evidence that mattered, the risk boundary that stayed open, and the next step that made the work continue.</p>
+        <p>Tracework keeps that context close to the session, then lets reports and later queries point back to the raw record instead of smoothing the history into a confident summary.</p>
+      </div>
+    </section>
+
+    <section class="tracework-surfaces tracework-reveal" data-tracework-reveal aria-labelledby="tracework-surfaces-title">
+      <div class="tracework-section-intro">
+        <span class="tracework-section-label">02 / The surfaces</span>
+        <div>
+          <h2 id="tracework-surfaces-title">One record, different moments of return.</h2>
+          <p>The surfaces are views into the same evidence layer, not separate products competing to become the source of truth.</p>
+        </div>
+      </div>
+      <div class="tracework-surface-list">
+        <div class="tracework-surface tracework-surface-heading" aria-hidden="true"><span>Surface</span><span>Reads for</span><span>Leaves you with</span></div>
+        <div class="tracework-surface"><strong>01</strong><h3>capture</h3><p>session goal, decision, rejected path, risk, artifact, next step</p><p>durable raw entry</p></div>
+        <div class="tracework-surface"><strong>02</strong><h3>recall</h3><p>recent decisions, risks, open questions, relevant artifacts</p><p>usable session context</p></div>
+        <div class="tracework-surface"><strong>03</strong><h3>query</h3><p>why, alternatives, source refs, answerability</p><p>cited answer or explicit evidence gap</p></div>
+        <div class="tracework-surface"><strong>04</strong><h3>daily / weekly / monthly</h3><p>outcomes, work streams, decisions, evidence audit</p><p>workplace-facing report</p></div>
+        <div class="tracework-surface"><strong>05</strong><h3>roadmap</h3><p>decision threads, accumulating risks, recurring questions</p><p>long-cycle direction with its edges intact</p></div>
+      </div>
+    </section>
+
+    <section class="tracework-gates tracework-reveal" data-tracework-reveal aria-labelledby="tracework-gates-title">
+      <div class="tracework-section-intro">
+        <span class="tracework-section-label">03 / Trust gates</span>
+        <div>
+          <h2 id="tracework-gates-title">A report earns trust by showing where it stops.</h2>
+          <p>Tracework treats evidence boundaries as product behavior, not a disclaimer added after the answer.</p>
+        </div>
+      </div>
+      <ol class="tracework-gate-list">
+        <li><span>01</span><strong>Raw first</strong><p>Raw entries are the semantic source. Git is only a limited fallback for coverage gaps.</p></li>
+        <li><span>02</span><strong>Scope before selection</strong><p>Reporting groups are separated before headlines are selected, so work and personal context do not blur together.</p></li>
+        <li><span>03</span><strong>Evidence boundary</strong><p>Source refs show provenance; they do not automatically become independent verification.</p></li>
+        <li><span>04</span><strong>Refusal is a feature</strong><p>When the local record cannot support the question, query returns an evidence gap instead of inventing history.</p></li>
+        <li><span>05</span><strong>Coverage is not outcome</strong><p>Activity counts describe coverage metadata. They do not prove that the work produced a result.</p></li>
+      </ol>
+    </section>
+
+    <section class="tracework-boundary tracework-reveal" data-tracework-reveal aria-labelledby="tracework-boundary-title">
+      <div class="tracework-section-intro">
+        <span class="tracework-section-label">04 / Boundary</span>
+        <div>
+          <h2 id="tracework-boundary-title">The boundary is part of the promise.</h2>
+          <p>Tracework is useful because it keeps the memory inspectable without turning work into surveillance.</p>
+        </div>
+      </div>
+      <div class="tracework-boundary-grid">
+        <div>
+          <span class="tracework-boundary-mark">It does</span>
+          <ul>
+            <li>Keep work choices, risks, artifacts, and next steps close to their evidence.</li>
+            <li>Let daily, weekly, and monthly reports return to the raw record.</li>
+            <li>Give the next session bounded context for continuing the work.</li>
+          </ul>
+        </div>
+        <div>
+          <span class="tracework-boundary-mark">It does not</span>
+          <ul>
+            <li>Package activity records as performance outcomes.</li>
+            <li>Use one thin source to support a claim across an entire field.</li>
+            <li>Turn local work memory into an approval or monitoring system.</li>
+          </ul>
+        </div>
+      </div>
+    </section>
+
+    <section class="tracework-cta tracework-reveal" data-tracework-reveal aria-labelledby="tracework-cta-title">
+      <span class="tracework-section-label">05 / Continue</span>
+      <div>
+        <h2 id="tracework-cta-title">Keep the why close to the work.</h2>
+        <p>Read the repository for the contracts and workflows, then use the documentation when you are ready to make the loop part of a real project.</p>
+        <div class="tracework-cta-links">
+          <a class="tracework-link" href="https://github.com/KKenny0/Tracework" target="_blank" rel="noopener">Open the GitHub repository ↗</a>
+          <a class="tracework-link" href="https://kkenny0.github.io/Tracework/" target="_blank" rel="noopener">Read the Tracework documentation ↗</a>
+          <a class="tracework-link tracework-link--quiet" href="/projects/">Back to the project index ↗</a>
+        </div>
+      </div>
+    </section>
+  </article>
+</BaseLayout>
+
+<script>
+  const page = document.querySelector<HTMLElement>(".tracework-page");
+  const revealItems = Array.from(document.querySelectorAll<HTMLElement>("[data-tracework-reveal]"));
+  if (page && "IntersectionObserver" in window && !matchMedia("(prefers-reduced-motion: reduce)").matches) {
+    page.dataset.motionReady = "true";
+    const observer = new IntersectionObserver((entries) => {
+      entries.forEach((entry) => {
+        if (entry.isIntersecting) {
+          entry.target.classList.add("is-visible");
+          observer.unobserve(entry.target);
+        }
+      });
+    }, { threshold: 0.14 });
+    revealItems.forEach((item) => observer.observe(item));
+  }
+</script>

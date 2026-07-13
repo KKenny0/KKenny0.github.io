@@ -47,6 +47,7 @@ export const projects = [
     thesis: "Replay why the work took this path.",
     problem: "Git records what changed, but loses decisions, rejected alternatives, and risk boundaries.",
     proof: "Session capture, cited decision queries, daily and weekly reports, monthly review, and narrative roadmaps.",
+    detailUrl: "/projects/tracework/",
     url: "https://github.com/KKenny0/Tracework",
     image: "/assets/img/projects/tracework-site-crop.webp",
     featured: true,
