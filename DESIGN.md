@@ -2,7 +2,7 @@
 
 ## Theme
 
-Warm editorial material with the density of a working notebook. Real project artifacts are the visual anchors. Layout changes with the evidence instead of forcing every project into one card.
+An abstract research desk for a personal field journal. Warm editorial materials overlap on one ruled work surface: a volume opens horizontally, filed sheets slide into reading position, and loose records sit at imperfect angles. Utility is secondary to the feeling of encountering an active body of work. Real project artifacts remain the visual anchors.
 
 ## Palette
 
@@ -24,20 +24,21 @@ Ink blue carries navigation and structure. Vermilion appears only as marginalia,
 
 ## Layout
 
-A full-width editorial frame capped at 1280px. Sections use a 12-column grid on desktop and a single content flow on mobile. Outer whitespace is generous, but evidence blocks remain dense.
+A full-width editorial frame capped at 1280px. The homepage is one continuous ruled desk rather than a stack of sections. Paper objects overlap across the shared 12-column grid, using uneven angles, negative space, and depth to connect adjacent material.
 
 ## Components
 
 - Masthead: identity, three routes, Index, theme
-- Practice switcher: three quiet text tabs with an inline evidence panel
-- Flagship cases: three deliberately different layouts
+- Homepage desk: identity thesis, Issue 00 frontispiece, and a loose contents card
+- Current plate: a blue Clipplane folder, an overlapping field note, one full artifact, and two loose related records
+- Folio dispatch: the three latest notes appear as filed sheets without copying the full folio controls
 - Project library: grouped shelves of book-like volumes; each cover expands into an evidence spread
 - Notes folio: a file index beside one focused working-paper sheet, with sequential controls
 - About: compact professional record and research archive
 
 ## Motion
 
-Only opacity and transform. Practice panels cross-fade, project spreads open with a short horizontal reveal, and note sheets settle into place. Reduced motion disables all three.
+Only opacity and transform. Project material opens horizontally, note sheets settle into place with a slight rotation, and desktop pointer movement creates a restrained parallax drift between loose objects. Reduced motion disables all three.
 
 ## Do
 
@@ -45,10 +46,14 @@ Only opacity and transform. Practice panels cross-fade, project spreads open wit
 - Let content determine geometry
 - Keep page scans understandable from headings
 - Preserve strong light and dark material hierarchy
+- Keep the homepage as front matter and routing context; full browsing tools belong on their destination pages
+- Let headings, notes, and evidence share one continuous vertical field
+- Allow controlled rotation, overlap, and decorative displacement on the homepage
 
 ## Do not
 
-- No system diagrams, gradients, glass, generic dashboards, uniform card grids, decorative metrics, or pseudo-technical labels
+- No system diagrams, digital glow gradients, glass, generic dashboards, uniform card grids, or decorative metrics
+- No full-width dividers or repeated screen-like section openings on the homepage
 - No live GitHub API dependency
 - No profile hero repeated on subpages
 

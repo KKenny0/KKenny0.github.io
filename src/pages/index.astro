@@ -1,74 +1,77 @@
 ---
 import BaseLayout from "../layouts/BaseLayout.astro";
-import { practices, projects } from "../data/projects";
+import { projects } from "../data/projects";
 import { writings } from "../data/writings";
+
 const currentProject = projects.find((project) => project.slug === "clipplane")!;
 const traceworkProject = projects.find((project) => project.slug === "tracework")!;
+const cardProject = projects.find((project) => project.slug === "card-skill")!;
+const latestNotes = writings.articles.slice(0, 3);
+const latestMonth = latestNotes[0]?.date ?? "Current";
 ---
 
 <BaseLayout>
+  <div class="home-publication" data-home-publication>
   <section class="studio-hero">
     <div class="hero-intro">
       <span class="eyebrow">Kenny Ponders · Shenzhen</span>
       <h1>I make tools for the parts of thinking that usually disappear.</h1>
     </div>
-    <figure class="hero-practice-mark" aria-hidden="true">
-      <img src="/assets/img/practices/walk.png" alt="" width="1254" height="1254" />
-      <figcaption>thinking in motion</figcaption>
+    <figure class="frontispiece" data-home-reveal>
+      <div class="frontispiece-sheet">
+        <span>Latest filing · {latestMonth}</span>
+        <strong lang="zh">{latestNotes[0]?.title}</strong>
+        <small>Research folio · sheet 01</small>
+      </div>
+      <div class="frontispiece-volume">
+        <span>Issue 00</span>
+        <strong>Kenny<br />Ponders</strong>
+        <small>Tools · notes · field work</small>
+      </div>
+      <figcaption>Living index · revised {latestMonth}</figcaption>
     </figure>
     <div class="hero-aside">
       <p>AI engineer working across local-first memory, agent workflows, and visual forms for thought.</p>
       <div class="now-note"><span>Now</span><strong>Shipping Clipplane and studying what deserves to persist.</strong></div>
     </div>
-    <div class="hero-margin" aria-hidden="true">
-      <span>capture</span><span>think</span><span>make</span>
-    </div>
+    <nav class="front-matter-index" aria-label="Explore the work">
+      <span class="continuous-label"><b>Contents</b><small>Front matter</small></span>
+      <div class="front-index-entries">
+        <a class="front-index-entry" href="/projects/">
+          <span>01</span>
+          <strong>Tools & projects</strong>
+          <small>Capture · Think · Make</small>
+          <em>{projects.length} volumes</em>
+          <b aria-hidden="true">↘</b>
+        </a>
+        <a class="front-index-entry" href="/notes/">
+          <span>02</span>
+          <strong>Notes & research</strong>
+          <small>Context · Memory · Agents</small>
+          <em>{writings.articles.length} sheets</em>
+          <b aria-hidden="true">↘</b>
+        </a>
+        <a class="front-index-entry" href="/about/">
+          <span>03</span>
+          <strong>About the practice</strong>
+          <small>Work · Research · Colophon</small>
+          <em>Background</em>
+          <b aria-hidden="true">↘</b>
+        </a>
+      </div>
+    </nav>
   </section>
 
-  <section class="practice-section" aria-labelledby="practice-title">
-    <header class="section-intro">
-      <span class="section-number">01</span>
-      <div><h2 id="practice-title">Three recurring practices</h2><p>Not a pipeline. Three ways of noticing where human and machine work breaks down.</p></div>
-    </header>
-    <div class="practice-workbench">
-      <div class="practice-tabs" role="tablist" aria-label="Practices">
-        {practices.map((practice, index) => (
-          <button
-            type="button"
-            role="tab"
-            class:list={["practice-tab", index === 0 && "active"]}
-            aria-selected={index === 0 ? "true" : "false"}
-            data-practice-tab={practice.id}
-          >
-            <span>{practice.index}</span><strong>{practice.title}</strong><small>{practice.description}</small>
-          </button>
-        ))}
-      </div>
-      <div class="practice-panels">
-        {practices.map((practice, index) => (
-          <div class="practice-panel" data-practice-panel={practice.id} hidden={index !== 0}>
-            <span class="margin-label">Projects in this practice</span>
-            {projects.filter((project) => project.practice === practice.id).map((project) => (
-              <a href={project.detailUrl ?? project.url} target={project.detailUrl ? undefined : "_blank"} rel={project.detailUrl ? undefined : "noopener"}>
-                <strong>{project.name}</strong><span>{project.thesis}</span><small>{project.status} {project.detailUrl ? "↘" : "↗"}</small>
-              </a>
-            ))}
-          </div>
-        ))}
-      </div>
-    </div>
-  </section>
-
-  <section class="flagship-section" aria-labelledby="flagship-title">
-    <header class="section-intro">
-      <span class="section-number">02</span>
-      <div><h2 id="flagship-title">Current field work</h2><p>Three projects, three different kinds of evidence.</p></div>
+  <section class="current-work" id="current-work" aria-labelledby="current-work-title">
+    <header class="continuous-heading" data-home-reveal>
+      <span class="continuous-label"><b>Plate 01</b><small>Current work</small></span>
+      <h2 id="current-work-title">Clipplane</h2>
+      <p>One product in full, followed by two quiet records from the wider practice.</p>
     </header>
 
-    <article class="case-study case-clipplane">
+    <article class="current-work-spread" data-home-reveal="volume">
       <div class="case-copy">
-        <span class="case-index">A · Local-first product</span>
-        <h3>Clipplane</h3>
+        <span class="case-index">Local-first capture</span>
         <p class="case-thesis">Keep web clips on your machine first.</p>
         <p>Clipplane saves pages and selections to a local org-mode inbox, keeps an inspectable capture trail, and only sends content outward when you explicitly choose a sync target.</p>
         <dl><div><dt>Boundary</dt><dd>Local save always completes first</dd></div><div><dt>Artifact</dt><dd>Human-readable inbox + machine-readable trail</dd></div><div><dt>Status</dt><dd>{currentProject.status}</dd></div></dl>
@@ -81,72 +84,91 @@ const traceworkProject = projects.find((project) => project.slug === "tracework"
       </figure>
     </article>
 
-    <article class="case-study case-tracework" id="tracework-case">
-      <div class="tracework-artifact">
-        <img src="/assets/img/projects/tracework-decision-ledger.webp" alt="Tracework decision replay ledger showing a decision, rejected alternative, supporting evidence, and report outputs" width="1600" height="1000" loading="lazy" />
-        <pre aria-label="Tracework decision query example"><code><span>$</span> /tracework:query why did we choose local-first storage?
-
-decision: keep the raw evidence inspectable
-rejected: cloud-only session history
-evidence: capture boundary + privacy promise</code></pre>
-      </div>
-      <div class="case-copy">
-        <span class="case-index">B · Decision replay</span>
-        <h3>Tracework</h3>
-        <p class="case-thesis">Git remembers the change. Tracework remembers why.</p>
-        <p>Session signals become cited decisions, daily reports, weekly synthesis, monthly review, and a narrative roadmap that can be questioned later.</p>
-        <a class="text-link" href={traceworkProject.detailUrl ?? traceworkProject.url} target={traceworkProject.detailUrl ? undefined : "_blank"} rel={traceworkProject.detailUrl ? undefined : "noopener"}>Read the Tracework case study {traceworkProject.detailUrl ? "↘" : "↗"}</a>
-      </div>
-    </article>
-
-    <article class="case-study case-card">
-      <div class="case-copy">
-        <span class="case-index">C · Visual systems</span>
-        <h3>card-skill</h3>
-        <p class="case-thesis">Content in, checked visual artifacts out.</p>
-        <p>The layout changes with the argument. Posters, infographics, editorial covers, and reading cards are different forms, not color variants of one template.</p>
-        <a class="text-link" href="https://github.com/KKenny0/card-skill" target="_blank" rel="noopener">Inspect card-skill ↗</a>
-      </div>
-      <div class="card-gallery" aria-label="card-skill output gallery">
-        <figure><img src="/assets/img/projects/card-poster.webp" alt="Poster generated by card-skill" loading="lazy" /><figcaption>Poster</figcaption></figure>
-        <figure><img src="/assets/img/projects/card-infograph.webp" alt="Infographic generated by card-skill" loading="lazy" /><figcaption>Infograph</figcaption></figure>
-        <figure><img src="/assets/img/projects/card-editorial.webp" alt="Editorial image generated by card-skill" loading="lazy" /><figcaption>Editorial</figcaption></figure>
-      </div>
-    </article>
-  </section>
-
-  <section class="notes-preview" aria-labelledby="notes-title">
-    <header class="section-intro">
-      <span class="section-number">03</span>
-      <div><h2 id="notes-title">Field notes</h2><p>Source-level writing on context, memory, and agent design.</p></div>
-    </header>
-    <div class="note-rows">
-      {writings.articles.slice(0, 4).map((article, index) => (
-        <a href={article.url} target="_blank" rel="noopener"><span>0{index + 1}</span><strong>{article.title}</strong><small>{article.date} · {article.source}</small></a>
-      ))}
+    <div class="related-records" data-home-reveal aria-label="Related work">
+      <a class="related-record" href={traceworkProject.detailUrl ?? traceworkProject.url}>
+        <span class="case-index">Record 02 · Decision replay</span>
+        <strong>Tracework</strong>
+        <p>Git remembers the change. Tracework remembers why.</p>
+        <em>Read the case study ↘</em>
+      </a>
+      <a class="related-record" href={cardProject.url} target="_blank" rel="noopener">
+        <span class="case-index">Record 03 · Visual systems</span>
+        <strong>card-skill</strong>
+        <p>Content in, checked visual artifacts out.</p>
+        <em>Inspect card-skill ↗</em>
+      </a>
     </div>
-    <a class="section-link" href="/notes/">All notes →</a>
   </section>
 
-  <section class="home-about">
-    <span class="section-number">04</span>
+  <section class="notes-preview" id="latest-filings" aria-labelledby="notes-title">
+    <header class="continuous-heading" data-home-reveal>
+      <span class="continuous-label"><b>Filed 03</b><small>Recent notes</small></span>
+      <h2 id="notes-title">Latest filings</h2>
+      <p>Three recent working papers from the research folio.</p>
+    </header>
+    <div class="folio-dispatch" data-home-reveal="sheet">
+      <div class="folio-dispatch-index" aria-hidden="true">
+        <span>Filed</span>
+        <strong>{latestMonth.replace("-", ".")}</strong>
+        <small>Context · memory · agents</small>
+      </div>
+      <div class="folio-dispatch-sheets">
+        {latestNotes.map((article, index) => (
+          <a href={article.url} target="_blank" rel="noopener">
+            <span class="dispatch-number">{String(index + 1).padStart(2, "0")}</span>
+            <span class="dispatch-copy">
+              <small>{article.topic}</small>
+              <strong lang="zh">{article.title}</strong>
+            </span>
+            <time datetime={article.date}>{article.date}</time>
+            <span class="dispatch-arrow" aria-hidden="true">↗</span>
+          </a>
+        ))}
+      </div>
+    </div>
+    <a class="section-link" href="/notes/">Enter the research folio →</a>
+  </section>
+
+  <section class="home-about" id="colophon" data-home-reveal>
+    <span class="section-number">04 · Colophon</span>
     <p>I work between research and product engineering: language systems, multimodal workflows, local-first tools, and the small interfaces that make agent work more humane.</p>
     <div><a href="/about/">Background and selected work →</a><a href="mailto:jdlow@live.cn">Compare notes ↗</a></div>
   </section>
-</BaseLayout>
+  </div>
 
-<script>
-  const tabs = Array.from(document.querySelectorAll<HTMLButtonElement>("[data-practice-tab]"));
-  const panels = Array.from(document.querySelectorAll<HTMLElement>("[data-practice-panel]"));
-  tabs.forEach((tab) => {
-    tab.addEventListener("click", () => {
-      const id = tab.dataset.practiceTab;
-      tabs.forEach((item) => {
-        const selected = item === tab;
-        item.classList.toggle("active", selected);
-        item.setAttribute("aria-selected", String(selected));
+  <script>
+    const publication = document.querySelector<HTMLElement>("[data-home-publication]");
+    const revealItems = Array.from(document.querySelectorAll<HTMLElement>("[data-home-reveal]"));
+    const reducedMotion = matchMedia("(prefers-reduced-motion: reduce)").matches;
+
+    if (publication && !reducedMotion && "IntersectionObserver" in window) {
+      publication.dataset.motionReady = "true";
+      const revealObserver = new IntersectionObserver((entries, observer) => {
+        entries.forEach((entry) => {
+          if (!entry.isIntersecting) return;
+          entry.target.classList.add("is-visible");
+          observer.unobserve(entry.target);
+        });
+      }, { rootMargin: "0px 0px -12% 0px", threshold: 0.08 });
+      revealItems.forEach((item) => revealObserver.observe(item));
+
+      let pointerFrame = 0;
+      publication.addEventListener("pointermove", (event) => {
+        if (event.pointerType === "touch") return;
+        cancelAnimationFrame(pointerFrame);
+        pointerFrame = requestAnimationFrame(() => {
+          const x = (event.clientX / innerWidth - 0.5) * 7;
+          const y = (event.clientY / innerHeight - 0.5) * 5;
+          publication.style.setProperty("--desk-x", `${x.toFixed(2)}px`);
+          publication.style.setProperty("--desk-y", `${y.toFixed(2)}px`);
+        });
       });
-      panels.forEach((panel) => { panel.hidden = panel.dataset.practicePanel !== id; });
-    });
-  });
-</script>
+      publication.addEventListener("pointerleave", () => {
+        publication.style.setProperty("--desk-x", "0px");
+        publication.style.setProperty("--desk-y", "0px");
+      });
+    } else {
+      revealItems.forEach((item) => item.classList.add("is-visible"));
+    }
+  </script>
+</BaseLayout>
