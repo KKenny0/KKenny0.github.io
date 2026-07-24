@@ -5,7 +5,9 @@
   "scripts": {
     "dev": "astro dev",
     "build": "astro build",
-    "preview": "astro preview"
+    "preview": "astro preview",
+    "notes:check": "node scripts/merge-zhihu-notes.mjs --check",
+    "notes:merge": "node scripts/merge-zhihu-notes.mjs"
   },
   "dependencies": {
     "astro": "^7.1.0"

@@ -31,13 +31,13 @@ A full-width editorial frame capped at 1280px. Sections use a 12-column grid on 
 - Masthead: identity, three routes, Index, theme
 - Practice switcher: three quiet text tabs with an inline evidence panel
 - Flagship cases: three deliberately different layouts
-- Project index: grouped editorial rows, not cards
-- Notes: chronological rows with topic annotations
+- Project library: grouped shelves of book-like volumes; each cover expands into an evidence spread
+- Notes folio: a file index beside one focused working-paper sheet, with sequential controls
 - About: compact professional record and research archive
 
 ## Motion
 
-Only opacity and transform. Practice panels cross-fade with a short vertical shift. Links expose short marginal notes. Reduced motion disables both.
+Only opacity and transform. Practice panels cross-fade, project spreads open with a short horizontal reveal, and note sheets settle into place. Reduced motion disables all three.
 
 ## Do
 

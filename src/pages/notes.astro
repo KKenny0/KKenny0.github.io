@@ -4,15 +4,108 @@ import { writings } from "../data/writings";
 ---
 
 <BaseLayout title="Notes" description="Field notes on agent memory, context engineering, coding agents, and tools for thought.">
-  <header class="page-heading"><span class="eyebrow">Field notes</span><h1>Writing toward a clearer model of the work.</h1><p>Source-level notes on agent memory, context engineering, coding tools, and the systems around the model.</p></header>
-  <div class="notes-index">
-    {writings.articles.map((article, index) => (
-      <article class="note-entry">
-        <div><span>{String(index + 1).padStart(2, "0")}</span><small>{article.date}<br />{article.source}</small></div>
-        <div><h2><a href={article.url} target="_blank" rel="noopener">{article.title} ↗</a></h2><p lang="zh">{article.teaser}</p></div>
-        <span class="topic-mark">{index < 2 ? "memory" : index < 4 ? "context" : "agents"}</span>
-      </article>
-    ))}
+  <header class="page-heading notes-heading"><span class="eyebrow">Research folio</span><h1>Notes, kept as working papers.</h1><p>Source-level material on agent memory, context engineering, coding tools, and the systems around the model. Select a sheet to inspect it.</p></header>
+  <div class="notes-reader" data-notes-reader>
+    <aside class="folio-index" aria-label="Note pages">
+      <div class="folio-index-heading">
+        <span><b>Index</b><small>Research notes</small></span>
+        <span><b>{String(writings.articles.length).padStart(2, "0")}</b><small>Sheets</small></span>
+      </div>
+      <div role="tablist" aria-orientation="vertical">
+        {writings.articles.map((article, index) => (
+          <button
+            type="button"
+            role="tab"
+            class:list={["folio-tab", index === 0 && "active"]}
+            aria-selected={index === 0 ? "true" : "false"}
+            aria-controls={`note-sheet-${index + 1}`}
+            id={`note-tab-${index + 1}`}
+            data-note-tab={index}
+          >
+            <span class="folio-tab-number">{String(index + 1).padStart(2, "0")}</span>
+            <strong>{article.title}</strong>
+            <span class="folio-tab-meta">
+              <small>{article.topic}</small>
+              <time datetime={article.date}>{article.date}</time>
+            </span>
+          </button>
+        ))}
+      </div>
+    </aside>
+    <section class="folio-stage" aria-label="Selected note">
+      <div class="paper-stack" aria-hidden="true"></div>
+      {writings.articles.map((article, index) => (
+        <article
+          class="note-sheet"
+          role="tabpanel"
+          id={`note-sheet-${index + 1}`}
+          aria-labelledby={`note-tab-${index + 1}`}
+          data-note-sheet={index}
+          hidden={index !== 0}
+        >
+          <header class="sheet-masthead">
+            <span>Kenny Ponders / research folio</span>
+            <span>Sheet {String(index + 1).padStart(2, "0")} of {String(writings.articles.length).padStart(2, "0")}</span>
+          </header>
+          <div class="sheet-body">
+            <div class="sheet-catalogue">
+              <span>{article.topic}</span>
+              <dl><div><dt>Filed</dt><dd>{article.date}</dd></div><div><dt>Source</dt><dd>{article.source}</dd></div></dl>
+            </div>
+            <div class="sheet-copy">
+              <h2 lang="zh">{article.title}</h2>
+              <p lang="zh">{article.teaser}</p>
+              <a class="text-link" href={article.url} target="_blank" rel="noopener">Read the complete note ↗</a>
+            </div>
+          </div>
+          <footer class="sheet-footer">
+            <span>Context · memory · agents</span>
+            <span aria-hidden="true">{String(index + 1).padStart(2, "0")}</span>
+          </footer>
+        </article>
+      ))}
+      <div class="folio-controls" aria-label="Page controls">
+        <button type="button" data-note-previous>← Previous sheet</button>
+        <span data-note-count>01 / {String(writings.articles.length).padStart(2, "0")}</span>
+        <button type="button" data-note-next>Next sheet →</button>
+      </div>
+    </section>
   </div>
   <a class="section-link" href={writings.collection_url} target="_blank" rel="noopener">Open the full column ↗</a>
 </BaseLayout>
+
+<script>
+  const reader = document.querySelector<HTMLElement>("[data-notes-reader]");
+  if (reader) {
+    const tabs = Array.from(reader.querySelectorAll<HTMLButtonElement>("[data-note-tab]"));
+    const sheets = Array.from(reader.querySelectorAll<HTMLElement>("[data-note-sheet]"));
+    const count = reader.querySelector<HTMLElement>("[data-note-count]");
+    let current = 0;
+
+    const showSheet = (next: number, focus = false) => {
+      current = (next + tabs.length) % tabs.length;
+      tabs.forEach((tab, index) => {
+        const selected = index === current;
+        tab.classList.toggle("active", selected);
+        tab.setAttribute("aria-selected", String(selected));
+        tab.tabIndex = selected ? 0 : -1;
+        if (selected && focus) tab.focus();
+      });
+      sheets.forEach((sheet, index) => { sheet.hidden = index !== current; });
+      if (count) count.textContent = `${String(current + 1).padStart(2, "0")} / ${String(tabs.length).padStart(2, "0")}`;
+    };
+
+    tabs.forEach((tab, index) => {
+      tab.addEventListener("click", () => showSheet(index));
+      tab.addEventListener("keydown", (event) => {
+        if (event.key === "ArrowDown" || event.key === "ArrowRight") { event.preventDefault(); showSheet(current + 1, true); }
+        if (event.key === "ArrowUp" || event.key === "ArrowLeft") { event.preventDefault(); showSheet(current - 1, true); }
+        if (event.key === "Home") { event.preventDefault(); showSheet(0, true); }
+        if (event.key === "End") { event.preventDefault(); showSheet(tabs.length - 1, true); }
+      });
+    });
+    reader.querySelector("[data-note-previous]")?.addEventListener("click", () => showSheet(current - 1));
+    reader.querySelector("[data-note-next]")?.addEventListener("click", () => showSheet(current + 1));
+    showSheet(0);
+  }
+</script>

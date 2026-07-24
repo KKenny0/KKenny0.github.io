@@ -4,25 +4,66 @@ import { practices, projects } from "../data/projects";
 ---
 
 <BaseLayout title="Projects" description="Local-first tools, agent workflows, and visual systems built by Kenny Ponders.">
-  <header class="page-heading"><span class="eyebrow">Maker index · 2026</span><h1>Projects organized by the question behind them.</h1><p>Not every repository belongs on the same shelf. These are grouped by the kind of failure they are trying to repair.</p></header>
+  <header class="page-heading project-heading"><span class="eyebrow">The tool library · 2026</span><h1>A working library of tools.</h1><p>Each volume begins with a problem worth keeping open. Pull one from the shelf to read the premise, evidence, and current state.</p></header>
   <div class="project-practices">
     {practices.map((practice) => (
       <section class="project-practice" id={practice.id}>
         <header><span>{practice.index}</span><div><h2>{practice.title}</h2><p>{practice.description}</p></div></header>
-        <div class="project-index">
-          {projects.filter((project) => project.practice === practice.id).map((project) => (
-            <article class:list={["project-entry", project.featured && "featured"]}>
-              <div class="project-entry-meta"><span>{project.year}</span><small>{project.status}</small></div>
-              <div class="project-entry-body">
-                <h3><a href={project.detailUrl ?? project.url} target={project.detailUrl ? undefined : "_blank"} rel={project.detailUrl ? undefined : "noopener"}>{project.name} {project.detailUrl ? "↘" : "↗"}</a></h3>
-                <p class="project-thesis">{project.thesis}</p>
-                <dl><div><dt>Problem</dt><dd>{project.problem}</dd></div><div><dt>Proof</dt><dd>{project.proof}</dd></div></dl>
-              </div>
-              {project.image && <img src={project.image} alt={`${project.name} project artifact`} loading="lazy" />}
-            </article>
+        <div class="project-shelf" data-project-shelf>
+          {projects.filter((project) => project.practice === practice.id).map((project, index) => (
+            <details class:list={["project-book", project.featured && "featured"]} name={`shelf-${practice.id}`}>
+              <summary>
+                <span class="book-spine" aria-hidden="true">{String(index + 1).padStart(2, "0")}</span>
+                <span class="book-cover">
+                  <small>{project.year} · {project.status}</small>
+                  <strong>{project.name}</strong>
+                  <em>{practice.short} / {String(index + 1).padStart(2, "0")}</em>
+                  <span class="book-pull">Pull to open <b aria-hidden="true">↘</b></span>
+                </span>
+              </summary>
+              <article class="book-spread">
+                <div class="book-colophon">
+                  <span>{project.year}</span>
+                  <small>{project.status}</small>
+                  <i>Volume {practice.index}.{String(index + 1).padStart(2, "0")}</i>
+                </div>
+                <div class="book-copy">
+                  <span class="book-kicker">{practice.short} / working premise</span>
+                  <h3>{project.name}</h3>
+                  <p class="project-thesis">{project.thesis}</p>
+                  <dl>
+                    <div><dt>Problem</dt><dd>{project.problem}</dd></div>
+                    <div><dt>Evidence</dt><dd>{project.proof}</dd></div>
+                  </dl>
+                  <a class="text-link" href={project.detailUrl ?? project.url} target={project.detailUrl ? undefined : "_blank"} rel={project.detailUrl ? undefined : "noopener"}>
+                    {project.detailUrl ? "Read the case study ↘" : "Open the repository ↗"}
+                  </a>
+                </div>
+                <figure class:list={["book-plate", !project.image && "book-plate-empty"]}>
+                  {project.image
+                    ? <img src={project.image} alt={`${project.name} project artifact`} loading="lazy" />
+                    : <div aria-hidden="true"><span>{project.name.charAt(0)}</span></div>}
+                  <figcaption>Plate {String(index + 1).padStart(2, "0")} · project artifact</figcaption>
+                </figure>
+              </article>
+            </details>
           ))}
+          <div class="shelf-edge" aria-hidden="true"><span>{practice.short} shelf</span></div>
         </div>
       </section>
     ))}
   </div>
 </BaseLayout>
+
+<script>
+  document.querySelectorAll<HTMLDetailsElement>(".project-book").forEach((book) => {
+    book.addEventListener("toggle", () => {
+      if (!book.open) return;
+      requestAnimationFrame(() => {
+        if (!matchMedia("(prefers-reduced-motion: reduce)").matches) {
+          book.scrollIntoView({ behavior: "smooth", block: "center" });
+        }
+      });
+    });
+  });
+</script>
