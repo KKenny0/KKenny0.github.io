@@ -1,6 +1,26 @@
 ---
 import BaseLayout from "../layouts/BaseLayout.astro";
 import { writings } from "../data/writings";
+
+const indexedArticles = writings.articles.map((article, index) => ({
+  ...article,
+  index,
+  searchText: `${article.title} ${article.topic} ${article.teaser}`.toLocaleLowerCase(),
+}));
+type IndexedArticle = (typeof indexedArticles)[number];
+const archiveGroups: Array<{ date: string; year: string; month: string; articles: IndexedArticle[] }> = [];
+
+indexedArticles.forEach((article) => {
+  const [year, month] = article.date.split("-");
+  const previousGroup = archiveGroups.at(-1);
+  if (previousGroup?.date === article.date) {
+    previousGroup.articles.push(article);
+    return;
+  }
+  archiveGroups.push({ date: article.date, year: year ?? "Undated", month: month ?? "00", articles: [article] });
+});
+
+const latestCount = Math.min(8, writings.articles.length);
 ---
 
 <BaseLayout title="Notes" description="Field notes on agent memory, context engineering, coding agents, and tools for thought.">
@@ -11,25 +31,65 @@ import { writings } from "../data/writings";
         <span><b>Index</b><small>Research notes</small></span>
         <span><b>{String(writings.articles.length).padStart(2, "0")}</b><small>Sheets</small></span>
       </div>
-      <div role="tablist" aria-orientation="vertical">
-        {writings.articles.map((article, index) => (
-          <button
-            type="button"
-            role="tab"
-            class:list={["folio-tab", index === 0 && "active"]}
-            aria-selected={index === 0 ? "true" : "false"}
-            aria-controls={`note-sheet-${index + 1}`}
-            id={`note-tab-${index + 1}`}
-            data-note-tab={index}
-          >
-            <span class="folio-tab-number">{String(index + 1).padStart(2, "0")}</span>
-            <strong>{article.title}</strong>
-            <span class="folio-tab-meta">
-              <small>{article.topic}</small>
-              <time datetime={article.date}>{article.date}</time>
-            </span>
-          </button>
-        ))}
+      <button class="folio-mobile-trigger" type="button" aria-expanded="false" data-note-index-trigger>
+        <span data-note-index-trigger-label>Browse sheets</span>
+        <small><span data-note-mobile-current>01</span> / {String(writings.articles.length).padStart(2, "0")}</small>
+      </button>
+      <div class="folio-index-body" data-note-index-body>
+        <div class="folio-index-tools">
+          <div class="folio-index-modes" aria-label="Index view">
+            <button type="button" aria-pressed="true" data-note-index-mode="latest">Latest</button>
+            <button type="button" aria-pressed="false" data-note-index-mode="archive">Archive</button>
+          </div>
+          <label class="folio-search">
+            <span>Find</span>
+            <input type="search" placeholder="Title, topic, keyword" autocomplete="off" data-note-search />
+            <kbd aria-hidden="true">/</kbd>
+          </label>
+        </div>
+        <div class="folio-index-scroll" data-note-index-scroll>
+          <div role="tablist" aria-orientation="vertical">
+            {archiveGroups.map((group, groupIndex) => (
+              <section class="folio-archive-group" role="presentation" data-note-group data-note-group-date={group.date}>
+                <button
+                  class="folio-group-toggle"
+                  type="button"
+                  aria-expanded={groupIndex === 0 ? "true" : "false"}
+                  data-note-group-toggle
+                >
+                  <span>{group.year}.{group.month}</span>
+                  <small>{String(group.articles.length).padStart(2, "0")} sheets</small>
+                </button>
+                <div class="folio-group-items" data-note-group-items>
+                  {group.articles.map((article) => (
+                    <button
+                      type="button"
+                      role="tab"
+                      class:list={["folio-tab", article.index === 0 && "active"]}
+                      aria-selected={article.index === 0 ? "true" : "false"}
+                      aria-controls={`note-sheet-${article.index + 1}`}
+                      id={`note-tab-${article.index + 1}`}
+                      data-note-tab={article.index}
+                      data-note-search-text={article.searchText}
+                    >
+                      <span class="folio-tab-number">{String(article.index + 1).padStart(2, "0")}</span>
+                      <strong>{article.title}</strong>
+                      <span class="folio-tab-meta">
+                        <small>{article.topic}</small>
+                        <time datetime={article.date}>{article.date}</time>
+                      </span>
+                    </button>
+                  ))}
+                </div>
+              </section>
+            ))}
+          </div>
+          <p class="folio-index-empty" data-note-index-empty hidden>No sheets found in this file.</p>
+        </div>
+        <div class="folio-index-status">
+          <span data-note-index-status>Latest {String(latestCount).padStart(2, "0")} of {String(writings.articles.length).padStart(2, "0")}</span>
+          <span>↑↓ to browse</span>
+        </div>
       </div>
     </aside>
     <section class="folio-stage" aria-label="Selected note">
@@ -79,33 +139,180 @@ import { writings } from "../data/writings";
   if (reader) {
     const tabs = Array.from(reader.querySelectorAll<HTMLButtonElement>("[data-note-tab]"));
     const sheets = Array.from(reader.querySelectorAll<HTMLElement>("[data-note-sheet]"));
+    const groups = Array.from(reader.querySelectorAll<HTMLElement>("[data-note-group]"));
+    const modeButtons = Array.from(reader.querySelectorAll<HTMLButtonElement>("[data-note-index-mode]"));
+    const search = reader.querySelector<HTMLInputElement>("[data-note-search]");
+    const indexStatus = reader.querySelector<HTMLElement>("[data-note-index-status]");
+    const indexEmpty = reader.querySelector<HTMLElement>("[data-note-index-empty]");
+    const indexTrigger = reader.querySelector<HTMLButtonElement>("[data-note-index-trigger]");
+    const indexTriggerLabel = reader.querySelector<HTMLElement>("[data-note-index-trigger-label]");
+    const mobileCurrent = reader.querySelector<HTMLElement>("[data-note-mobile-current]");
     const count = reader.querySelector<HTMLElement>("[data-note-count]");
+    const latestCount = Math.min(8, tabs.length);
+    let mode: "latest" | "archive" = "latest";
+    let query = "";
     let current = 0;
+
+    const setGroupExpanded = (group: HTMLElement, expanded: boolean) => {
+      const toggle = group.querySelector<HTMLButtonElement>("[data-note-group-toggle]");
+      const items = group.querySelector<HTMLElement>("[data-note-group-items]");
+      toggle?.setAttribute("aria-expanded", String(expanded));
+      if (items) items.hidden = !expanded;
+    };
+
+    const activeGroup = () => tabs[current]?.closest<HTMLElement>("[data-note-group]") ?? null;
+
+    const applyIndex = () => {
+      const isSearching = query.length > 0;
+      let visibleCount = 0;
+
+      tabs.forEach((tab, index) => {
+        const matches = !isSearching || (tab.dataset.noteSearchText ?? "").includes(query);
+        const belongsInLatest = index < latestCount || index === current;
+        tab.hidden = !matches || (!isSearching && mode === "latest" && !belongsInLatest);
+        if (!tab.hidden) visibleCount += 1;
+        tab.tabIndex = index === current && !tab.hidden ? 0 : -1;
+      });
+
+      groups.forEach((group) => {
+        const groupTabs = Array.from(group.querySelectorAll<HTMLButtonElement>("[data-note-tab]"));
+        const hasVisibleTab = groupTabs.some((tab) => !tab.hidden);
+        group.hidden = !hasVisibleTab;
+        if (!hasVisibleTab) return;
+        if (isSearching || mode === "latest") {
+          setGroupExpanded(group, true);
+          return;
+        }
+        if (group === activeGroup()) setGroupExpanded(group, true);
+      });
+
+      reader.dataset.noteIndexMode = mode;
+      reader.classList.toggle("is-searching-notes", isSearching);
+      modeButtons.forEach((button) => button.setAttribute("aria-pressed", String(button.dataset.noteIndexMode === mode)));
+      if (indexEmpty) indexEmpty.hidden = visibleCount !== 0;
+
+      if (indexStatus) {
+        if (isSearching) indexStatus.textContent = `${String(visibleCount).padStart(2, "0")} found`;
+        else if (mode === "latest") {
+          const includesPinned = current >= latestCount;
+          indexStatus.textContent = includesPinned
+            ? `Latest ${String(latestCount).padStart(2, "0")} + current`
+            : `Latest ${String(latestCount).padStart(2, "0")} of ${String(tabs.length).padStart(2, "0")}`;
+        } else indexStatus.textContent = `Archive ${String(tabs.length).padStart(2, "0")} sheets`;
+      }
+    };
+
+    const setMode = (nextMode: "latest" | "archive") => {
+      mode = nextMode;
+      if (mode === "archive") {
+        groups.forEach((group) => setGroupExpanded(group, group === activeGroup()));
+      }
+      applyIndex();
+    };
+
+    const setMobileIndexOpen = (open: boolean) => {
+      reader.classList.toggle("mobile-index-open", open);
+      indexTrigger?.setAttribute("aria-expanded", String(open));
+      if (indexTriggerLabel) indexTriggerLabel.textContent = open ? "Close catalogue" : "Browse sheets";
+    };
+
+    const revealTab = (tab: HTMLButtonElement) => {
+      if (!tab.hidden) return;
+      query = "";
+      if (search) search.value = "";
+      mode = "archive";
+      const group = tab.closest<HTMLElement>("[data-note-group]");
+      if (group) setGroupExpanded(group, true);
+      applyIndex();
+    };
 
     const showSheet = (next: number, focus = false) => {
       current = (next + tabs.length) % tabs.length;
+      const selectedTab = tabs[current];
+      revealTab(selectedTab);
       tabs.forEach((tab, index) => {
         const selected = index === current;
         tab.classList.toggle("active", selected);
         tab.setAttribute("aria-selected", String(selected));
-        tab.tabIndex = selected ? 0 : -1;
-        if (selected && focus) tab.focus();
+        tab.tabIndex = selected && !tab.hidden ? 0 : -1;
       });
       sheets.forEach((sheet, index) => { sheet.hidden = index !== current; });
       if (count) count.textContent = `${String(current + 1).padStart(2, "0")} / ${String(tabs.length).padStart(2, "0")}`;
+      if (mobileCurrent) mobileCurrent.textContent = String(current + 1).padStart(2, "0");
+      applyIndex();
+      if (focus) {
+        selectedTab.focus();
+        selectedTab.scrollIntoView({ block: "nearest" });
+      }
     };
 
     tabs.forEach((tab, index) => {
-      tab.addEventListener("click", () => showSheet(index));
-      tab.addEventListener("keydown", (event) => {
-        if (event.key === "ArrowDown" || event.key === "ArrowRight") { event.preventDefault(); showSheet(current + 1, true); }
-        if (event.key === "ArrowUp" || event.key === "ArrowLeft") { event.preventDefault(); showSheet(current - 1, true); }
-        if (event.key === "Home") { event.preventDefault(); showSheet(0, true); }
-        if (event.key === "End") { event.preventDefault(); showSheet(tabs.length - 1, true); }
+      tab.addEventListener("click", () => {
+        showSheet(index);
+        if (matchMedia("(max-width: 720px)").matches) setMobileIndexOpen(false);
       });
+      tab.addEventListener("keydown", (event) => {
+        const navigableTabs = tabs.filter((candidate) => !candidate.hidden);
+        const visibleIndex = navigableTabs.indexOf(tab);
+        if (event.key === "ArrowDown" || event.key === "ArrowRight") {
+          event.preventDefault();
+          const target = navigableTabs[(visibleIndex + 1) % navigableTabs.length];
+          showSheet(Number(target.dataset.noteTab), true);
+        }
+        if (event.key === "ArrowUp" || event.key === "ArrowLeft") {
+          event.preventDefault();
+          const target = navigableTabs[(visibleIndex - 1 + navigableTabs.length) % navigableTabs.length];
+          showSheet(Number(target.dataset.noteTab), true);
+        }
+        if (event.key === "Home") {
+          event.preventDefault();
+          showSheet(Number(navigableTabs[0]?.dataset.noteTab ?? 0), true);
+        }
+        if (event.key === "End") {
+          event.preventDefault();
+          showSheet(Number(navigableTabs.at(-1)?.dataset.noteTab ?? tabs.length - 1), true);
+        }
+      });
+    });
+
+    groups.forEach((group) => {
+      group.querySelector<HTMLButtonElement>("[data-note-group-toggle]")?.addEventListener("click", () => {
+        if (mode !== "archive" || query) return;
+        const expanded = group.querySelector("[data-note-group-toggle]")?.getAttribute("aria-expanded") === "true";
+        setGroupExpanded(group, !expanded);
+      });
+    });
+
+    modeButtons.forEach((button) => {
+      button.addEventListener("click", () => setMode(button.dataset.noteIndexMode === "archive" ? "archive" : "latest"));
+    });
+
+    search?.addEventListener("input", () => {
+      query = search.value.trim().toLocaleLowerCase();
+      applyIndex();
+    });
+    search?.addEventListener("keydown", (event) => {
+      if (event.key === "Escape" && search.value) {
+        search.value = "";
+        query = "";
+        applyIndex();
+      }
+    });
+    document.addEventListener("keydown", (event) => {
+      const target = event.target as HTMLElement | null;
+      if (event.key === "/" && !event.metaKey && !event.ctrlKey && !event.altKey && target?.tagName !== "INPUT") {
+        event.preventDefault();
+        setMobileIndexOpen(true);
+        search?.focus();
+      }
+    });
+
+    indexTrigger?.addEventListener("click", () => {
+      setMobileIndexOpen(indexTrigger.getAttribute("aria-expanded") !== "true");
     });
     reader.querySelector("[data-note-previous]")?.addEventListener("click", () => showSheet(current - 1));
     reader.querySelector("[data-note-next]")?.addEventListener("click", () => showSheet(current + 1));
+    setMode("latest");
     showSheet(0);
   }
 </script>
