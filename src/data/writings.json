@@ -1,6 +1,15 @@
 {
   "articles": [
     {
+      "id": "2064505443020493922",
+      "title": "伴读：你能读懂的强化学习",
+      "url": "https://zhuanlan.zhihu.com/p/2064505443020493922",
+      "date": "2026-07",
+      "teaser": "从 ChatGPT、AlphaGo 到 DeepSeek-R1，解释强化学习为何不只依赖海量数据，更通过奖励反馈让模型在试错中学习。",
+      "source": "知乎",
+      "topic": "agents"
+    },
+    {
       "id": "2062205073929852736",
       "title": "Anthropic 提出的 J-space 又是个什么东西？",
       "url": "https://zhuanlan.zhihu.com/p/2062205073929852736",
