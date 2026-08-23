@@ -1,6 +1,51 @@
 {
   "articles": [
     {
+      "id": "2049593726360721196",
+      "title": "Agent 搜索系统的盲区",
+      "url": "https://zhuanlan.zhihu.com/p/2049593726360721196",
+      "date": "2026-06",
+      "teaser": "以智能体检索历史对话为例，解析依赖 grep 的搜索方案为何会在海量记录、语义改写和跨会话查询中暴露盲区。",
+      "source": "知乎",
+      "topic": "agents"
+    },
+    {
+      "id": "2060715503174341318",
+      "title": "Codex 为什么要和 ChatGPT 融合：实现成本下降之后，知识工作的中心变成了什么",
+      "url": "https://zhuanlan.zhihu.com/p/2060715503174341318",
+      "date": "2026-07",
+      "teaser": "当实现想法的成本持续下降，产品与知识工作的瓶颈会从执行转向选择、取舍、协调和判断，这也解释了 Codex 与 ChatGPT 融合的方向。",
+      "source": "知乎",
+      "topic": "agents"
+    },
+    {
+      "id": "2062215260971521921",
+      "title": "Anthropic 提出的 J-space 真正证明了什么？",
+      "url": "https://zhuanlan.zhihu.com/p/2062215260971521921",
+      "date": "2026-07",
+      "teaser": "Anthropic 的实验显示，模型直接续写一种语言与回答语言类别时，可能调用不同的内部路径，由此重新审视 J-space 真正证明了什么。",
+      "source": "知乎",
+      "topic": "context"
+    },
+    {
+      "id": "2067243428048532935",
+      "title": "伴读 · AI智能体上下文工程：Manus构建实践与启示",
+      "url": "https://zhuanlan.zhihu.com/p/2067243428048532935",
+      "date": "2026-08",
+      "teaser": "从 Manus 的构建实践出发，理解为何利用前沿模型的上下文学习、把工程重心放在模型外部，是打造可靠 AI 智能体的关键路线。",
+      "source": "知乎",
+      "topic": "context"
+    },
+    {
+      "id": "2072291792742098269",
+      "title": "伴读：Perplexity 团队如何设计 Agent Skill？",
+      "url": "https://zhuanlan.zhihu.com/p/2072291792742098269",
+      "date": "2026-08",
+      "teaser": "Perplexity Agents 团队把 Skill 质量视作代码质量，但指出软件工程惯例未必适用于 Skill 开发，并总结上下文效率与例外处理的设计取舍。",
+      "source": "知乎",
+      "topic": "agents"
+    },
+    {
       "id": "2064505443020493922",
       "title": "伴读：你能读懂的强化学习",
       "url": "https://zhuanlan.zhihu.com/p/2064505443020493922",
