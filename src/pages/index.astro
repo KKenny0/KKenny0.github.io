@@ -1,174 +1,203 @@
 ---
 import BaseLayout from "../layouts/BaseLayout.astro";
-import { projects } from "../data/projects";
-import { writings } from "../data/writings";
-
-const currentProject = projects.find((project) => project.slug === "clipplane")!;
-const traceworkProject = projects.find((project) => project.slug === "tracework")!;
-const cardProject = projects.find((project) => project.slug === "card-skill")!;
-const latestNotes = writings.articles.slice(0, 3);
-const latestMonth = latestNotes[0]?.date ?? "Current";
 ---
+<BaseLayout title="工作桌">
 
-<BaseLayout>
-  <div class="home-publication" data-home-publication>
-  <section class="studio-hero">
-    <div class="hero-intro">
-      <span class="eyebrow">Kenny Ponders · Shenzhen</span>
-      <h1>I make tools for the parts of thinking that usually disappear.</h1>
-    </div>
-    <figure class="frontispiece" data-home-reveal>
-      <div class="frontispiece-sheet">
-        <span>Latest filing · {latestMonth}</span>
-        <strong lang="zh">{latestNotes[0]?.title}</strong>
-        <small>Research folio · sheet 01</small>
+    <section class="studio" aria-labelledby="welcome" data-screen-label="个人工作桌">
+      <div class="eyebrow studio-meta">
+<span>A SMALL SPACE ON THE INTERNET</span>
+<span>SHENZHEN · KENNY'S STUDIO</span>
+</div>
+      <div class="intro">
+<div>
+<p class="hello">你好，我是 Kenny。</p>
+<h1 id="welcome">留一点空间，<br>给<span class="ink-word">思考。</span>
+</h1>
+<p class="lede">我做 AI 工具，写研究笔记，<br>也试着把一闪而过的想法，变成能留下来的东西。</p>
+</div>
+<div class="walking">
+<img src="/assets/img/practices/walk.png" alt="散步中的 Kenny 插画" width="1254" height="1254">
+<span class="handwritten">thinking in motion</span>
+</div>
+</div>
+      <div class="desk-label">
+<span class="eyebrow">ON MY DESK</span>
+<span>随意翻翻。每件东西都可以打开。<span aria-hidden="true"> ↙</span>
+</span>
+</div>
+      <div class="desk">
+        <a class="object tool" href="#playground">
+<span class="object-meta">正在打磨的工具 <span aria-hidden="true">↗</span>
+</span>
+<h2>Clipplane<span class="dot">.</span>
+</h2>
+<p>把值得留下的那句话，<br>先放回自己的电脑。</p>
+<div class="mini-capture" aria-hidden="true">
+<span>read → select → keep</span>
+<div>
+<mark>Keep what matters.</mark>
+<span class="clip-symbol">＋</span>
+</div>
+</div>
+<span class="object-link">亲手收集一句话 <span aria-hidden="true">→</span>
+</span>
+</a>
+        <button class="object notebook" type="button" data-open="notes-dialog">
+<span class="object-meta">翻开的研究笔记 <span aria-hidden="true">↗</span>
+</span>
+<span class="notebook-title">AI 应该<br>记住什么？</span>
+<span class="notebook-copy">存储、检索，以及必要的遗忘。</span>
+<span class="note-lines" aria-hidden="true">
+</span>
+<span class="object-link">从一个问题开始 <span aria-hidden="true">→</span>
+</span>
+</button>
+        <button class="object life" type="button" data-open="life-dialog">
+<span class="object-meta">屏幕以外 <span aria-hidden="true">↗</span>
+</span>
+<img src="/assets/img/practices/listen.png" alt="坐在藤椅里听音乐的 Kenny" width="1254" height="1254">
+<span class="object-link">给注意力放个假 <span aria-hidden="true">→</span>
+</span>
+</button>
       </div>
-      <div class="frontispiece-volume">
-        <span>Issue 00</span>
-        <strong>Kenny<br />Ponders</strong>
-        <small>Tools · notes · field work</small>
+      <div class="desk-bottom">
+<span>Tools for thought. Room for life.</span>
+<a href="#playground">往下走，动手试试 ↓</a>
+</div>
+    </section>
+    <section class="playground section" id="playground" aria-labelledby="play-title" data-screen-label="Clipplane 交互演示">
+      <div class="section-heading">
+<div>
+<span class="eyebrow">A TOOL YOU CAN TOUCH</span>
+<h2 id="play-title">好想法，值得被留下。</h2>
+</div>
+<span class="demo-label">Clipplane · 示例演示</span>
+</div>
+      <p class="section-description">在短文中选中一句话，再把它放进收集区。感受一次从阅读到留存的过程。</p>
+      <div class="demo">
+        <article class="reading-pane">
+<div class="pane-label">
+<span>01 / READ & SELECT</span>
+<span>示例短文</span>
+</div>
+<h3>收集之后，<br>思考才刚刚开始。</h3>
+<div id="sample">
+<p>我们每天读到很多东西。真正留下来的，往往只有一句让自己停顿的话。</p>
+<p>收集的意义，不是把互联网再存一遍。<span id="sample-quote">好的工具，应该让想法回到你手里，而不是困在另一个收件箱里。</span>
+</p>
+<p>先留下原句和出处。等到下一次需要它时，你还可以沿着线索，回到当时的问题。</p>
+</div>
+<div class="reading-actions">
+<button id="select-example" class="text-button" type="button">帮我选一句 ↗</button>
+<button id="capture" class="primary" type="button">收进来 <span aria-hidden="true">→</span>
+</button>
+</div>
+<p id="selection-status" class="selection-status" role="status">可以拖选文字，也可以点「帮我选一句」。</p>
+</article>
+        <div class="inbox-pane">
+<div class="pane-label">
+<span>02 / KEEP</span>
+<span id="count">0 条片段</span>
+</div>
+<div id="empty" class="empty">
+<span class="empty-mark" aria-hidden="true">[　]</span>
+<h3>留一个位置，<br>给刚刚的触动。</h3>
+<p>你选中的文字，会出现在这里。</p>
+</div>
+<div id="captured" hidden>
+<span class="saved-label">✓ 已收进本次演示</span>
+<blockquote id="saved-quote">
+</blockquote>
+<p class="source-line">出处 · 收集之后，思考才刚刚开始。<br>来源保留，线索不断。</p>
+<div class="saved-actions">
+<button id="undo" class="text-button" type="button">撤销收集 ↶</button>
+<button id="reset" class="text-button" type="button">重新体验 ↺</button>
+</div>
+</div>
+<p class="demo-boundary">仅演示选文收集；不连接扩展，不上传内容，刷新后清空。</p>
+</div>
       </div>
-      <figcaption>Living index · revised {latestMonth}</figcaption>
-    </figure>
-    <div class="hero-aside">
-      <p>AI engineer working across local-first memory, agent workflows, and visual forms for thought.</p>
-      <div class="now-note"><span>Now</span><strong>Shipping Clipplane and studying what deserves to persist.</strong></div>
-    </div>
-    <nav class="front-matter-index" aria-label="Explore the work">
-      <span class="continuous-label"><b>Contents</b><small>Front matter</small></span>
-      <div class="front-index-entries">
-        <a class="front-index-entry" href="/projects/">
-          <span>01</span>
-          <strong>Tools & projects</strong>
-          <small>Capture · Think · Make</small>
-          <em>{projects.length} volumes</em>
-          <b aria-hidden="true">↘</b>
-        </a>
-        <a class="front-index-entry" href="/notes/">
-          <span>02</span>
-          <strong>Notes & research</strong>
-          <small>Context · Memory · Agents</small>
-          <em>{writings.articles.length} sheets</em>
-          <b aria-hidden="true">↘</b>
-        </a>
-        <a class="front-index-entry" href="/about/">
-          <span>03</span>
-          <strong>About the practice</strong>
-          <small>Work · Research · Colophon</small>
-          <em>Background</em>
-          <b aria-hidden="true">↘</b>
-        </a>
-      </div>
-    </nav>
-  </section>
-
-  <section class="current-work" id="current-work" aria-labelledby="current-work-title">
-    <header class="continuous-heading" data-home-reveal>
-      <span class="continuous-label"><b>Plate 01</b><small>Current work</small></span>
-      <h2 id="current-work-title">Clipplane</h2>
-      <p>One product in full, followed by two quiet records from the wider practice.</p>
-    </header>
-
-    <article class="current-work-spread" data-home-reveal="volume">
-      <div class="case-copy">
-        <span class="case-index">Local-first capture</span>
-        <p class="case-thesis">Keep web clips on your machine first.</p>
-        <p>Clipplane saves pages and selections to a local org-mode inbox, keeps an inspectable capture trail, and only sends content outward when you explicitly choose a sync target.</p>
-        <dl><div><dt>Boundary</dt><dd>Local save always completes first</dd></div><div><dt>Artifact</dt><dd>Human-readable inbox + machine-readable trail</dd></div><div><dt>Status</dt><dd>{currentProject.status}</dd></div></dl>
-        <a class="text-link" href={currentProject.url} target="_blank" rel="noopener">Inspect Clipplane ↗</a>
-      </div>
-      <figure class="clipplane-artifact">
-        <img src="/assets/img/projects/clipplane-settings.png" alt="Clipplane capture history showing local and synced clips" width="1600" height="900" />
-        <img class="clipplane-popup" src="/assets/img/projects/clipplane-popup.png" alt="Clipplane browser extension popup" width="640" height="720" loading="lazy" />
-        <figcaption>Capture history stays visible and local.</figcaption>
-      </figure>
-    </article>
-
-    <div class="related-records" data-home-reveal aria-label="Related work">
-      <a class="related-record" href={traceworkProject.detailUrl ?? traceworkProject.url}>
-        <span class="case-index">Record 02 · Decision replay</span>
-        <strong>Tracework</strong>
-        <p>Git remembers the change. Tracework remembers why.</p>
-        <em>Read the case study ↘</em>
-      </a>
-      <a class="related-record" href={cardProject.url} target="_blank" rel="noopener">
-        <span class="case-index">Record 03 · Visual systems</span>
-        <strong>card-skill</strong>
-        <p>Content in, checked visual artifacts out.</p>
-        <em>Inspect card-skill ↗</em>
-      </a>
-    </div>
-  </section>
-
-  <section class="notes-preview" id="latest-filings" aria-labelledby="notes-title">
-    <header class="continuous-heading" data-home-reveal>
-      <span class="continuous-label"><b>Filed 03</b><small>Recent notes</small></span>
-      <h2 id="notes-title">Latest filings</h2>
-      <p>Three recent working papers from the research folio.</p>
-    </header>
-    <div class="folio-dispatch" data-home-reveal="sheet">
-      <div class="folio-dispatch-index" aria-hidden="true">
-        <span>Filed</span>
-        <strong>{latestMonth.replace("-", ".")}</strong>
-        <small>Context · memory · agents</small>
-      </div>
-      <div class="folio-dispatch-sheets">
-        {latestNotes.map((article, index) => (
-          <a href={article.url} target="_blank" rel="noopener">
-            <span class="dispatch-number">{String(index + 1).padStart(2, "0")}</span>
-            <span class="dispatch-copy">
-              <small>{article.topic}</small>
-              <strong lang="zh">{article.title}</strong>
-            </span>
-            <time datetime={article.date}>{article.date}</time>
-            <span class="dispatch-arrow" aria-hidden="true">↗</span>
-          </a>
-        ))}
-      </div>
-    </div>
-    <a class="section-link" href="/notes/">Enter the research folio →</a>
-  </section>
-
-  <section class="home-about" id="colophon" data-home-reveal>
-    <span class="section-number">04 · Colophon</span>
-    <p>I work between research and product engineering: language systems, multimodal workflows, local-first tools, and the small interfaces that make agent work more humane.</p>
-    <div><a href="/about/">Background and selected work →</a><a href="mailto:jdlow@live.cn">Compare notes ↗</a></div>
-  </section>
-  </div>
-
-  <script>
-    const publication = document.querySelector<HTMLElement>("[data-home-publication]");
-    const revealItems = Array.from(document.querySelectorAll<HTMLElement>("[data-home-reveal]"));
-    const reducedMotion = matchMedia("(prefers-reduced-motion: reduce)").matches;
-
-    if (publication && !reducedMotion && "IntersectionObserver" in window) {
-      publication.dataset.motionReady = "true";
-      const revealObserver = new IntersectionObserver((entries, observer) => {
-        entries.forEach((entry) => {
-          if (!entry.isIntersecting) return;
-          entry.target.classList.add("is-visible");
-          observer.unobserve(entry.target);
-        });
-      }, { rootMargin: "0px 0px -12% 0px", threshold: 0.08 });
-      revealItems.forEach((item) => revealObserver.observe(item));
-
-      let pointerFrame = 0;
-      publication.addEventListener("pointermove", (event) => {
-        if (event.pointerType === "touch") return;
-        cancelAnimationFrame(pointerFrame);
-        pointerFrame = requestAnimationFrame(() => {
-          const x = (event.clientX / innerWidth - 0.5) * 7;
-          const y = (event.clientY / innerHeight - 0.5) * 5;
-          publication.style.setProperty("--desk-x", `${x.toFixed(2)}px`);
-          publication.style.setProperty("--desk-y", `${y.toFixed(2)}px`);
-        });
-      });
-      publication.addEventListener("pointerleave", () => {
-        publication.style.setProperty("--desk-x", "0px");
-        publication.style.setProperty("--desk-y", "0px");
-      });
-    } else {
-      revealItems.forEach((item) => item.classList.add("is-visible"));
-    }
-  </script>
+      <a class="project-link" href="https://github.com/KKenny0/Clipplane" target="_blank" rel="noopener noreferrer">了解真正的 Clipplane <span aria-hidden="true">↗</span>
+</a>
+    </section>
+    <section class="now section" id="now" aria-labelledby="now-title" data-screen-label="此刻在意的事">
+      <div class="now-intro">
+<span class="eyebrow">A NOTE FROM HERE</span>
+<h2 id="now-title">此刻，<br>在意这些事。</h2>
+<p>做一点。读一点。<br>给没想明白的事留个位置。</p>
+<span class="draft">本次更新 · <time datetime="2026-09-05">2026.09.05</time>
+</span>
+</div>
+      <div class="now-notes">
+<details open>
+<summary>
+<span class="now-kind">MAKING</span>
+<span>让个人主页成为可以逛的空间</span>
+<span class="expand" aria-hidden="true">＋</span>
+</summary>
+<p>从一张工作桌、一次可玩的收集体验开始，让作品有入口，也让生活露出一点边角。</p>
+</details>
+<details>
+<summary>
+<span class="now-kind">PONDERING</span>
+<span>什么值得被 AI 记住？</span>
+<span class="expand" aria-hidden="true">＋</span>
+</summary>
+<p>从已有的记忆系统研究继续往下问：什么该保留，什么该遗忘，谁来做这个决定？</p>
+<button class="text-button" data-open="notes-dialog" type="button">翻开相关笔记 →</button>
+</details>
+<details>
+<summary>
+<span class="now-kind">OFFLINE</span>
+<span>听、读、走一走</span>
+<span class="expand" aria-hidden="true">＋</span>
+</summary>
+<p>听一点音乐，读几页书，走一段路。给注意力留一点屏幕以外的空间。</p>
+<button class="text-button" data-open="life-dialog" type="button">去屏幕以外坐坐 →</button>
+</details>
+</div>
+    </section>
+  <dialog id="notes-dialog" aria-labelledby="notes-title">
+<div class="dialog-top">
+<span class="eyebrow">AN OPEN NOTEBOOK</span>
+<form method="dialog">
+<button class="close" aria-label="关闭笔记">×</button>
+</form>
+</div>
+<h2 id="notes-title">AI 应该记住什么？</h2>
+<p class="dialog-lede">一个问题，几条继续往下走的线索。</p>
+<a class="note-link" href="https://zhuanlan.zhihu.com/p/2046699626565219617" target="_blank" rel="noopener noreferrer">
+<span>01 · 从记忆开始</span>
+<strong>ChatGPT 的 Dreaming 记忆做了什么 ↗</strong>
+<small>存储、检索与遗忘的工程挑战。</small>
+</a>
+<a class="note-link" href="https://zhuanlan.zhihu.com/p/2036754568097296982" target="_blank" rel="noopener noreferrer">
+<span>02 · 看系统怎样工作</span>
+<strong>Session、Context 和 Memory 管理机制 ↗</strong>
+<small>AI 编程助手如何管理工作状态。</small>
+</a>
+<a class="note-link" href="/projects/#tracework" target="_blank" rel="noopener noreferrer">
+<span>03 · 走向一个工具</span>
+<strong>Tracework ↗</strong>
+<small>让工作留下理由，也留下可追溯的证据。</small>
+</a>
+</dialog>
+<dialog id="life-dialog" aria-labelledby="life-title">
+<div class="dialog-top">
+<span class="eyebrow">OUTSIDE THE TERMINAL</span>
+<form method="dialog">
+<button class="close" aria-label="关闭生活角落">×</button>
+</form>
+</div>
+<div class="life-content">
+<img src="/assets/img/practices/read.png" alt="Kenny 正在阅读和批注" width="1254" height="1254">
+<div>
+<h2 id="life-title">有时候，<br>先离开屏幕。</h2>
+<p>听一点音乐，翻几页书，走一段路。给注意力换一种节奏。</p>
+<p class="small">Listen · Read · Walk · Return</p>
+<a class="text-button" href="/about/">再认识我一点 ↗</a>
+</div>
+</div>
+</dialog>
+<script>import '../scripts/capture-demo.js';</script>
 </BaseLayout>

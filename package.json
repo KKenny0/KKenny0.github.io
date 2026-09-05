@@ -7,7 +7,8 @@
     "build": "astro build",
     "preview": "astro preview",
     "notes:check": "node scripts/merge-zhihu-notes.mjs --check",
-    "notes:merge": "node scripts/merge-zhihu-notes.mjs"
+    "notes:merge": "node scripts/merge-zhihu-notes.mjs",
+    "check:site": "node scripts/check-personal-space.cjs"
   },
   "dependencies": {
     "astro": "^7.1.0"

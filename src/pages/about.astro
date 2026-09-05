@@ -1,31 +1,115 @@
 ---
 import BaseLayout from "../layouts/BaseLayout.astro";
-import PersonalPractices from "../components/PersonalPractices.astro";
 import { publications } from "../data/publications";
 import { site } from "../data/site";
 ---
-
-<BaseLayout title="About" description="Background, selected professional work, and research by Kenny Wu.">
-  <header class="about-heading">
-    <img src={site.avatar} alt="Kenny Wu" width="180" height="180" />
-    <div><span class="eyebrow">Kenny Wu · Kenny Ponders</span><h1>An AI engineer interested in what survives the model call.</h1><p>Based in Shenzhen. I move between language systems, multimodal workflows, local-first software, and tools for thought.</p></div>
-  </header>
-
-  <section class="about-section"><span class="section-number">01</span><div><h2>Current questions</h2><ul class="question-list"><li>What deserves to become durable context?</li><li>How should an agent expose its decisions without creating more noise?</li><li>Which constraints turn model capability into a reliable artifact?</li></ul></div></section>
-
-  <PersonalPractices />
-
-  <section class="about-section"><span class="section-number">03</span><div><h2>Selected professional work</h2>
-    <div class="experience-list">
-      <article><header><h3>AI comic generation</h3><span>Lead · 2026</span></header><p>Staged LLM workflows for narrative slicing, scene analysis, shot generation, and reusable character and scene memory.</p></article>
-      <article><header><h3>Short-drama identity systems</h3><span>Direction lead · 2025–2026</span></header><p>Cross-episode entity alignment, retrieval, scheduling, and cache reuse for more continuous generated edits.</p></article>
-      <article><header><h3>Enterprise RAG and safety review</h3><span>Core algorithm engineer · 2024</span></header><p>Hierarchical chunking, multi-stage retrieval, dynamic thresholding, and prompt-assisted internal safety review.</p></article>
-    </div>
-  </div></section>
-
-  <section class="about-section"><span class="section-number">04</span><div><h2>Research</h2>
-    <div class="research-list">{publications.main.map((pub) => <article><span>{pub.conference}</span><h3><a href={pub.pdf} target="_blank" rel="noopener">{pub.title} ↗</a></h3><p set:html={pub.authors} /></article>)}</div>
-  </div></section>
-
-  <section class="about-section about-contact"><span class="section-number">05</span><div><h2>Elsewhere</h2><p>For collaboration, difficult context problems, or a thoughtful disagreement:</p><div><a href={`mailto:${site.email}`}>{site.email}</a><a href={site.cv_link}>Curriculum vitae ↓</a></div></div></section>
+<BaseLayout title="屏幕之外">
+<section class="inner-heading">
+<div>
+<span class="eyebrow">OUTSIDE THE TERMINAL</span>
+<h1>做工具的人，<br>也在练习<span class="ink-word">生活。</span>
+</h1>
+<p>Kenny Wu · AI engineer · Shenzhen。工作在语言系统、多模态流程与本地优先工具之间。</p>
+</div>
+<img src="/assets/img/practices/listen.png" alt="Kenny 的听音乐插画" width="1254" height="1254">
+</section>
+<section class="section about-questions">
+<span class="eyebrow">QUESTIONS I KEEP COMING BACK TO</span>
+<h2>反复回到的三个问题</h2>
+<a href="/notes/?topic=memory">
+<span>01</span>什么值得成为长期上下文？<span>→</span>
+</a>
+<a href="/projects/#tracework">
+<span>02</span>Agent 怎样解释决定，又不制造噪声？<span>→</span>
+</a>
+<a href="/projects/#card-skill">
+<span>03</span>什么约束能让模型产出可靠作品？<span>→</span>
+</a>
+</section>
+<section class="section">
+<span class="eyebrow">SMALL PRACTICES</span>
+<h2 class="inner-section-title">屏幕以外，注意力还有别的去处。</h2>
+<div class="practice-shelf">
+<details class="practice-card">
+<summary>
+<img src="/assets/img/practices/listen.png" alt="Listen · 听的 Kenny 插画" width="1254" height="1254">
+<span>Listen · 听 <span aria-hidden="true">＋</span>
+</span>
+</summary>
+<p>给不同的节奏留一点位置。</p>
+</details>
+<details class="practice-card">
+<summary>
+<img src="/assets/img/practices/read.png" alt="Read · 读的 Kenny 插画" width="1254" height="1254">
+<span>Read · 读 <span aria-hidden="true">＋</span>
+</span>
+</summary>
+<p>沿着一个想法，回到它的来源。</p>
+</details>
+<details class="practice-card">
+<summary>
+<img src="/assets/img/practices/walk.png" alt="Walk · 走的 Kenny 插画" width="1254" height="1254">
+<span>Walk · 走 <span aria-hidden="true">＋</span>
+</span>
+</summary>
+<p>让问题在走动中慢慢松开。</p>
+</details>
+<details class="practice-card">
+<summary>
+<img src="/assets/img/practices/return.png" alt="Return · 回来的 Kenny 插画" width="1254" height="1254">
+<span>Return · 回来 <span aria-hidden="true">＋</span>
+</span>
+</summary>
+<p>回到力量、平衡与呼吸。</p>
+</details>
+</div>
+</section>
+<section class="section">
+<span class="eyebrow">SELECTED WORK</span>
+<h2 class="inner-section-title">从研究，走到真实系统。</h2>
+<div class="work-list">
+<details open>
+<summary>
+<span class="note-date">2026 · Lead</span>
+<span>AI 漫画生成</span>
+<span class="expand">＋</span>
+</summary>
+<p>分阶段的 LLM 工作流：叙事切分、场景分析、镜头生成，以及可复用的角色和场景记忆。</p>
+</details>
+<details>
+<summary>
+<span class="note-date">2025–2026</span>
+<span>短剧身份一致性系统</span>
+<span class="expand">＋</span>
+</summary>
+<p>负责方向：跨集实体对齐、检索、调度与缓存复用，让生成剪辑保持连续。</p>
+</details>
+<details>
+<summary>
+<span class="note-date">2024</span>
+<span>企业 RAG 与安全审核</span>
+<span class="expand">＋</span>
+</summary>
+<p>核心算法工程：分层切片、多阶段检索、动态阈值与提示词辅助的内部安全审核。</p>
+</details>
+</div>
+</section>
+<section class="section research-section">
+<span class="eyebrow">RESEARCH</span>
+<h2 class="inner-section-title">更早的一些追问。</h2>{publications.main.map(pub=>
+<a class="note-link" href={pub.pdf} target="_blank" rel="noopener noreferrer">
+<span>{pub.conference_short}</span>
+<strong>{pub.title} ↗</strong>
+<span set:html={pub.authors} />
+</a>)}</section>
+<aside class="next-room">
+<div>
+<span>关于合作、上下文难题，或一个不同的看法</span>
+<p>欢迎来交换想法。</p>
+</div>
+<div class="detail-links">
+<a href={`mailto:${site.email}`}>写封信给我 ↗</a>
+<a href={site.cv_link}>查看履历 ↗</a>
+</div>
+</aside>
 </BaseLayout>

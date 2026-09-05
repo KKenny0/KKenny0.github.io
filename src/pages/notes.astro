@@ -1,318 +1,57 @@
 ---
 import BaseLayout from "../layouts/BaseLayout.astro";
 import { writings } from "../data/writings";
-
-const indexedArticles = writings.articles.map((article, index) => ({
-  ...article,
-  index,
-  searchText: `${article.title} ${article.topic} ${article.teaser}`.toLocaleLowerCase(),
-}));
-type IndexedArticle = (typeof indexedArticles)[number];
-const archiveGroups: Array<{ date: string; year: string; month: string; articles: IndexedArticle[] }> = [];
-
-indexedArticles.forEach((article) => {
-  const [year, month] = article.date.split("-");
-  const previousGroup = archiveGroups.at(-1);
-  if (previousGroup?.date === article.date) {
-    previousGroup.articles.push(article);
-    return;
-  }
-  archiveGroups.push({ date: article.date, year: year ?? "Undated", month: month ?? "00", articles: [article] });
-});
-
-const latestCount = Math.min(8, writings.articles.length);
 ---
-
-<BaseLayout title="Notes" description="Field notes on agent memory, context engineering, coding agents, and tools for thought.">
-  <header class="page-heading notes-heading"><span class="eyebrow">Research folio</span><h1>Notes, kept as working papers.</h1><p>Source-level material on agent memory, context engineering, coding tools, and the systems around the model. Select a sheet to inspect it.</p></header>
-  <div class="notes-reader" data-notes-reader>
-    <aside class="folio-index" aria-label="Note pages">
-      <div class="folio-index-heading">
-        <span><b>Index</b><small>Research notes</small></span>
-        <span><b>{String(writings.articles.length).padStart(2, "0")}</b><small>Sheets</small></span>
-      </div>
-      <button class="folio-mobile-trigger" type="button" aria-expanded="false" data-note-index-trigger>
-        <span data-note-index-trigger-label>Browse sheets</span>
-        <small><span data-note-mobile-current>01</span> / {String(writings.articles.length).padStart(2, "0")}</small>
-      </button>
-      <div class="folio-index-body" data-note-index-body>
-        <div class="folio-index-tools">
-          <div class="folio-index-modes" aria-label="Index view">
-            <button type="button" aria-pressed="true" data-note-index-mode="latest">Latest</button>
-            <button type="button" aria-pressed="false" data-note-index-mode="archive">Archive</button>
-          </div>
-          <label class="folio-search">
-            <span>Find</span>
-            <input type="search" placeholder="Title, topic, keyword" autocomplete="off" data-note-search />
-            <kbd aria-hidden="true">/</kbd>
-          </label>
-        </div>
-        <div class="folio-index-scroll" data-note-index-scroll>
-          <div role="tablist" aria-orientation="vertical">
-            {archiveGroups.map((group, groupIndex) => (
-              <section class="folio-archive-group" role="presentation" data-note-group data-note-group-date={group.date}>
-                <button
-                  class="folio-group-toggle"
-                  type="button"
-                  aria-expanded={groupIndex === 0 ? "true" : "false"}
-                  data-note-group-toggle
-                >
-                  <span>{group.year}.{group.month}</span>
-                  <small>{String(group.articles.length).padStart(2, "0")} sheets</small>
-                </button>
-                <div class="folio-group-items" data-note-group-items>
-                  {group.articles.map((article) => (
-                    <button
-                      type="button"
-                      role="tab"
-                      class:list={["folio-tab", article.index === 0 && "active"]}
-                      aria-selected={article.index === 0 ? "true" : "false"}
-                      aria-controls={`note-sheet-${article.index + 1}`}
-                      id={`note-tab-${article.index + 1}`}
-                      data-note-tab={article.index}
-                      data-note-search-text={article.searchText}
-                    >
-                      <span class="folio-tab-number">{String(article.index + 1).padStart(2, "0")}</span>
-                      <strong>{article.title}</strong>
-                      <span class="folio-tab-meta">
-                        <small>{article.topic}</small>
-                        <time datetime={article.date}>{article.date}</time>
-                      </span>
-                    </button>
-                  ))}
-                </div>
-              </section>
-            ))}
-          </div>
-          <p class="folio-index-empty" data-note-index-empty hidden>No sheets found in this file.</p>
-        </div>
-        <div class="folio-index-status">
-          <span data-note-index-status>Latest {String(latestCount).padStart(2, "0")} of {String(writings.articles.length).padStart(2, "0")}</span>
-          <span>↑↓ to browse</span>
-        </div>
-      </div>
-    </aside>
-    <section class="folio-stage" aria-label="Selected note">
-      <div class="paper-stack" aria-hidden="true"></div>
-      {writings.articles.map((article, index) => (
-        <article
-          class="note-sheet"
-          role="tabpanel"
-          id={`note-sheet-${index + 1}`}
-          aria-labelledby={`note-tab-${index + 1}`}
-          data-note-sheet={index}
-          hidden={index !== 0}
-        >
-          <header class="sheet-masthead">
-            <span>Kenny Ponders / research folio</span>
-            <span>Sheet {String(index + 1).padStart(2, "0")} of {String(writings.articles.length).padStart(2, "0")}</span>
-          </header>
-          <div class="sheet-body">
-            <div class="sheet-catalogue">
-              <span>{article.topic}</span>
-              <dl><div><dt>Filed</dt><dd>{article.date}</dd></div><div><dt>Source</dt><dd>{article.source}</dd></div></dl>
-            </div>
-            <div class="sheet-copy">
-              <h2 lang="zh">{article.title}</h2>
-              <p lang="zh">{article.teaser}</p>
-              <a class="text-link" href={article.url} target="_blank" rel="noopener">Read the complete note ↗</a>
-            </div>
-          </div>
-          <footer class="sheet-footer">
-            <span>Context · memory · agents</span>
-            <span aria-hidden="true">{String(index + 1).padStart(2, "0")}</span>
-          </footer>
-        </article>
-      ))}
-      <div class="folio-controls" aria-label="Page controls">
-        <button type="button" data-note-previous>← Previous sheet</button>
-        <span data-note-count>01 / {String(writings.articles.length).padStart(2, "0")}</span>
-        <button type="button" data-note-next>Next sheet →</button>
-      </div>
-    </section>
-  </div>
-  <a class="section-link" href={writings.collection_url} target="_blank" rel="noopener">Open the full column ↗</a>
+<BaseLayout title="思考笔记本">
+<section class="inner-heading">
+<div>
+<span class="eyebrow">THE OPEN NOTEBOOK</span>
+<h1>顺着好奇，<br>多翻<span class="ink-word">一页。</span>
+</h1>
+<p>关于记忆、上下文与 Agent 的研究笔记。一个问题，留几条继续思考的线索。</p>
+</div>
+<img src="/assets/img/practices/read.png" alt="Kenny 的阅读插画" width="1254" height="1254">
+</section>
+<section class="collection section" aria-label="笔记集合">
+<div class="notes-controls">
+<div>
+<label class="field-label" for="note-search">在笔记中搜索</label>
+<input id="note-search" type="search" placeholder="标题、摘要，或一个关键词">
+</div>
+<button class="primary" id="random-note" type="button">随机翻一篇 ↗</button>
+</div>
+<div class="filter-bar" role="group" aria-label="按主题筛选笔记">
+<button data-filter="all" aria-pressed="true">所有笔记</button>
+<button data-filter="memory" aria-pressed="false">记忆与遗忘</button>
+<button data-filter="context" aria-pressed="false">上下文</button>
+<button data-filter="agents" aria-pressed="false">Agent 工程</button>
+</div>
+<p id="collection-count" class="small-status" role="status">
+</p>
+<div class="notebook-list">{writings.articles.map(note=>
+<details class="note-record" id={`note-${note.id}`} data-entry data-category={note.topic}>
+<summary>
+<span class="note-date">{note.date}<br />{note.source}</span>
+<span class="note-title">{note.title}</span>
+<span class="expand" aria-hidden="true">＋</span>
+</summary>
+<div class="note-body">
+<p>{note.teaser}</p>
+<div class="detail-links">
+<a href={note.url} target="_blank" rel="noopener noreferrer">去知乎读全文 ↗</a>
+<a href={note.topic === 'memory' ? '/projects/#tracework' : '/projects/'}>看看相关工具 →</a>
+</div>
+</div>
+</details>)}</div>
+<div class="no-results" id="collection-empty" hidden>
+<h3>这一页暂时是空白。</h3>
+<p>换个词，或清除筛选再翻翻。</p>
+<button class="text-button" id="clear-filters" type="button">清除搜索与筛选 ↺</button>
+</div>
+<p class="editor-note">这里展示已有文章的摘要与线索，全文在原发布平台阅读。</p>
+</section>
+<aside class="next-room">
+<span>想法怎样落到实践</span>
+<a href="/projects/">回工具架看看 →</a>
+</aside>
 </BaseLayout>
-
-<script>
-  const reader = document.querySelector<HTMLElement>("[data-notes-reader]");
-  if (reader) {
-    const tabs = Array.from(reader.querySelectorAll<HTMLButtonElement>("[data-note-tab]"));
-    const sheets = Array.from(reader.querySelectorAll<HTMLElement>("[data-note-sheet]"));
-    const groups = Array.from(reader.querySelectorAll<HTMLElement>("[data-note-group]"));
-    const modeButtons = Array.from(reader.querySelectorAll<HTMLButtonElement>("[data-note-index-mode]"));
-    const search = reader.querySelector<HTMLInputElement>("[data-note-search]");
-    const indexStatus = reader.querySelector<HTMLElement>("[data-note-index-status]");
-    const indexEmpty = reader.querySelector<HTMLElement>("[data-note-index-empty]");
-    const indexTrigger = reader.querySelector<HTMLButtonElement>("[data-note-index-trigger]");
-    const indexTriggerLabel = reader.querySelector<HTMLElement>("[data-note-index-trigger-label]");
-    const mobileCurrent = reader.querySelector<HTMLElement>("[data-note-mobile-current]");
-    const count = reader.querySelector<HTMLElement>("[data-note-count]");
-    const latestCount = Math.min(8, tabs.length);
-    let mode: "latest" | "archive" = "latest";
-    let query = "";
-    let current = 0;
-
-    const setGroupExpanded = (group: HTMLElement, expanded: boolean) => {
-      const toggle = group.querySelector<HTMLButtonElement>("[data-note-group-toggle]");
-      const items = group.querySelector<HTMLElement>("[data-note-group-items]");
-      toggle?.setAttribute("aria-expanded", String(expanded));
-      if (items) items.hidden = !expanded;
-    };
-
-    const activeGroup = () => tabs[current]?.closest<HTMLElement>("[data-note-group]") ?? null;
-
-    const applyIndex = () => {
-      const isSearching = query.length > 0;
-      let visibleCount = 0;
-
-      tabs.forEach((tab, index) => {
-        const matches = !isSearching || (tab.dataset.noteSearchText ?? "").includes(query);
-        const belongsInLatest = index < latestCount || index === current;
-        tab.hidden = !matches || (!isSearching && mode === "latest" && !belongsInLatest);
-        if (!tab.hidden) visibleCount += 1;
-        tab.tabIndex = index === current && !tab.hidden ? 0 : -1;
-      });
-
-      groups.forEach((group) => {
-        const groupTabs = Array.from(group.querySelectorAll<HTMLButtonElement>("[data-note-tab]"));
-        const hasVisibleTab = groupTabs.some((tab) => !tab.hidden);
-        group.hidden = !hasVisibleTab;
-        if (!hasVisibleTab) return;
-        if (isSearching || mode === "latest") {
-          setGroupExpanded(group, true);
-          return;
-        }
-        if (group === activeGroup()) setGroupExpanded(group, true);
-      });
-
-      reader.dataset.noteIndexMode = mode;
-      reader.classList.toggle("is-searching-notes", isSearching);
-      modeButtons.forEach((button) => button.setAttribute("aria-pressed", String(button.dataset.noteIndexMode === mode)));
-      if (indexEmpty) indexEmpty.hidden = visibleCount !== 0;
-
-      if (indexStatus) {
-        if (isSearching) indexStatus.textContent = `${String(visibleCount).padStart(2, "0")} found`;
-        else if (mode === "latest") {
-          const includesPinned = current >= latestCount;
-          indexStatus.textContent = includesPinned
-            ? `Latest ${String(latestCount).padStart(2, "0")} + current`
-            : `Latest ${String(latestCount).padStart(2, "0")} of ${String(tabs.length).padStart(2, "0")}`;
-        } else indexStatus.textContent = `Archive ${String(tabs.length).padStart(2, "0")} sheets`;
-      }
-    };
-
-    const setMode = (nextMode: "latest" | "archive") => {
-      mode = nextMode;
-      if (mode === "archive") {
-        groups.forEach((group) => setGroupExpanded(group, group === activeGroup()));
-      }
-      applyIndex();
-    };
-
-    const setMobileIndexOpen = (open: boolean) => {
-      reader.classList.toggle("mobile-index-open", open);
-      indexTrigger?.setAttribute("aria-expanded", String(open));
-      if (indexTriggerLabel) indexTriggerLabel.textContent = open ? "Close catalogue" : "Browse sheets";
-    };
-
-    const revealTab = (tab: HTMLButtonElement) => {
-      if (!tab.hidden) return;
-      query = "";
-      if (search) search.value = "";
-      mode = "archive";
-      const group = tab.closest<HTMLElement>("[data-note-group]");
-      if (group) setGroupExpanded(group, true);
-      applyIndex();
-    };
-
-    const showSheet = (next: number, focus = false) => {
-      current = (next + tabs.length) % tabs.length;
-      const selectedTab = tabs[current];
-      revealTab(selectedTab);
-      tabs.forEach((tab, index) => {
-        const selected = index === current;
-        tab.classList.toggle("active", selected);
-        tab.setAttribute("aria-selected", String(selected));
-        tab.tabIndex = selected && !tab.hidden ? 0 : -1;
-      });
-      sheets.forEach((sheet, index) => { sheet.hidden = index !== current; });
-      if (count) count.textContent = `${String(current + 1).padStart(2, "0")} / ${String(tabs.length).padStart(2, "0")}`;
-      if (mobileCurrent) mobileCurrent.textContent = String(current + 1).padStart(2, "0");
-      applyIndex();
-      if (focus) {
-        selectedTab.focus();
-        selectedTab.scrollIntoView({ block: "nearest" });
-      }
-    };
-
-    tabs.forEach((tab, index) => {
-      tab.addEventListener("click", () => {
-        showSheet(index);
-        if (matchMedia("(max-width: 720px)").matches) setMobileIndexOpen(false);
-      });
-      tab.addEventListener("keydown", (event) => {
-        const navigableTabs = tabs.filter((candidate) => !candidate.hidden);
-        const visibleIndex = navigableTabs.indexOf(tab);
-        if (event.key === "ArrowDown" || event.key === "ArrowRight") {
-          event.preventDefault();
-          const target = navigableTabs[(visibleIndex + 1) % navigableTabs.length];
-          showSheet(Number(target.dataset.noteTab), true);
-        }
-        if (event.key === "ArrowUp" || event.key === "ArrowLeft") {
-          event.preventDefault();
-          const target = navigableTabs[(visibleIndex - 1 + navigableTabs.length) % navigableTabs.length];
-          showSheet(Number(target.dataset.noteTab), true);
-        }
-        if (event.key === "Home") {
-          event.preventDefault();
-          showSheet(Number(navigableTabs[0]?.dataset.noteTab ?? 0), true);
-        }
-        if (event.key === "End") {
-          event.preventDefault();
-          showSheet(Number(navigableTabs.at(-1)?.dataset.noteTab ?? tabs.length - 1), true);
-        }
-      });
-    });
-
-    groups.forEach((group) => {
-      group.querySelector<HTMLButtonElement>("[data-note-group-toggle]")?.addEventListener("click", () => {
-        if (mode !== "archive" || query) return;
-        const expanded = group.querySelector("[data-note-group-toggle]")?.getAttribute("aria-expanded") === "true";
-        setGroupExpanded(group, !expanded);
-      });
-    });
-
-    modeButtons.forEach((button) => {
-      button.addEventListener("click", () => setMode(button.dataset.noteIndexMode === "archive" ? "archive" : "latest"));
-    });
-
-    search?.addEventListener("input", () => {
-      query = search.value.trim().toLocaleLowerCase();
-      applyIndex();
-    });
-    search?.addEventListener("keydown", (event) => {
-      if (event.key === "Escape" && search.value) {
-        search.value = "";
-        query = "";
-        applyIndex();
-      }
-    });
-    document.addEventListener("keydown", (event) => {
-      const target = event.target as HTMLElement | null;
-      if (event.key === "/" && !event.metaKey && !event.ctrlKey && !event.altKey && target?.tagName !== "INPUT") {
-        event.preventDefault();
-        setMobileIndexOpen(true);
-        search?.focus();
-      }
-    });
-
-    indexTrigger?.addEventListener("click", () => {
-      setMobileIndexOpen(indexTrigger.getAttribute("aria-expanded") !== "true");
-    });
-    reader.querySelector("[data-note-previous]")?.addEventListener("click", () => showSheet(current - 1));
-    reader.querySelector("[data-note-next]")?.addEventListener("click", () => showSheet(current + 1));
-    setMode("latest");
-    showSheet(0);
-  }
-</script>

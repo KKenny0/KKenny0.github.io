@@ -31,7 +31,10 @@ jobs:
         run: npm ci
 
       - name: Build site
-        run: npm run build
+        run: |
+          npm run notes:check
+          npm run build
+          npm run check:site
 
       - name: Upload artifact
         uses: actions/upload-pages-artifact@v5
