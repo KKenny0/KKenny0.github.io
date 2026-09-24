@@ -81,7 +81,7 @@ shared.get('#theme').handlers.click();assert.equal(root.dataset.theme,'dark');
 console.log('PASS: collection filtering, empty state, reset, random selection, deep links and blocked storage.');
 const {existsSync,readdirSync}=require('node:fs');const path=require('node:path');
 const output=path.resolve(__dirname,'../dist');
-const pages=readdirSync(output,{recursive:true}).filter(file=>file.endsWith('.html'));
+const pages=readdirSync(output,{recursive:true}).map(file=>file.replaceAll('\\','/')).filter(file=>file.endsWith('.html'));
 for(const route of ['index.html','about/index.html','notes/index.html','projects/index.html','projects/tracework/index.html','projects/weave/index.html','support/index.html','background/index.html','work/index.html','writings/index.html','open-source/index.html']) assert.ok(pages.includes(route),route);
 for(const page of pages){
   const source=readFileSync(path.join(output,page),'utf8');
@@ -100,3 +100,39 @@ const notes=readFileSync(path.join(output,'notes/index.html'),'utf8');
 for(const article of writings.articles) assert.ok(notes.includes(`id="note-${article.id}"`),article.title);
 assert.ok(!readFileSync(path.join(output,'index.html'),'utf8').includes('近况草稿'));
 console.log(`PASS: ${pages.length} built routes, local links/assets/fragments and all ${writings.articles.length} current notes.`);
+// The accepted portfolio ships in both languages with the same project order.
+for (const prefix of ['', 'zh/']) {
+  for (const page of ['index.html', 'projects/index.html', 'about/index.html']) {
+    const html = readFileSync(path.join(output, prefix, page), 'utf8');
+    assert.ok(html.includes(`lang="${prefix ? 'zh-CN' : 'en'}"`));
+    assert.ok(html.includes(`data-language="${prefix ? 'en' : 'zh'}"`));
+    assert.ok(html.includes('hreflang="x-default"'));
+    assert.ok(!/DESIGN STUDY|localhost:4311|kenny-prototype/.test(html));
+  }
+  const projectHtml = readFileSync(path.join(output, prefix, 'projects/index.html'), 'utf8');
+  const stars = [...projectHtml.matchAll(/data-stars="(\d+)"/g)].map(m => Number(m[1]));
+  assert.equal(stars.length, 9);
+  assert.deepEqual(stars, [...stars].sort((a,b) => b-a));
+  const images = [...projectHtml.matchAll(/data-image="([^"]+)"/g)];
+  assert.equal(images.length, 9);
+  for (const [,image] of images) assert.ok(existsSync(path.join(output,image)));
+  const about = readFileSync(path.join(output, prefix, 'about/index.html'), 'utf8');
+  assert.ok(about.includes('id="awards"'));
+  assert.ok(about.includes('id="experience"'));
+}
+const localeScript = readFileSync(path.resolve(__dirname, '../src/layouts/PortfolioLayout.astro'), 'utf8').match(/<script is:inline>([\s\S]*?)<\/script>/)[1];
+for (const [lang, preference, pathname, expected] of [
+  ['en', null, '/', undefined],
+  ['en', 'zh', '/projects/?test=1#taku', 'https://local.test/zh/projects/?test=1#taku'],
+  ['zh-CN', 'en', '/zh/about/#awards', 'https://local.test/about/#awards'],
+  ['en', 'invalid', '/', undefined],
+]) {
+  let redirected;
+  runInNewContext(localeScript, { URL,
+    document: { documentElement: { lang, dataset: {} } },
+    location: { href: `https://local.test${pathname}`, replace(url) { redirected = url; } },
+    localStorage: { getItem(key) { return key === 'kenny-language' ? preference : null; } },
+  });
+  assert.equal(redirected, expected);
+}
+console.log('PASS: bilingual portfolio, descending stars, focus images, awards and language redirects.');

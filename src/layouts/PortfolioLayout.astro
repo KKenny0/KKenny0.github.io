@@ -1,0 +1,62 @@
+---
+import { site } from '../data/site';
+import '../styles/portfolio.css';
+interface Props { title: string; lang: 'en' | 'zh'; page: 'index' | 'projects' | 'about'; }
+const { title, lang, page } = Astro.props;
+const english = lang === 'en';
+const base = english ? '' : '/zh';
+const path = page === 'index' ? '/' : `/${page}/`;
+const alternate = `${english ? '/zh' : ''}${path}`;
+const canonical = new URL(`${base}${path}`, site.canonical).href;
+const description = english ? site.description : 'Kenny 的个人项目、工作经历与研究。探索 AI、上下文与本地优先工具。';
+const pageTitle = page === 'index' ? 'Kenny Ponders' : `${title} · Kenny Ponders`;
+---
+<!DOCTYPE html>
+<html lang={english ? 'en' : 'zh-CN'}>
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width,initial-scale=1" />
+  <title>{pageTitle}</title>
+  <meta name="description" content={description} />
+  <link rel="canonical" href={canonical} />
+  <link rel="alternate" hreflang="en" href={new URL(path, site.canonical).href} />
+  <link rel="alternate" hreflang="zh-CN" href={new URL(`/zh${path}`, site.canonical).href} />
+  <link rel="alternate" hreflang="x-default" href={new URL(path, site.canonical).href} />
+  <link rel="icon" href={site.favicon} />
+  <meta property="og:title" content={pageTitle} />
+  <meta property="og:description" content={description} />
+  <meta property="og:url" content={canonical} />
+  <meta property="og:type" content="website" />
+  <meta property="og:image" content={new URL(site.avatar, site.canonical).href} />
+  <meta name="twitter:card" content="summary" />
+  <script is:inline>
+    try {
+      const preferred = localStorage.getItem('kenny-language');
+      const current = document.documentElement.lang === 'en' ? 'en' : 'zh';
+      if ((preferred === 'en' || preferred === 'zh') && preferred !== current) {
+        const url = new URL(location.href);
+        url.pathname = (preferred === 'zh' ? '/zh' : '') + url.pathname.replace(/^\/zh(?=\/)/, '');
+        location.replace(url.href);
+      }
+      document.documentElement.dataset.theme = localStorage.getItem('kenny-space-theme') === 'dark' ? 'dark' : 'light';
+    } catch {}
+  </script>
+</head>
+<body>
+<a class="skip" href="#main">{english ? 'Skip to content' : '跳到主要内容'}</a>
+<div class="wrap">
+  <header class="masthead">
+    <a class="identity" href={`${base}/`}><strong>Kenny Ponders<span style="color:var(--red)">.</span></strong><small>{english ? 'Exploring AI' : '肯玩 AI'}</small></a>
+    <nav class="nav" aria-label={english ? 'Main navigation' : '主导航'}>
+      <a href={`${base}/`} aria-current={page === 'index' ? 'page' : undefined}>{english ? 'Home' : '首页'}</a>
+      <a href={`${base}/projects/`} aria-current={page === 'projects' ? 'page' : undefined}>Projects</a>
+      <a href={`${base}/about/`} aria-current={page === 'about' ? 'page' : undefined}>About</a>
+      <a class="language" href={alternate} data-language={english ? 'zh' : 'en'} lang={english ? 'zh-CN' : 'en'} aria-label={english ? 'Switch to Chinese' : '切换到英文'}>{english ? '中文' : 'EN'}</a>
+      <button class="theme" aria-label={english ? 'Switch to dark mode' : '切换到深色外观'} aria-pressed="false">◐</button>
+    </nav>
+  </header>
+  <slot />
+</div>
+<script>import '../scripts/portfolio.js';</script>
+</body>
+</html>

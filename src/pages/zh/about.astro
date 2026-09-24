@@ -1,0 +1,23 @@
+---
+import PortfolioLayout from "../../layouts/PortfolioLayout.astro";
+---
+<PortfolioLayout title="About" lang="zh" page="about">
+<main id="main" data-screen-label="About · 经历与研究"><section class="about-top"><div><span class="eyebrow">ABOUT KENNY</span><h1>在研究与实践之间。</h1><p>我是 Kenny Wu，一名在深圳工作的 AI 工程师。我的工作涉及语言系统、多模态生成和本地优先工具：从检索信息，到组织上下文，再到让模型产出连贯、可用的作品。</p><div class="text-links"><a href="mailto:jdlow@live.cn">jdlow@live.cn ↗</a><a href="#experience">工作经历 ↓</a><a href="#awards">获奖经历 ↓</a><a href="https://scholar.google.com/citations?user=q9Z8cmIAAAAJ&hl=en" target="_blank" rel="noopener noreferrer">Google Scholar ↗</a></div></div></section>
+<div class="about-layout"><nav class="about-index" aria-label="About 章节"><a href="#experience"><span>01</span>工作经历</a><a href="#research"><span>02</span>研究论文</a><a href="#awards"><span>03</span>获奖经历</a><a href="#questions"><span>04</span>关注的问题</a><a href="#outside"><span>05</span>屏幕之外</a><p>经历解释来处，作品记录探索。</p></nav><div>
+<section class="about-section" id="experience"><h2>工作经历</h2>
+<article class="timeline"><time>2026</time><div><h3>AI 漫剧生成与分镜自动化</h3><p class="role">系统设计与研发 · 从剧本到分镜</p><p>从 0 到 1 建设分镜自动化系统，将剧本解析、叙事时间线、场景分析与镜头生成串成完整流程。围绕多集创作，推进角色、场景和道具资产复用，并完善任务调度与质量评估，让后续剧集能沿用此前建立的创作上下文。</p><details><summary>展开工作内容</summary><ul><li>建立从剧本到分镜的分阶段流程，校验原文内容是否完整覆盖，并将镜头绑定到明确的角色与场景。</li><li>实现逐集滚动执行，管理跨集角色身份、场景与道具资产，结合分阶段缓存减少重复计算。</li><li>建设 API 服务与任务依赖调度，通过固定样本评估角色匹配、场景一致性和镜头连贯性，持续修正生成规则。</li></ul></details></div></article>
+<article class="timeline"><time>2025–2026</time><div><h3>短剧跨集人物身份一致性</h3><p class="role">人物身份建模 · 成片流程集成</p><p>围绕短剧智能剪辑中“同一个人跨集出现，却被识别为不同人物”的问题，建设跨集身份对齐链路。将集内人物聚合、全局身份与视频理解结果关联，并接入成片流程，让下游剪辑能够围绕持续一致的人物主线组织素材。</p><details><summary>展开工作内容</summary><ul><li>建立集内人物聚合与跨集身份库，以稳定标识连接人物的不同出场片段，减少仅依赖人名或外观描述造成的混淆。</li><li>将视频理解中的人物实体对齐到身份结果，并设计别名、未知身份、语义冲突与人工纠正的处理规则。</li><li>把独立身份服务接入成片流程，完善接口、并发调度与缓存复用，并针对人物消歧环节开展性能优化。</li></ul></details></div></article>
+<article class="timeline"><time>2024</time><div><h3>企业 RAG 与安全审核</h3><p class="role">核心算法工程</p><p>围绕企业资料检索与内部安全审核，使用分层切片、多阶段检索和动态阈值组织信息获取流程，并通过提示词辅助审核。</p><details><summary>展开工作内容</summary><ul><li>分层切片、多阶段检索与动态阈值。</li><li>面向内部安全审核的提示词辅助流程。</li></ul></details></div></article>
+</section>
+<section class="about-section" id="research"><h2>研究与论文</h2><article class="publication"><a href="https://link.springer.com/article/10.1007/s10506-023-09354-x" target="_blank" rel="noopener noreferrer"><span class="label">ARTIFICIAL INTELLIGENCE AND LAW · VOL. 32</span><h3 lang="en">Semantic matching based legal information retrieval system for COVID-19 pandemic <span class="arrow" aria-hidden="true">↗</span></h3><p lang="en">Junlin Zhu, <strong>Jiaye Wu</strong>, Xudong Luo, Jie Liu</p></a></article><article class="publication"><a href="https://link.springer.com/chapter/10.1007/978-3-030-82153-1_32" target="_blank" rel="noopener noreferrer"><span class="label">KSEM · 2021</span><h3 lang="en">Alignment-based graph network for judicial examination task <span class="arrow" aria-hidden="true">↗</span></h3><p lang="en"><strong>Jiaye Wu</strong>, Xudong Luo</p></a></article></section>
+<section class="about-section" id="awards"><h2>获奖经历</h2>
+<article class="timeline"><time datetime="2021">2021</time><div><h3>CAIL 法律智能挑战赛</h3><p class="role" lang="en">Challenge of AI in Law</p><ul><li>二等奖 · 类案检索任务（Legal Case Retrieval）</li><li>三等奖 · 信息抽取任务（Information Extraction）</li><li>三等奖 · 司法考试任务（Judicial Examination）</li></ul></div></article>
+<article class="timeline"><time datetime="2020">2020</time><div><h3>广西高校人工智能设计大赛</h3><p class="role">一等奖</p><p>地铁客流预测（Subway Passenger Flow Prediction）</p></div></article>
+<article class="timeline"><time datetime="2019">2019</time><div><h3>广西高校人工智能设计大赛</h3><p class="role">二等奖</p><p>中证指数预测（CSI Index Prediction）</p></div></article>
+</section>
+<section class="about-section questions" id="questions"><h2>反复回到的三个问题</h2><p><a href="/notes/?topic=memory" target="_blank" rel="noopener noreferrer">什么值得成为长期上下文？ ↗</a></p><p><a href="/zh/projects/#tracework">Agent 怎样解释决定，又不制造噪声？ ↗</a></p><p><a href="/zh/projects/#card-skill">什么约束能让模型产出可靠作品？ ↗</a></p></section>
+<section class="about-section" id="outside"><h2>屏幕之外</h2><div class="life-line"><p>听一点音乐，读几页书，走一段路。</p><p>给注意力换一种节奏，也给还没想明白的问题留一点空间。</p></div></section>
+</div></div>
+<section class="contact"><div><h2>欢迎交换想法。</h2><p>关于合作、上下文难题，或一个不同的看法。</p></div><a href="mailto:jdlow@live.cn">写封信给我 <span class="arrow" aria-hidden="true">↗</span></a></section>
+</main><footer class="footer"><p>Kenny Ponders · 深圳</p><div><a href="/zh/projects/">看看我的项目 ↗</a><a href="/zh/">回到首页 ↗</a></div></footer>
+</PortfolioLayout>

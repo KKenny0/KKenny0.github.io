@@ -1,115 +1,23 @@
 ---
-import BaseLayout from "../layouts/BaseLayout.astro";
-import { publications } from "../data/publications";
-import { site } from "../data/site";
+import PortfolioLayout from "../layouts/PortfolioLayout.astro";
 ---
-<BaseLayout title="屏幕之外">
-<section class="inner-heading">
-<div>
-<span class="eyebrow">OUTSIDE THE TERMINAL</span>
-<h1>做工具的人，<br>也在练习<span class="ink-word">生活。</span>
-</h1>
-<p>Kenny Wu · AI engineer · Shenzhen。工作在语言系统、多模态流程与本地优先工具之间。</p>
-</div>
-<img src="/assets/img/practices/listen.png" alt="Kenny 的听音乐插画" width="1254" height="1254">
+<PortfolioLayout title="About" lang="en" page="about">
+<main id="main" data-screen-label="About · Experience and research"><section class="about-top"><div><span class="eyebrow">ABOUT KENNY</span><h1>Between research and practice.</h1><p>I&#x27;m Kenny Wu, an AI engineer based in Shenzhen. I work on language systems, multimodal generation, and local-first tools: retrieving information, organizing context, and helping models produce coherent, useful work.</p><div class="text-links"><a href="mailto:jdlow@live.cn">jdlow@live.cn ↗</a><a href="#experience">Experience ↓</a><a href="#awards">Awards ↓</a><a href="https://scholar.google.com/citations?user=q9Z8cmIAAAAJ&hl=en" target="_blank" rel="noopener noreferrer">Google Scholar ↗</a></div></div></section>
+<div class="about-layout"><nav class="about-index" aria-label="About sections"><a href="#experience"><span>01</span>Experience</a><a href="#research"><span>02</span>Publications</a><a href="#awards"><span>03</span>Awards</a><a href="#questions"><span>04</span>Questions</a><a href="#outside"><span>05</span>Away from the screen</a><p>Experience tells the backstory. Projects trace the exploration.</p></nav><div>
+<section class="about-section" id="experience"><h2>Experience</h2>
+<article class="timeline"><time>2026</time><div><h3>AI comics &amp; storyboard automation</h3><p class="role">System design &amp; development · Script to storyboard</p><p>Built a storyboard automation system from the ground up, connecting script parsing, narrative timelines, scene analysis, and shot generation. Extended it to reuse character, scene, and prop assets across episodes, with task scheduling and quality evaluation to carry creative context forward.</p><details><summary>Explore the work</summary><ul><li>Built a staged script-to-storyboard workflow, checking source coverage and binding shots to specific characters and scenes.</li><li>Implemented rolling execution across episodes, managing shared identities and assets with stage-level caching to reduce repeated computation.</li><li>Built API services and dependency-based scheduling. Used a fixed evaluation set to assess character matching, scene consistency, and shot continuity, then refine generation rules.</li></ul></details></div></article>
+<article class="timeline"><time>2025–2026</time><div><h3>Cross-episode character identity</h3><p class="role">Identity modeling · Editing integration</p><p>Built an identity alignment workflow for short-drama editing, addressing characters being recognized as different people across episodes. Connected within-episode grouping, persistent identities, and video understanding to the editing pipeline so footage could be organized around consistent character threads.</p><details><summary>Explore the work</summary><ul><li>Linked within-episode character groups to a shared identity library, using stable identifiers to connect appearances and reduce ambiguity from names or visual descriptions alone.</li><li>Aligned character entities from video understanding with identity results, and designed rules for aliases, unknown identities, semantic conflicts, and manual correction.</li><li>Integrated the standalone identity service into the editing workflow, improving interfaces, concurrent scheduling, cache reuse, and identity-disambiguation performance.</li></ul></details></div></article>
+<article class="timeline"><time>2024</time><div><h3>Enterprise RAG &amp; safety review</h3><p class="role">Core algorithm engineering</p><p>Worked on enterprise document retrieval and internal safety review, using hierarchical chunking, multi-stage retrieval, and dynamic thresholds, with prompts to support review.</p><details><summary>Explore the work</summary><ul><li>Hierarchical chunking, multi-stage retrieval, and dynamic thresholds.</li><li>Prompt-assisted workflows for internal safety review.</li></ul></details></div></article>
 </section>
-<section class="section about-questions">
-<span class="eyebrow">QUESTIONS I KEEP COMING BACK TO</span>
-<h2>反复回到的三个问题</h2>
-<a href="/notes/?topic=memory">
-<span>01</span>什么值得成为长期上下文？<span>→</span>
-</a>
-<a href="/projects/#tracework">
-<span>02</span>Agent 怎样解释决定，又不制造噪声？<span>→</span>
-</a>
-<a href="/projects/#card-skill">
-<span>03</span>什么约束能让模型产出可靠作品？<span>→</span>
-</a>
+<section class="about-section" id="research"><h2>Research &amp; publications</h2><article class="publication"><a href="https://link.springer.com/article/10.1007/s10506-023-09354-x" target="_blank" rel="noopener noreferrer"><span class="label">ARTIFICIAL INTELLIGENCE AND LAW · VOL. 32</span><h3 lang="en">Semantic matching based legal information retrieval system for COVID-19 pandemic <span class="arrow" aria-hidden="true">↗</span></h3><p lang="en">Junlin Zhu, <strong>Jiaye Wu</strong>, Xudong Luo, Jie Liu</p></a></article><article class="publication"><a href="https://link.springer.com/chapter/10.1007/978-3-030-82153-1_32" target="_blank" rel="noopener noreferrer"><span class="label">KSEM · 2021</span><h3 lang="en">Alignment-based graph network for judicial examination task <span class="arrow" aria-hidden="true">↗</span></h3><p lang="en"><strong>Jiaye Wu</strong>, Xudong Luo</p></a></article></section>
+<section class="about-section" id="awards"><h2>Awards</h2>
+<article class="timeline"><time datetime="2021">2021</time><div><h3>Challenge of AI in Law (CAIL)</h3><p class="role" lang="en">Challenge of AI in Law</p><ul><li>2nd Prize · Legal Case Retrieval</li><li>3rd Prize · Information Extraction</li><li>3rd Prize · Judicial Examination</li></ul></div></article>
+<article class="timeline"><time datetime="2020">2020</time><div><h3>Guangxi Collegiate AI Design Competition</h3><p class="role">1st Prize</p><p>Subway Passenger Flow Prediction</p></div></article>
+<article class="timeline"><time datetime="2019">2019</time><div><h3>Guangxi Collegiate AI Design Competition</h3><p class="role">2nd Prize</p><p>CSI Index Prediction</p></div></article>
 </section>
-<section class="section">
-<span class="eyebrow">SMALL PRACTICES</span>
-<h2 class="inner-section-title">屏幕以外，注意力还有别的去处。</h2>
-<div class="practice-shelf">
-<details class="practice-card">
-<summary>
-<img src="/assets/img/practices/listen.png" alt="Listen · 听的 Kenny 插画" width="1254" height="1254">
-<span>Listen · 听 <span aria-hidden="true">＋</span>
-</span>
-</summary>
-<p>给不同的节奏留一点位置。</p>
-</details>
-<details class="practice-card">
-<summary>
-<img src="/assets/img/practices/read.png" alt="Read · 读的 Kenny 插画" width="1254" height="1254">
-<span>Read · 读 <span aria-hidden="true">＋</span>
-</span>
-</summary>
-<p>沿着一个想法，回到它的来源。</p>
-</details>
-<details class="practice-card">
-<summary>
-<img src="/assets/img/practices/walk.png" alt="Walk · 走的 Kenny 插画" width="1254" height="1254">
-<span>Walk · 走 <span aria-hidden="true">＋</span>
-</span>
-</summary>
-<p>让问题在走动中慢慢松开。</p>
-</details>
-<details class="practice-card">
-<summary>
-<img src="/assets/img/practices/return.png" alt="Return · 回来的 Kenny 插画" width="1254" height="1254">
-<span>Return · 回来 <span aria-hidden="true">＋</span>
-</span>
-</summary>
-<p>回到力量、平衡与呼吸。</p>
-</details>
-</div>
-</section>
-<section class="section">
-<span class="eyebrow">SELECTED WORK</span>
-<h2 class="inner-section-title">从研究，走到真实系统。</h2>
-<div class="work-list">
-<details open>
-<summary>
-<span class="note-date">2026 · Lead</span>
-<span>AI 漫画生成</span>
-<span class="expand">＋</span>
-</summary>
-<p>分阶段的 LLM 工作流：叙事切分、场景分析、镜头生成，以及可复用的角色和场景记忆。</p>
-</details>
-<details>
-<summary>
-<span class="note-date">2025–2026</span>
-<span>短剧身份一致性系统</span>
-<span class="expand">＋</span>
-</summary>
-<p>负责方向：跨集实体对齐、检索、调度与缓存复用，让生成剪辑保持连续。</p>
-</details>
-<details>
-<summary>
-<span class="note-date">2024</span>
-<span>企业 RAG 与安全审核</span>
-<span class="expand">＋</span>
-</summary>
-<p>核心算法工程：分层切片、多阶段检索、动态阈值与提示词辅助的内部安全审核。</p>
-</details>
-</div>
-</section>
-<section class="section research-section">
-<span class="eyebrow">RESEARCH</span>
-<h2 class="inner-section-title">更早的一些追问。</h2>{publications.main.map(pub=>
-<a class="note-link" href={pub.pdf} target="_blank" rel="noopener noreferrer">
-<span>{pub.conference_short}</span>
-<strong>{pub.title} ↗</strong>
-<span set:html={pub.authors} />
-</a>)}</section>
-<aside class="next-room">
-<div>
-<span>关于合作、上下文难题，或一个不同的看法</span>
-<p>欢迎来交换想法。</p>
-</div>
-<div class="detail-links">
-<a href={`mailto:${site.email}`}>写封信给我 ↗</a>
-<a href={site.cv_link}>查看履历 ↗</a>
-</div>
-</aside>
-</BaseLayout>
+<section class="about-section questions" id="questions"><h2>Three questions I return to</h2><p><a href="/notes/?topic=memory" target="_blank" rel="noopener noreferrer">What deserves to become lasting context? ↗</a></p><p><a href="/projects/#tracework">How can agents explain decisions without adding noise? ↗</a></p><p><a href="/projects/#card-skill">Which constraints help models produce reliable work? ↗</a></p></section>
+<section class="about-section" id="outside"><h2>Away from the screen</h2><div class="life-line"><p>Some music, a few pages, a long walk.</p><p>A change of pace for my attention, and room for questions I haven&#x27;t worked out yet.</p></div></section>
+</div></div>
+<section class="contact"><div><h2>Let&#x27;s compare notes.</h2><p>About a collaboration, a difficult context problem, or a different point of view.</p></div><a href="mailto:jdlow@live.cn">Send me a note <span class="arrow" aria-hidden="true">↗</span></a></section>
+</main><footer class="footer"><p>Kenny Ponders · Shenzhen</p><div><a href="/projects/">Explore my projects ↗</a><a href="/">Back home ↗</a></div></footer>
+</PortfolioLayout>
