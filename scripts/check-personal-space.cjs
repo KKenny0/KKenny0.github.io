@@ -136,3 +136,15 @@ for (const [lang, preference, pathname, expected] of [
   assert.equal(redirected, expected);
 }
 console.log('PASS: bilingual portfolio, descending stars, focus images, awards and language redirects.');
+// About refresh: both locales retain anonymized experience and accessible photo viewers.
+for (const prefix of ['', 'zh/']) {
+  const about = readFileSync(path.join(output, prefix, 'about/index.html'), 'utf8');
+  const experience = about.match(/id="experience"[\s\S]*?<\/section>/)[0];
+  assert.equal((experience.match(/<article /g) || []).length, 5);
+  assert.ok(!/爱图仕|冰鉴|蓝月亮|Aputure|Icekredit|Blue Moon/.test(experience));
+  assert.ok(about.includes('China AI and Law Challenge'));
+  assert.equal((about.match(/class="photo-open"/g) || []).length, 2);
+  assert.ok(/id="awards"[\s\S]*?class="archive-photo"/.test(about));
+  assert.ok(about.includes('<dialog class="photo-viewer"'));
+}
+console.log('PASS: About experience, company anonymity, CAIL and photo viewer markup.');
