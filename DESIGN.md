@@ -1,10 +1,63 @@
 # Kenny Ponders: compact paper portfolio
 
+## Audience and intent
+
+The primary audience is potential collaborators. The intended takeaway is that
+Kenny can reliably deliver outcomes in his area of expertise. Visitors should
+understand his capabilities and know how to contact him. His professional scope
+is AI application and systems engineering, including language processing,
+information retrieval, and multimodal applications. Reliable delivery means
+taking responsibility for agreed outcomes and bringing problems to an
+acceptable result, with concrete evidence of quality and stability.
+
 ## Theme
 
-A personal maker's index with Kami's ink-on-paper typography. Keep the accepted
-compact structure, real work, and one small homepage illustration. Identity and
-project names lead; supporting copy and dated metadata follow.
+Retain the accepted typography and paper palette while strengthening the
+presentation of representative work and Kenny's engineering judgment.
+
+A personal engineering portfolio with Kami's ink-on-paper typography. Give
+representative delivery work a clear focal point, followed by engineering
+judgment, open-source work, and a concrete invitation to collaborate. Retain the
+small personal illustration as a supporting identity detail.
+
+## Agreed content direction
+
+- Lead with the AI comics generation system as the delivery case. Use enterprise
+  document Q&A as a supporting case to show the breadth of the professional scope.
+- Express personality through engineering judgment and trade-offs: how Kenny
+  assesses quality, handles failure, and brings work to acceptance.
+- Invite collaboration on technical planning and engineering delivery for AI
+  applications. Quality and stability improvement are capabilities within this work.
+
+## Proposed page changes
+
+This proposal awaits confirmation of the complete direction before page edits.
+The implementation scope is the homepage, Projects, and About in both languages.
+
+- Homepage: a clear professional introduction, a prominent AI comics delivery
+  case with a workflow illustration and visible outcomes, a compact enterprise
+  Q&A case, concrete engineering judgments, selected open-source work, and a
+  collaboration invitation. Break up the repeated text-row rhythm with differing
+  section proportions and a visible visual focal point.
+- Projects: distinguish featured work from the complete repository index, show
+  real previews more directly, and keep key previews available on mobile.
+  GitHub metrics support the work rather than leading its presentation. Retain
+  existing project data, filtering, sorting, archive links, and no-image states.
+- About: surface representative outcomes before expandable technical detail.
+  Keep the complete experience, research, awards, personal photos, and interests.
+  Describe collaboration in the agreed professional scope.
+
+Use existing public work descriptions for professional cases and label workflow
+illustrations as diagrams. Preserve Kenny's actual role and the conditions of
+each result: fixed-set quality measurements, internal tests, and individual task
+runs must remain distinguishable. Use real existing screenshots for open-source
+work; professional diagrams and project screenshots have different meanings.
+
+Acceptance: the main pages make the professional scope, a concrete delivery
+result, and a contact route clear. Representative evidence is visible without
+opening a disclosure. Desktop and mobile both retain meaningful work visuals.
+The established typography, paper palette, dark mode, and bilingual navigation
+remain coherent. Existing behavior checks and a final full build must pass.
 
 ## Palette
 
@@ -27,18 +80,20 @@ JetBrains Mono, then Consolas. Titles and body share the serif family.
 
 ## Components
 
-Shared masthead with language and theme controls; four selected projects on the
-homepage; project disclosures with categories, sorting, real previews and a
-collapsed archive group; plain text GitHub totals with explicit snapshot scope.
+Shared masthead with language and theme controls; representative delivery cases
+and four selected open-source projects on the homepage; project disclosures with
+categories, sorting, real previews and a collapsed archive group; plain text
+GitHub totals with explicit snapshot scope.
 No-image projects show an honest text notice and never reuse the last screenshot.
 About preserves its timeline, awards, research and photo viewer.
 
 ## Layout
 
 One shared stylesheet, no new styling framework. Frame maximum 1096px with
-36px desktop padding. The homepage and project index retain their existing
-content/sidebar split. Project bodies stay within 65ch; lists are separated by
-neutral hairlines. Use 8/16/24/32/48px gaps instead of separate card containers.
+36px desktop padding. Vary section proportions to distinguish representative
+delivery cases, engineering judgments, and repository lists. Project bodies stay
+within 65ch; lists are separated by neutral hairlines. Use 8/16/24/32/48px gaps
+instead of separate card containers.
 
 ## Depth and motion
 
@@ -59,9 +114,11 @@ Keyboard changes and reduced-motion preferences suppress motion.
 ## Responsive
 
 At 850px reduce column gaps. At 640px wrap the navigation and use one column;
-hide the sidebar and homepage illustration. Keep project names and dates usable
-at 375px and 320px without horizontal scrolling. Native disclosures remain usable
-without JavaScript; archive links open their parent group when scripting is on.
+stack supporting experience and work previews instead of losing meaningful
+evidence. The small homepage illustration may be hidden. Keep project names and
+dates usable at 375px and 320px without horizontal scrolling. Native disclosures
+remain usable without JavaScript; archive links open their parent group when
+scripting is on.
 
 ## Prompt guide
 

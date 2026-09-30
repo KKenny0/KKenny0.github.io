@@ -1,0 +1,87 @@
+{
+  "type": "design",
+  "designSystems": [],
+  "primaryDesignSystem": null,
+  "assets": {
+    "首页 · 交付与判断": {
+      "versions": [
+        {
+          "path": "index.html",
+          "createdAt": "2026-09-30T08:32:18.801Z",
+          "status": "needs-review",
+          "viewport": {
+            "width": 1280,
+            "height": 720
+          }
+        }
+      ]
+    },
+    "Projects · 工具与实验": {
+      "versions": [
+        {
+          "path": "projects.html",
+          "createdAt": "2026-09-30T08:32:18.883Z",
+          "status": "needs-review",
+          "viewport": {
+            "width": 1280,
+            "height": 720
+          }
+        }
+      ]
+    },
+    "About · 经历与成果": {
+      "versions": [
+        {
+          "path": "about.html",
+          "createdAt": "2026-09-30T08:32:18.958Z",
+          "status": "needs-review",
+          "viewport": {
+            "width": 1280,
+            "height": 720
+          }
+        }
+      ]
+    },
+    "index-en": {
+      "versions": [
+        {
+          "path": "index-en.html",
+          "createdAt": "2026-09-30T08:47:52.005Z",
+          "status": "needs-review",
+          "viewport": {
+            "width": 1280,
+            "height": 720
+          }
+        }
+      ]
+    },
+    "projects-en": {
+      "versions": [
+        {
+          "path": "projects-en.html",
+          "createdAt": "2026-09-30T08:47:52.165Z",
+          "status": "needs-review",
+          "viewport": {
+            "width": 1280,
+            "height": 720
+          }
+        }
+      ]
+    },
+    "about-en": {
+      "versions": [
+        {
+          "path": "about-en.html",
+          "createdAt": "2026-09-30T08:47:52.326Z",
+          "status": "needs-review",
+          "viewport": {
+            "width": 1280,
+            "height": 720
+          }
+        }
+      ]
+    }
+  },
+  "createdAt": "2026-09-30T08:32:18.802Z",
+  "updatedAt": "2026-09-30T08:54:03.571Z"
+}
