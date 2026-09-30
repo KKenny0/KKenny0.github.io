@@ -1,11 +1,12 @@
 # KKenny0.github.io
 <a href='http://kkenny0.github.io/'>My Homepage.</a>
 
-The accepted compact portfolio is implemented in Astro. English routes are `/`,
+The accepted delivery portfolio (designs/kenny-delivery-v2) is implemented in Astro. English routes are `/`,
 `/projects/`, and `/about/`; Chinese routes use the `/zh/` prefix. Both versions
 share `src/layouts/PortfolioLayout.astro`, `src/styles/portfolio.css`, and
 `src/scripts/portfolio.js`. Keep corresponding page copy in sync when editing.
-Language and theme choices are remembered locally. Notes, support, case studies,
+Language and theme choices are remembered locally; project filters and sorting
+are preserved in the URL and across language changes. Notes, support, case studies,
 and legacy redirects retain their existing routes.
 
 Project metadata and account totals use a dated snapshot (2026-09-30), not a live

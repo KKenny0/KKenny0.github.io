@@ -1,7 +1,6 @@
 ---
 import { site } from '../data/site';
 import '../styles/portfolio.css';
-import '../styles/about.css';
 interface Props { title: string; lang: 'en' | 'zh'; page: 'index' | 'projects' | 'about'; }
 const { title, lang, page } = Astro.props;
 const english = lang === 'en';
@@ -9,7 +8,7 @@ const base = english ? '' : '/zh';
 const path = page === 'index' ? '/' : `/${page}/`;
 const alternate = `${english ? '/zh' : ''}${path}`;
 const canonical = new URL(`${base}${path}`, site.canonical).href;
-const description = english ? site.description : 'Kenny 的个人项目、工作经历与研究。探索 AI、上下文与本地优先工具。';
+const description = english ? 'AI applications and systems engineering by Kenny Wu: professional delivery, independent tools, and research.' : 'Kenny Wu 的 AI 应用与系统工程：专业交付、独立工具与研究实践。';
 const pageTitle = page === 'index' ? 'Kenny Ponders' : `${title} · Kenny Ponders`;
 ---
 <!DOCTYPE html>
@@ -48,7 +47,7 @@ const pageTitle = page === 'index' ? 'Kenny Ponders' : `${title} · Kenny Ponder
 <a class="skip" href="#main">{english ? 'Skip to content' : '跳到主要内容'}</a>
 <div class="wrap">
   <header class="masthead">
-    <a class="identity" href={`${base}/`}><strong>Kenny Ponders<span style="color:var(--red)">.</span></strong><small>{english ? 'Exploring AI' : '肯玩 AI'}</small></a>
+    <a class="identity" href={`${base}/`}><strong>Kenny Ponders<span style="color:var(--red)">.</span></strong><small>{english ? 'AI notes' : '青衫 AI'}</small></a>
     <nav class="nav" aria-label={english ? 'Main navigation' : '主导航'}>
       <a href={`${base}/`} aria-current={page === 'index' ? 'page' : undefined}>{english ? 'Home' : '首页'}</a>
       <a href={`${base}/projects/`} aria-current={page === 'projects' ? 'page' : undefined}>Projects</a>
@@ -58,6 +57,7 @@ const pageTitle = page === 'index' ? 'Kenny Ponders' : `${title} · Kenny Ponder
     </nav>
   </header>
   <slot />
+  <footer><p>Kenny Ponders · {english ? 'Shenzhen' : '深圳'}</p><a href={site.github_link} target="_blank" rel="noopener noreferrer">GitHub ↗</a></footer>
 </div>
 <script>import '../scripts/portfolio.js';</script>
 </body>

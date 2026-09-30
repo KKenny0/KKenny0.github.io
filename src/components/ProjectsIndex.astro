@@ -1,45 +1,37 @@
 ---
-import { activeProjects, archivedProjects, githubSnapshot } from '../data/projects';
+import { activeProjects, archivedProjects, githubSnapshot, projects } from '../data/projects';
 interface Props { lang: 'en' | 'zh' }
 const { lang } = Astro.props;
 const english = lang === 'en';
 const t = (en: string, zh: string) => english ? en : zh;
 const base = english ? '' : '/zh';
-const first = activeProjects[0];
-const categories = [['all','All','全部'],['capture','Capture','信息收集'],['think','Agent workflows','Agent 协作'],['make','Create','内容创作'],['research','Research','研究实验']];
-const date = (value: string) => new Intl.DateTimeFormat(english ? 'en-GB' : 'zh-CN', {timeZone:'Asia/Shanghai',year:'numeric',month:'2-digit',day:'2-digit'}).format(new Date(value));
+const featured = ['videowipe', 'obsidian-kami'].map(slug => projects.find(project => project.slug === slug)!);
+const categories = [['all','All','全部'],['capture','Capture','信息收集'],['think','Think','Agent 协作'],['make','Make','内容创作'],['research','Research','研究实验']];
+const date = (value: string) => new Intl.DateTimeFormat('sv-SE', { timeZone: 'Asia/Shanghai', year: 'numeric', month: '2-digit', day: '2-digit' }).format(new Date(value));
 ---
 <main id="main" data-screen-label={t('Projects · Project index','Projects · 项目索引')}>
-  <section class="page-heading"><div><span class="eyebrow">INDEPENDENT PROJECTS</span><h1>{t('It starts with making.','做出来，才算开始。')}</h1><p>{t('Independent tools, open-source experiments, and the problems behind them.','一些独立工具、开源实验，以及它们在解决的问题。')}</p></div><div class="text-links"><a href="https://github.com/KKenny0?tab=repositories" target="_blank" rel="noopener noreferrer">{t('All repositories on GitHub','GitHub 上的全部仓库')} <span class="arrow" aria-hidden="true">↗</span></a></div></section>
-  <section class="github-overview" aria-label={t('GitHub overview','GitHub 概览')}>
-    <dl class="github-metrics"><div><dt>{t('Public repositories','公开仓库')}</dt><dd>{githubSnapshot.publicRepos}</dd></div><div><dt>Stars</dt><dd>{githubSnapshot.stars}</dd></div><div><dt>Forks</dt><dd>{githubSnapshot.forks}</dd></div><div><dt>{t('Followers','关注者')}</dt><dd>{githubSnapshot.followers}</dd></div></dl>
-    <p class="snapshot-note">{t(`Stars and forks cover all ${githubSnapshot.ownedRepos} non-fork repositories, including archived and profile repositories.`,`Stars 与 Forks 统计全部 ${githubSnapshot.ownedRepos} 个非 fork 仓库，包含归档与个人简介仓库。`)}<br/>{t('Snapshot','数据快照')} · <time datetime={githubSnapshot.date}>{githubSnapshot.date}</time> · {t('Not live','非实时数据')}</p>
-  </section>
-  <div class="filter-bar"><div class="filters" role="group" aria-label={t('Project categories','项目分类')}>{categories.map(([id,en,zh]) => <button type="button" data-filter={id} aria-pressed={id === 'all' ? 'true' : 'false'}>{t(en,zh)}</button>)}</div><label class="sort" for="sort">{t('Sort','排序')}<select id="sort"><option value="stars">{t('Most stars','Stars 从高到低')}</option><option value="recent">{t('Recently pushed','最近更新')}</option><option value="name">{t('Name A–Z','名称 A–Z')}</option></select></label></div>
-  <div class="collection"><div class="collection-main">
-    <p class="collection-status" id="project-count" role="status">{t(`${activeProjects.length} projects · ${archivedProjects.length} archived`,`${activeProjects.length} 个项目 · ${archivedProjects.length} 个已归档`)}</p>
-    {[activeProjects, archivedProjects].map((group, groupIndex) => {
-      const archived = groupIndex === 1;
-      const Container = archived ? 'details' : 'div';
-      return <Container class={archived ? 'archive-group' : undefined} id={archived ? 'project-archive' : 'project-active'}>
-        {archived && <summary class="archive-heading"><span>{t('Archived projects','已归档项目')}</span><span id="archive-count">{group.length}</span></summary>}
-        <div id={archived ? 'archive-items' : 'project-items'}>{group.map(project => <details class="project" id={project.slug} data-category={project.practice} data-stars={project.stars} data-forks={project.forks} data-updated={project.pushedAt} data-archived={String(project.archived)} data-name={project.name} data-image={project.focus?.src} data-image-alt={project.focus ? t(project.focus.alt,project.focus.altZh) : undefined} data-image-caption={project.focus ? t(project.focus.caption,project.focus.captionZh) : undefined}>
-          <summary><div><strong>{project.name}</strong><p>{t(project.thesis,project.thesisZh)}</p></div><span class="stars" aria-label={t(`${project.stars} stars`,`${project.stars} 个 Star`)}>☆ {project.stars}</span><span class="plus" aria-hidden="true">＋</span></summary>
-          <div class="project-body"><p class="tagline">{project.tagline}</p>
-            <dl class="project-meta"><div><dt>{t('Language','主要语言')}</dt><dd>{project.language ?? t('Not specified','未标注')}</dd></div><div><dt>Forks</dt><dd>{project.forks}</dd></div><div><dt>{t('Last push','最后推送')}</dt><dd><time datetime={project.pushedAt}>{date(project.pushedAt)}</time></dd></div><div><dt>{t('Status','仓库状态')}</dt><dd>{project.archived ? t('Archived','已归档') : t('Not archived','未归档')}</dd></div></dl>
-            <p>{t(project.description,project.descriptionZh)}</p>
-            {project.image && <img src={project.image.src} alt={t(project.image.alt,project.image.altZh)} width={project.image.width} height={project.image.height} loading="lazy"/>}
-            {project.slug === 'clipplane' && <div class="demo"><span class="label">{t('TRY SAVING THIS LINE','试着留下这句话')}</span><blockquote id="demo-quote">{t('Good tools should put your ideas back in your hands.','好的工具，应该让想法回到你手里。')}</blockquote><div class="saved" id="demo-saved" hidden></div><div class="demo-actions"><button id="save-quote" type="button">{t('Save this ↗','收进来 ↗')}</button><button id="undo-quote" type="button" hidden>{t('Undo save','撤销收集')}</button></div><p id="demo-status" role="status">{t('Save the line to see how a thought is captured.','点击收集，看看一句话如何被留下。')}</p><small>{t('Demo only. Saved on this page until you refresh.','交互示意，仅本页暂存，刷新后清空。')}</small></div>}
-            <div class="text-links"><a href={project.url} target="_blank" rel="noopener noreferrer">{t('Source & documentation','查看源码与说明')} ↗</a>{project.homepage && project.homepage !== project.url && <a href={project.homepage} target="_blank" rel="noopener noreferrer">{t('Project website','项目网站')} ↗</a>}{project.detailUrl && <a href={project.detailUrl}>{t('Project story','项目介绍')} ↗</a>}</div>
-          </div>
-        </details>)}</div>
-      </Container>;
-    })}
-  </div>
-  <aside class="preview-rail" aria-label={t('Project preview','项目速览')}><span class="label">PROJECT IN FOCUS</span><h2 id="preview-title">{first.name}</h2><p id="preview-copy">{t(first.thesis,first.thesisZh)}</p><div class="rail-stats" id="preview-stars">{first.stars}<small>GitHub Stars</small></div>
-    <a class="preview-art" id="preview-image-link" hidden={!first.focus} href={first.focus?.src} target="_blank" rel="noopener noreferrer" aria-label={t(`View full-size ${first.name} image (new tab)`,`查看 ${first.name} 原图（新标签页）`)}><img id="preview-image" src={first.focus?.src} alt={first.focus ? t(first.focus.alt,first.focus.altZh) : ""}/></a>
-    <p class="preview-caption" id="preview-image-caption" hidden={!first.focus}><span id="preview-caption">{first.focus && t(first.focus.caption,first.focus.captionZh)}</span><span aria-hidden="true">{t('Full size ↗','查看原图 ↗')}</span></p><p class="preview-missing" id="preview-missing" hidden={Boolean(first.focus)}>{t('No preview image. Open the repository for documentation and examples.','暂无预览图，可前往仓库查看说明与示例。')}</p>
-    <div class="text-links"><a id="preview-link" href={`#${first.slug}`}>{t('Explore this project','打开项目详情')} <span class="arrow" aria-hidden="true">↗</span></a></div><p class="rail-foot">{t('Browse the list for a preview here. Select a project name to read more.','沿着列表浏览，右侧会带你先看一眼。点击项目名称，展开完整介绍。')}</p>
-  </aside></div>
+<section class="page-heading"><p class="eyebrow">PROJECTS / TOOLS & EXPERIMENTS</p><h1>{t('Ideas, made tangible.', "想法，落在作品里。")}</h1><p>{t('These are tools and public experiments I build independently. For professional delivery work, see', "这里是我独立制作的工具与公开实验。工作中的交付案例，可以在")} <a class="blue" href={`${base}/about/#experience`}>About</a>{t('.', ' 经历。')}</p></section>
+<section class="featured-grid" aria-label={t('Featured projects','代表项目')}>
+{featured.map(project => <article class="featured-item"><a href={`#${project.slug}`}><figure class="preview"><img src={project.focus!.src} alt={t(project.focus!.alt,project.focus!.altZh)} loading="lazy" /></figure><h2>{project.name} ↗</h2><p>{t(project.thesis,project.thesisZh)}</p></a><div class="links"><a href={`#${project.slug}`}>{t('Explore project','展开项目')} ↓</a><a href={project.url} target="_blank" rel="noopener noreferrer">GitHub ↗</a></div></article>)}
+</section>
+<div class="stats-strip"><span><strong>{githubSnapshot.publicRepos}</strong> {t('Public repositories','公开仓库')}</span><span><strong>{githubSnapshot.stars}</strong> Stars</span><span><strong>{githubSnapshot.forks}</strong> Forks</span><span><strong>{githubSnapshot.followers}</strong> {t('Followers','关注者')}</span><span class="caption">GitHub {t('snapshot','快照')} · <time datetime={githubSnapshot.date}>{githubSnapshot.date}</time></span></div>
+<p class="caption">{t(`Stars / forks cover ${githubSnapshot.ownedRepos} non-fork public repositories. The index contains ${activeProjects.length} active and ${archivedProjects.length} archived projects, excluding profile, configuration, and this website’s repositories.`,`Stars / Forks 统计 ${githubSnapshot.ownedRepos} 个非 fork 公开仓库；项目索引保留 ${activeProjects.length} 个活跃、${archivedProjects.length} 个归档项目，排除个人简介、配置与本站仓库。`)}</p>
+<section class="repository-index" aria-labelledby="index-title">
+<div class="section-head"><div><p class="label">REPOSITORY INDEX</p><h2 id="index-title">{t('Repository index','项目索引')}</h2></div><a href="https://github.com/KKenny0?tab=repositories" target="_blank" rel="noopener noreferrer">GitHub ↗</a></div>
+<div class="filter-bar"><div class="filters" role="group" aria-label={t('Filter by practice','按实践方向筛选')}>{categories.map(([id,en,zh]) => <button type="button" data-filter={id} aria-pressed={String(id === 'all')}>{t(en,zh)}</button>)}</div><label class="sort" for="sort">{t('Sort by','排序')}<select id="sort"><option value="stars">{t('Stars','Stars 从高到低')}</option><option value="recent">{t('Last pushed','最近推送')}</option></select></label></div>
+<p class="collection-status" id="project-count" role="status">{t(`${activeProjects.length} active projects · ${archivedProjects.length} archived`,`当前筛选：${activeProjects.length} 个活跃项目 · ${archivedProjects.length} 个归档项目`)}</p>
+{[activeProjects, archivedProjects].map((group, index) => {
+const archived = index === 1;
+const Container = archived ? 'details' : 'div';
+return <Container class={archived ? 'archive-group' : undefined} id={archived ? 'project-archive' : 'project-active'}>
+{archived && <summary>{t('Archived projects','归档项目')} · <span id="archive-count">{group.length}</span></summary>}
+<div id={archived ? 'archive-items' : 'project-items'} data-project-list={archived ? 'archive' : 'active'}>{group.map(project => <details class="project" id={project.slug} data-category={project.practice} data-stars={project.stars} data-forks={project.forks} data-updated={project.pushedAt} data-archived={String(project.archived)} data-name={project.name}>
+<summary><div><strong>{project.name}</strong><p>{t(project.thesis,project.thesisZh)}</p></div><span class="stars" aria-label={t(`${project.stars} stars`,`${project.stars} 个 Star`)}>☆ {project.stars}</span><span class="plus" aria-hidden="true">＋</span></summary>
+<div class="project-body"><div class="project-meta"><span class={project.language ? undefined : "project-state"}>{project.language ?? t('Not specified','未标注语言')}</span><span class="project-updated">{t('Last pushed','最近推送')} <time datetime={project.pushedAt}>{date(project.pushedAt)}</time></span><span>{project.forks} forks</span>{project.archived && <span class="project-state">{t('Archived','已归档')}</span>}</div><p>{t(project.description,project.descriptionZh)}</p>
+{project.focus ? <><img src={project.focus.src} alt={t(project.focus.alt,project.focus.altZh)} loading="lazy" /><p class="caption">{t(project.focus.caption,project.focus.captionZh)}</p></> : <p class="empty-preview">{t('No public preview for this project. See the repository for documentation and examples.','这个项目暂无公开预览，源代码与说明可在 GitHub 查看。')}</p>}
+<div class="links"><a href={project.url} target="_blank" rel="noopener noreferrer">{t('Source code','源代码')} ↗</a>{project.homepage && project.homepage !== project.url && <a href={project.homepage} target="_blank" rel="noopener noreferrer">{t('Visit project','访问项目')} ↗</a>}{project.detailUrl && <a href={project.detailUrl}>{t('Project story','项目介绍')} ↗</a>}</div>
+</div></details>)}</div></Container>;
+})}
+</section>
+<section class="contact"><div><p class="label">LET’S WORK TOGETHER</p><h2>{t('Have an AI project to move forward?','有一个 AI 项目想推进？')}</h2><p>{t('Let’s discuss the technical approach, engineering delivery, quality, and reliability.','可以从技术方案聊起，一起梳理工程落地、质量与稳定性。')}</p></div><a href="mailto:jdlow@live.cn">jdlow@live.cn <span aria-hidden="true">↗</span></a></section>
 </main>
-<footer class="footer"><p>{t('Every tool starts with a specific problem.','每件工具，始于一个具体的问题。')}</p><div><a href={`${base}/about/`}>{t('About me','关于我')} ↗</a><a href="mailto:jdlow@live.cn">{t('Get in touch','交换想法')} ↗</a></div></footer>

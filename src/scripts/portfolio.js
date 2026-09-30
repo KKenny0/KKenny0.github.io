@@ -1,134 +1,111 @@
-const root = document.documentElement;
-const english = root.lang === 'en';
-const t = (en, zh) => english ? en : zh;
-const languageLink = document.querySelector('[data-language]');
-languageLink.addEventListener('click', () => {
-  const target = new URL(languageLink.href);
-  target.search = location.search;
-  target.hash = location.hash;
-  languageLink.href = target.href;
-  try { localStorage.setItem('kenny-language', languageLink.dataset.language); } catch {}
-});
 const themeButton = document.querySelector('.theme');
-function applyTheme(dark) {
-  root.dataset.theme = dark ? 'dark' : 'light';
-  themeButton.setAttribute('aria-pressed', String(dark));
-  themeButton.setAttribute('aria-label', dark ? t('Switch to light mode', '切换到浅色外观') : t('Switch to dark mode', '切换到深色外观'));
-  themeButton.textContent = dark ? '◑' : '◐';
+const english = document.documentElement.lang === 'en';
+const languageLink = document.querySelector('.language');
+const languageTarget = languageLink.getAttribute('href');
+function syncLanguageLink() {
+  languageLink.href = languageTarget + location.search + location.hash;
 }
-try { applyTheme(localStorage.getItem('kenny-space-theme') === 'dark'); } catch { applyTheme(false); }
-themeButton.addEventListener('click', () => {
-  applyTheme(root.dataset.theme !== 'dark');
-  try { localStorage.setItem('kenny-space-theme', root.dataset.theme); } catch {}
+syncLanguageLink();
+window.addEventListener('hashchange', syncLanguageLink);
+languageLink.addEventListener('click', () => {
+  syncLanguageLink();
+  try { localStorage.setItem('kenny-language', languageLink.dataset.language); } catch {}
 });
 document.addEventListener('keydown', () => { document.body.dataset.keyboard = ''; });
 document.addEventListener('pointerdown', () => { delete document.body.dataset.keyboard; });
-
-const projects = [...document.querySelectorAll('.project')];
-const filters = [...document.querySelectorAll('[data-filter]')];
-const sort = document.querySelector('#sort');
-let category = 'all';
-let previewed;
-function preview(project) {
-  if (!project || previewed === project) return;
-  previewed = project;
-  document.querySelector('#preview-title').textContent = project.dataset.name;
-  document.querySelector('#preview-copy').textContent = project.querySelector('summary p').textContent;
-  const stars = document.querySelector('#preview-stars');
-  stars.replaceChildren(document.createTextNode(project.dataset.stars));
-  const caption = document.createElement('small');
-  caption.textContent = 'GitHub Stars';
-  stars.append(caption);
-  const img = document.querySelector('#preview-image');
-  const imageLink = document.querySelector('#preview-image-link');
-  const hasImage = Boolean(project.dataset.image);
-  imageLink.hidden = !hasImage;
-  document.querySelector('#preview-image-caption').hidden = !hasImage;
-  document.querySelector('#preview-missing').hidden = hasImage;
-  if (hasImage) {
-    img.src = project.dataset.image;
-    img.alt = project.dataset.imageAlt;
-    imageLink.href = project.dataset.image;
-    imageLink.setAttribute('aria-label', t(`View full-size ${project.dataset.name} image (new tab)`, `查看 ${project.dataset.name} 原图（新标签页）`));
-    document.querySelector('#preview-caption').textContent = project.dataset.imageCaption;
-  } else {
-    img.removeAttribute('src');
-    img.alt = '';
-    imageLink.removeAttribute('href');
-    document.querySelector('#preview-caption').textContent = '';
-  }
-  document.querySelector('#preview-link').href = `#${project.id}`;
+let theme = 'light';
+try { theme = localStorage.getItem('kenny-space-theme') === 'dark' ? 'dark' : 'light'; } catch {}
+function applyTheme(value) {
+  document.documentElement.dataset.theme = value;
+  themeButton.setAttribute('aria-pressed', String(value === 'dark'));
+  themeButton.textContent = value === 'dark' ? '◑' : '◐';
+  themeButton.setAttribute('aria-label', english
+    ? `Switch to ${value === 'dark' ? 'light' : 'dark'} mode`
+    : `切换到${value === 'dark' ? '浅' : '深'}色外观`);
 }
-function filterProjects() {
-  const sorted = [...projects].sort((a, b) => sort.value === 'name'
-    ? a.dataset.name.localeCompare(b.dataset.name, 'en')
-    : sort.value === 'recent'
-      ? b.dataset.updated.localeCompare(a.dataset.updated) || a.dataset.name.localeCompare(b.dataset.name, 'en')
-      : Number(b.dataset.stars) - Number(a.dataset.stars) || a.dataset.name.localeCompare(b.dataset.name, 'en'));
-  for (const project of sorted) {
-    project.hidden = category !== 'all' && project.dataset.category !== category;
-    document.querySelector(project.dataset.archived === 'true' ? '#archive-items' : '#project-items').append(project);
-  }
-  for (const button of filters) button.setAttribute('aria-pressed', String(button.dataset.filter === category));
-  const visible = sorted.filter(project => !project.hidden);
-  const active = visible.filter(project => project.dataset.archived !== 'true');
-  const archived = visible.length - active.length;
-  document.querySelector('#project-count').textContent = t(`${active.length} projects · ${archived} archived`, `${active.length} 个项目 · ${archived} 个已归档`);
-  document.querySelector('#archive-count').textContent = archived;
-  document.querySelector('#project-archive').hidden = archived === 0;
-  preview(active[0] || visible[0]);
-}
-for (const button of filters) button.addEventListener('click', () => { category = button.dataset.filter; filterProjects(); });
-sort?.addEventListener('change', filterProjects);
-for (const project of projects) {
-  const summary = project.querySelector('summary');
-  summary.addEventListener('pointerenter', () => preview(project));
-  summary.addEventListener('focus', () => preview(project));
-  summary.addEventListener('click', event => {
-    const body = project.querySelector('.project-body');
-    body.classList.toggle('pointer-reveal', event.detail > 0 && !project.open);
-  });
-  project.addEventListener('toggle', () => { if (project.open) preview(project); });
-}
-function revealHash() {
-  const project = projects.find(item => `#${item.id}` === location.hash);
-  if (!project) return;
-  category = 'all';
-  filterProjects();
-  if (project.dataset.archived === 'true') document.querySelector('#project-archive').open = true;
-  project.open = true;
-  preview(project);
-  project.querySelector('summary').focus({ preventScroll: true });
-  project.scrollIntoView({ block: 'start' });
-}
-if (projects.length) { filterProjects(); revealHash(); window.addEventListener('hashchange', revealHash); }
-document.querySelector('#preview-link')?.addEventListener('click', () => {
-  // Reopening an already-selected hash does not dispatch hashchange.
-  if (location.hash === document.querySelector('#preview-link').hash) revealHash();
+applyTheme(theme);
+themeButton.addEventListener('click', () => {
+  theme = document.documentElement.dataset.theme === 'dark' ? 'light' : 'dark';
+  applyTheme(theme);
+  try { localStorage.setItem('kenny-space-theme', theme); } catch {}
 });
 
-const save = document.querySelector('#save-quote');
-const undo = document.querySelector('#undo-quote');
-if (save) {
-  const saved = document.querySelector('#demo-saved');
-  const quote = document.querySelector('#demo-quote');
-  const status = document.querySelector('#demo-status');
-  save.addEventListener('click', () => {
-    saved.textContent = t(`Saved: ${quote.textContent}`, `已留下：${quote.textContent}`);
-    saved.hidden = false;
-    quote.hidden = true;
-    save.hidden = true;
-    undo.hidden = false;
-    status.textContent = t('Saved in this demo. You can undo it anytime.', '已收进本次演示，随时可以撤销。');
-    undo.focus({ preventScroll: true });
-  });
-  undo.addEventListener('click', () => {
-    saved.hidden = true;
-    saved.textContent = '';
-    quote.hidden = false;
-    save.hidden = false;
-    undo.hidden = true;
-    status.textContent = t('Undone. You can save it again.', '已撤销，可以重新收集。');
-    save.focus({ preventScroll: true });
-  });
+const filters = [...document.querySelectorAll('[data-filter]')];
+const sort = document.querySelector('#sort');
+const archiveGroup = document.querySelector('.archive-group');
+const query = new URLSearchParams(location.search);
+if (sort) {
+  const category = filters.some(button => button.dataset.filter === query.get('filter')) ? query.get('filter') : 'all';
+  filters.forEach(button => button.setAttribute('aria-pressed', String(button.dataset.filter === category)));
+  sort.value = query.get('sort') === 'recent' ? 'recent' : 'stars';
 }
+function updateProjects() {
+  const category = filters.find(button => button.getAttribute('aria-pressed') === 'true')?.dataset.filter || 'all';
+  let active = 0;
+  let archived = 0;
+  document.querySelectorAll('[data-project-list]').forEach(list => {
+    const items = [...list.querySelectorAll('.project')];
+    items.sort((a, b) => sort.value === 'recent' ? b.dataset.updated.localeCompare(a.dataset.updated) : Number(b.dataset.stars) - Number(a.dataset.stars) || a.dataset.name.localeCompare(b.dataset.name, 'en'));
+    items.forEach(item => {
+      item.hidden = category !== 'all' && item.dataset.category !== category;
+      if (!item.hidden) {
+        if (list.dataset.projectList === 'archive') archived++;
+        else active++;
+      }
+      list.append(item);
+    });
+  });
+  document.querySelector('.collection-status').textContent = english
+    ? `${active} active projects · ${archived} archived`
+    : `当前筛选：${active} 个活跃项目 · ${archived} 个归档项目`;
+  if (archiveGroup) {
+    archiveGroup.hidden = archived === 0;
+    document.querySelector('#archive-count').textContent = archived;
+  }
+}
+function saveProjectView() {
+  const url = new URL(location.href);
+  const category = filters.find(button => button.getAttribute('aria-pressed') === 'true').dataset.filter;
+  category === 'all' ? url.searchParams.delete('filter') : url.searchParams.set('filter', category);
+  sort.value === 'stars' ? url.searchParams.delete('sort') : url.searchParams.set('sort', sort.value);
+  // A filter can hide the current fragment; keep the URL consistent with the view.
+  const linked = [...document.querySelectorAll('.project')].find(item => '#' + item.id === url.hash);
+  if (linked?.hidden) url.hash = '';
+  history.replaceState(null, '', url);
+  syncLanguageLink();
+}
+filters.forEach(button => button.addEventListener('click', () => {
+  filters.forEach(other => other.setAttribute('aria-pressed', String(other === button)));
+  updateProjects();
+  saveProjectView();
+}));
+sort?.addEventListener('change', () => { updateProjects(); saveProjectView(); });
+if (sort) updateProjects();
+function openLinkedProject() {
+  const item = [...document.querySelectorAll('.project')].find(item => '#' + item.id === location.hash);
+  if (item?.classList.contains('project')) {
+    filters.forEach(button => button.setAttribute('aria-pressed', String(button.dataset.filter === 'all')));
+    updateProjects();
+    saveProjectView();
+    item.open = true;
+    const archive = item.closest('.archive-group');
+    if (archive) archive.open = true;
+    item.querySelector('summary').focus({ preventScroll: true });
+    item.scrollIntoView({ block: 'start' });
+  }
+}
+window.addEventListener('hashchange', openLinkedProject);
+if (sort && location.hash) openLinkedProject();
+document.querySelectorAll('a[href^="#"]').forEach(link => link.addEventListener('click', event => {
+  if (event.metaKey || event.ctrlKey || event.shiftKey || event.altKey || event.button > 0) return;
+  const hash = link.getAttribute('href');
+  if (!sort || ![...document.querySelectorAll('.project')].some(item => '#' + item.id === hash)) return;
+  event.preventDefault();
+  if (hash !== location.hash) history.pushState(null, '', hash);
+  openLinkedProject();
+}));
+document.querySelectorAll('details').forEach(details => {
+  details.querySelector('summary').addEventListener('click', event => {
+    details.classList.toggle('pointer-reveal', event.detail > 0 && !details.open);
+  });
+});

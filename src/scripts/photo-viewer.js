@@ -12,5 +12,8 @@ for (const button of document.querySelectorAll('.photo-open')) {
   });
 }
 viewer.querySelector('.photo-close').addEventListener('click', () => viewer.close());
-viewer.addEventListener('click', event => { if (event.target === viewer) viewer.close(); });
+viewer.addEventListener('click', event => {
+  const bounds = viewer.getBoundingClientRect();
+  if (event.target === viewer && (event.clientX < bounds.left || event.clientX > bounds.right || event.clientY < bounds.top || event.clientY > bounds.bottom)) viewer.close();
+});
 viewer.addEventListener('close', () => photoTrigger?.focus({ preventScroll: true }));

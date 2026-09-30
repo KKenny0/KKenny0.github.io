@@ -79,48 +79,90 @@ address.hash='#one';windowEvents.hashchange();
 assert.equal(records[0].hidden,false);assert.equal(records[0].open,true);
 shared.get('#theme').handlers.click();assert.equal(root.dataset.theme,'dark');
 console.log('PASS: collection filtering, empty state, reset, random selection, deep links and blocked storage.');
-// Portfolio interactions must keep archived records grouped and clear stale images.
-for (const lang of ['en', 'zh-CN']) {
-  const nodes = new Map();
-  function portfolioNode(id) {
-    if (!nodes.has(id)) nodes.set(id, { id, dataset: {}, attrs: {}, handlers: {}, children: [], hidden: false, open: false, textContent: '',
-      addEventListener(k,f){this.handlers[k]=f;}, setAttribute(k,v){this.attrs[k]=v;}, removeAttribute(k){delete this.attrs[k]; if(k==='src')delete this.src;},
-      append(n){this.children=this.children.filter(child=>child!==n);this.children.push(n);}, replaceChildren(n){this.children=[n];},
-      focus(){}, scrollIntoView(){}, classList:{toggle(){}}, querySelector(selector){return portfolioNode(`${id} ${selector}`);}
-    });
-    return nodes.get(id);
-  }
-  const entries = [portfolioNode('with-image'),portfolioNode('without-image'),portfolioNode('archived')];
-  entries[0].dataset={name:'Alpha',category:'make',stars:'5',updated:'2026-09-01T00:00:00Z',archived:'false',image:'/real.png',imageAlt:'Real',imageCaption:'Screenshot'};
-  entries[1].dataset={name:'Beta',category:'capture',stars:'2',updated:'2026-09-30T00:00:00Z',archived:'false'};
-  entries[2].dataset={name:'Gamma',category:'think',stars:'10',updated:'2026-08-01T00:00:00Z',archived:'true'};
-  const filterNodes=['all','make','capture','think'].map(filter=>{const n=portfolioNode(`filter-${filter}`);n.dataset.filter=filter;return n;});
-  const portfolioRoot=portfolioNode('root');portfolioRoot.lang=lang;
-  portfolioNode('#sort').value='stars';
-  const address={hash:'#archived',search:'',href:'https://local.test/projects/#archived'};
-  const events={};
-  runInNewContext(readFileSync(`${__dirname}/../src/scripts/portfolio.js`,'utf8'), {
-    document:{documentElement:portfolioRoot,body:portfolioNode('body'),querySelector:portfolioNode,
-      querySelectorAll:selector=>selector==='.project'?entries:selector==='[data-filter]'?filterNodes:[],addEventListener(){},createTextNode:text=>text,createElement:()=>portfolioNode('caption')},
-    window:{addEventListener:(k,f)=>events[k]=f},location:address,URL,
-    localStorage:{getItem(){throw Error('storage blocked');},setItem(){throw Error('storage blocked');}}
-  });
-  assert.equal(entries[2].open,true);assert.equal(portfolioNode('#project-archive').open,true);
-  assert.deepEqual(portfolioNode('#project-items').children.map(n=>n.id),['with-image','without-image']);
-  assert.deepEqual(portfolioNode('#archive-items').children.map(n=>n.id),['archived']);
-  assert.equal(portfolioNode('#preview-image-link').hidden,true);
-  portfolioNode('#sort').value='recent';portfolioNode('#sort').handlers.change();
-  assert.deepEqual(portfolioNode('#project-items').children.map(n=>n.id),['without-image','with-image']);
-  filterNodes[1].handlers.click();assert.equal(portfolioNode('#project-archive').hidden,true);
-  assert.equal(portfolioNode('#preview-image').src,'/real.png');
-  assert.equal(portfolioNode('#preview-image-link').hidden,false);
-  filterNodes[2].handlers.click();assert.equal(portfolioNode('#preview-image').src,undefined);
-  assert.equal(portfolioNode('#preview-image-link').hidden,true);assert.equal(portfolioNode('#preview-missing').hidden,false);
-  portfolioNode('.theme').handlers.click();assert.equal(portfolioRoot.dataset.theme,'dark');
-  portfolioNode('#save-quote').handlers.click();assert.equal(portfolioNode('#demo-saved').hidden,false);
-  portfolioNode('#undo-quote').handlers.click();assert.equal(portfolioNode('#demo-saved').hidden,true);
+{
+// Approved disclosures: URL view state, archive grouping and keyboard feedback.
+function node(dataset = {}) {
+  return {
+    dataset, handlers: {}, attributes: {}, hidden: false,
+    addEventListener(name, callback) { this.handlers[name] = callback; },
+    setAttribute(name, value) { this.attributes[name] = value; },
+    getAttribute(name) { return this.attributes[name]; },
+    classList: { contains: value => value === 'project', toggle() {} },
+    focus() { this.focused = true; }, scrollIntoView() { this.scrolled = true; }
+  };
 }
-console.log('PASS: bilingual portfolio sorting, archive grouping/deep links, missing-image transitions, demo and blocked storage.');
+const filters = ['all', 'make', 'research'].map(filter => node({ filter }));
+const theme = node(), language = node(), status = node(), archive = node(), archiveSummary = node(), archiveCount = node();
+language.setAttribute('href', '/zh/projects/');
+const sort = node();
+function project(id, practice, stars, pushed) {
+  const item = node({ name: id, category: practice, stars, updated: pushed });
+  item.id = id;
+  item.summary = node();
+  item.querySelector = () => item.summary;
+  item.closest = () => item.archived ? archive : null;
+  return item;
+}
+const active = [project('new', 'make', '2', '2026-09-30'), project('popular', 'research', '9', '2026-08-01')];
+const archived = [project('old', 'make', '1', '2025-01-01')];
+archived[0].archived = true;
+function list(items, projectList) {
+  const result = node({ projectList });
+  result.querySelectorAll = () => items;
+  result.append = item => { items.splice(items.indexOf(item), 1); items.push(item); };
+  return result;
+}
+const lists = [list(active, 'active'), list(archived, 'archive')];
+archive.querySelector = () => archiveSummary;
+const elements = { '.theme': theme, '.language': language, '#sort': sort, '.archive-group': archive, '.collection-status': status, '#archive-count': archiveCount };
+const all = [...active, ...archived];
+const projectLink = node();
+projectLink.setAttribute('href', '#old');
+const documentEvents = {}, windowEvents = {};
+const context = {
+  URL, URLSearchParams,
+  location: new URL('https://example.test/projects/?filter=research&sort=recent'),
+  history: {
+    replaceState(_state, _title, url) { context.location = new URL(url, context.location); },
+    pushState(_state, _title, url) { context.location = new URL(url, context.location); }
+  },
+  localStorage: { getItem() { return null; }, setItem() {} },
+  document: {
+    body: node(), documentElement: { lang: 'en', dataset: {} },
+    querySelector: selector => elements[selector] || null,
+    querySelectorAll: selector => ({ '[data-filter]': filters, '[data-project-list]': lists, '.project': all, details: all, 'a[href^="#"]': [projectLink] })[selector] || [],
+    addEventListener(name, callback) { documentEvents[name] = callback; }
+  },
+  window: { addEventListener(name, callback) { windowEvents[name] = callback; } }
+};
+runInNewContext(readFileSync(`${__dirname}/../src/scripts/portfolio.js`, 'utf8'), context);
+assert.equal(sort.value, 'recent');
+assert.equal(status.textContent, '1 active projects · 0 archived');
+assert.equal(archive.hidden, true);
+assert.match(language.href, /\?filter=research&sort=recent$/);
+filters[0].handlers.click();
+assert.equal(status.textContent, '2 active projects · 1 archived');
+assert.equal(archive.hidden, false);
+assert.equal(context.location.search, '?sort=recent');
+sort.value = 'stars'; sort.handlers.change();
+assert.equal(active[0].id, 'popular');
+assert.equal(context.location.search, '');
+context.location.hash = '#old'; windowEvents.hashchange();
+assert.equal(archived[0].open, true);
+assert.equal(archive.open, true);
+assert.equal(archived[0].summary.focused, true);
+archived[0].open = false;
+let prevented = false;
+projectLink.handlers.click({ preventDefault() { prevented = true; } });
+assert.equal(prevented, true);
+assert.equal(archived[0].open, true);
+theme.handlers.click();
+assert.equal(theme.getAttribute('aria-label'), 'Switch to light mode');
+documentEvents.keydown(); assert.ok('keyboard' in context.document.body.dataset);
+documentEvents.pointerdown(); assert.ok(!('keyboard' in context.document.body.dataset));
+console.log('PASS: URL view state, active/archive counts, sorting, archived deep links, theme labels and keyboard mode.');
+
+}
 const {existsSync,readdirSync}=require('node:fs');const path=require('node:path');
 const output=path.resolve(__dirname,'../dist');
 const pages=readdirSync(output,{recursive:true}).map(file=>file.replaceAll('\\','/')).filter(file=>file.endsWith('.html'));
@@ -169,13 +211,17 @@ for (const prefix of ['', 'zh/']) {
   assert.deepEqual(stars,[...stars].sort((a,b)=>b-a));
   assert.ok(projectHtml.includes(`datetime="${snapshot.date}"`));
   const home=readFileSync(path.join(output,prefix,'index.html'),'utf8');
+  assert.ok(home.includes('id="delivery"'));
+  assert.ok(home.includes('9.53%'));
+  assert.ok(home.includes('class="case-role"'));
   for(const slug of ['videowipe','script-weaver','obsidian-kami','tracework']){
     const record=projectRecords.find(p=>p.slug===slug);
-    assert.ok(home.includes(`/projects/#${slug}`));assert.ok(home.includes(`☆ ${record.stars}`));
+    assert.ok(home.includes(`/projects/#${slug}`));
   }
-  const images = [...projectHtml.matchAll(/data-image="([^"]+)"/g)];
-  assert.equal(images.length, projectRecords.filter(p=>p.focus).length);
-  for (const [,image] of images) assert.ok(existsSync(path.join(output,image)));
+  for (const record of projectRecords.filter(project => project.focus)) {
+    assert.ok(projectHtml.includes(record.focus.src), record.slug);
+    assert.ok(existsSync(path.join(output,record.focus.src)));
+  }
   const about = readFileSync(path.join(output, prefix, 'about/index.html'), 'utf8');
   assert.ok(about.includes('id="awards"'));
   assert.ok(about.includes('id="experience"'));
@@ -195,7 +241,7 @@ for (const [lang, preference, pathname, expected] of [
   });
   assert.equal(redirected, expected);
 }
-console.log('PASS: bilingual portfolio, descending stars, focus images, awards and language redirects.');
+console.log('PASS: bilingual portfolio, descending stars, project images, awards and language redirects.');
 // About refresh: both locales retain anonymized experience and accessible photo viewers.
 for (const prefix of ['', 'zh/']) {
   const about = readFileSync(path.join(output, prefix, 'about/index.html'), 'utf8');
