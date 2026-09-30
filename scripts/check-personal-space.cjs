@@ -79,6 +79,48 @@ address.hash='#one';windowEvents.hashchange();
 assert.equal(records[0].hidden,false);assert.equal(records[0].open,true);
 shared.get('#theme').handlers.click();assert.equal(root.dataset.theme,'dark');
 console.log('PASS: collection filtering, empty state, reset, random selection, deep links and blocked storage.');
+// Portfolio interactions must keep archived records grouped and clear stale images.
+for (const lang of ['en', 'zh-CN']) {
+  const nodes = new Map();
+  function portfolioNode(id) {
+    if (!nodes.has(id)) nodes.set(id, { id, dataset: {}, attrs: {}, handlers: {}, children: [], hidden: false, open: false, textContent: '',
+      addEventListener(k,f){this.handlers[k]=f;}, setAttribute(k,v){this.attrs[k]=v;}, removeAttribute(k){delete this.attrs[k]; if(k==='src')delete this.src;},
+      append(n){this.children=this.children.filter(child=>child!==n);this.children.push(n);}, replaceChildren(n){this.children=[n];},
+      focus(){}, scrollIntoView(){}, classList:{toggle(){}}, querySelector(selector){return portfolioNode(`${id} ${selector}`);}
+    });
+    return nodes.get(id);
+  }
+  const entries = [portfolioNode('with-image'),portfolioNode('without-image'),portfolioNode('archived')];
+  entries[0].dataset={name:'Alpha',category:'make',stars:'5',updated:'2026-09-01T00:00:00Z',archived:'false',image:'/real.png',imageAlt:'Real',imageCaption:'Screenshot'};
+  entries[1].dataset={name:'Beta',category:'capture',stars:'2',updated:'2026-09-30T00:00:00Z',archived:'false'};
+  entries[2].dataset={name:'Gamma',category:'think',stars:'10',updated:'2026-08-01T00:00:00Z',archived:'true'};
+  const filterNodes=['all','make','capture','think'].map(filter=>{const n=portfolioNode(`filter-${filter}`);n.dataset.filter=filter;return n;});
+  const portfolioRoot=portfolioNode('root');portfolioRoot.lang=lang;
+  portfolioNode('#sort').value='stars';
+  const address={hash:'#archived',search:'',href:'https://local.test/projects/#archived'};
+  const events={};
+  runInNewContext(readFileSync(`${__dirname}/../src/scripts/portfolio.js`,'utf8'), {
+    document:{documentElement:portfolioRoot,body:portfolioNode('body'),querySelector:portfolioNode,
+      querySelectorAll:selector=>selector==='.project'?entries:selector==='[data-filter]'?filterNodes:[],addEventListener(){},createTextNode:text=>text,createElement:()=>portfolioNode('caption')},
+    window:{addEventListener:(k,f)=>events[k]=f},location:address,URL,
+    localStorage:{getItem(){throw Error('storage blocked');},setItem(){throw Error('storage blocked');}}
+  });
+  assert.equal(entries[2].open,true);assert.equal(portfolioNode('#project-archive').open,true);
+  assert.deepEqual(portfolioNode('#project-items').children.map(n=>n.id),['with-image','without-image']);
+  assert.deepEqual(portfolioNode('#archive-items').children.map(n=>n.id),['archived']);
+  assert.equal(portfolioNode('#preview-image-link').hidden,true);
+  portfolioNode('#sort').value='recent';portfolioNode('#sort').handlers.change();
+  assert.deepEqual(portfolioNode('#project-items').children.map(n=>n.id),['without-image','with-image']);
+  filterNodes[1].handlers.click();assert.equal(portfolioNode('#project-archive').hidden,true);
+  assert.equal(portfolioNode('#preview-image').src,'/real.png');
+  assert.equal(portfolioNode('#preview-image-link').hidden,false);
+  filterNodes[2].handlers.click();assert.equal(portfolioNode('#preview-image').src,undefined);
+  assert.equal(portfolioNode('#preview-image-link').hidden,true);assert.equal(portfolioNode('#preview-missing').hidden,false);
+  portfolioNode('.theme').handlers.click();assert.equal(portfolioRoot.dataset.theme,'dark');
+  portfolioNode('#save-quote').handlers.click();assert.equal(portfolioNode('#demo-saved').hidden,false);
+  portfolioNode('#undo-quote').handlers.click();assert.equal(portfolioNode('#demo-saved').hidden,true);
+}
+console.log('PASS: bilingual portfolio sorting, archive grouping/deep links, missing-image transitions, demo and blocked storage.');
 const {existsSync,readdirSync}=require('node:fs');const path=require('node:path');
 const output=path.resolve(__dirname,'../dist');
 const pages=readdirSync(output,{recursive:true}).map(file=>file.replaceAll('\\','/')).filter(file=>file.endsWith('.html'));
@@ -101,6 +143,12 @@ for(const article of writings.articles) assert.ok(notes.includes(`id="note-${art
 assert.ok(!readFileSync(path.join(output,'index.html'),'utf8').includes('近况草稿'));
 console.log(`PASS: ${pages.length} built routes, local links/assets/fragments and all ${writings.articles.length} current notes.`);
 // The accepted portfolio ships in both languages with the same project order.
+const projectSource=readFileSync(path.resolve(__dirname,'../src/data/projects.ts'),'utf8');
+const projectRecords=JSON.parse(projectSource.match(/export const projects: Project\[\] = (\[[\s\S]*?\]);/)[1]);
+const snapshot=JSON.parse(projectSource.match(/export const githubSnapshot = (\{[\s\S]*?\});/)[1]);
+assert.equal(new Set(projectRecords.map(p=>p.slug)).size,projectRecords.length);
+assert.ok(projectRecords.every(p=>Number.isInteger(p.stars)&&p.stars>=0&&Number.isInteger(p.forks)&&p.forks>=0&&!Number.isNaN(Date.parse(p.pushedAt))));
+assert.ok(!projectRecords.some(p=>['future-agi','ragvizexpander','kotaemon','.github','kkenny0','kkenny0.github.io'].includes(p.slug)));
 for (const prefix of ['', 'zh/']) {
   for (const page of ['index.html', 'projects/index.html', 'about/index.html']) {
     const html = readFileSync(path.join(output, prefix, page), 'utf8');
@@ -110,11 +158,23 @@ for (const prefix of ['', 'zh/']) {
     assert.ok(!/DESIGN STUDY|localhost:4311|kenny-prototype/.test(html));
   }
   const projectHtml = readFileSync(path.join(output, prefix, 'projects/index.html'), 'utf8');
-  const stars = [...projectHtml.matchAll(/data-stars="(\d+)"/g)].map(m => Number(m[1]));
-  assert.equal(stars.length, 9);
-  assert.deepEqual(stars, [...stars].sort((a,b) => b-a));
+  const entries=[...projectHtml.matchAll(/<details class="project" id="([^"]+)"([^>]*)>/g)];
+  assert.equal(entries.length,projectRecords.length);
+  for(const [,slug,attrs] of entries){
+    const record=projectRecords.find(p=>p.slug===slug);assert.ok(record,slug);
+    assert.ok(attrs.includes(`data-stars="${record.stars}"`));assert.ok(attrs.includes(`data-forks="${record.forks}"`));
+    assert.ok(attrs.includes(`data-updated="${record.pushedAt}"`));assert.ok(attrs.includes(`data-archived="${record.archived}"`));
+  }
+  const stars=entries.filter(([,slug,attrs])=>attrs.includes('data-archived="false"')).map(([,slug,attrs])=>Number(attrs.match(/data-stars="(\d+)"/)[1]));
+  assert.deepEqual(stars,[...stars].sort((a,b)=>b-a));
+  assert.ok(projectHtml.includes(`datetime="${snapshot.date}"`));
+  const home=readFileSync(path.join(output,prefix,'index.html'),'utf8');
+  for(const slug of ['videowipe','script-weaver','obsidian-kami','tracework']){
+    const record=projectRecords.find(p=>p.slug===slug);
+    assert.ok(home.includes(`/projects/#${slug}`));assert.ok(home.includes(`☆ ${record.stars}`));
+  }
   const images = [...projectHtml.matchAll(/data-image="([^"]+)"/g)];
-  assert.equal(images.length, 9);
+  assert.equal(images.length, projectRecords.filter(p=>p.focus).length);
   for (const [,image] of images) assert.ok(existsSync(path.join(output,image)));
   const about = readFileSync(path.join(output, prefix, 'about/index.html'), 'utf8');
   assert.ok(about.includes('id="awards"'));

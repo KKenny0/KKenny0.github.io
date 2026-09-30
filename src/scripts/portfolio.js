@@ -40,26 +40,43 @@ function preview(project) {
   caption.textContent = 'GitHub Stars';
   stars.append(caption);
   const img = document.querySelector('#preview-image');
-  img.src = project.dataset.image;
-  img.alt = project.dataset.imageAlt;
   const imageLink = document.querySelector('#preview-image-link');
-  imageLink.href = project.dataset.image;
-  imageLink.setAttribute('aria-label', t(`View full-size ${project.dataset.name} image (new tab)`, `查看 ${project.dataset.name} 原图（新标签页）`));
-  document.querySelector('#preview-caption').textContent = project.dataset.imageCaption;
+  const hasImage = Boolean(project.dataset.image);
+  imageLink.hidden = !hasImage;
+  document.querySelector('#preview-image-caption').hidden = !hasImage;
+  document.querySelector('#preview-missing').hidden = hasImage;
+  if (hasImage) {
+    img.src = project.dataset.image;
+    img.alt = project.dataset.imageAlt;
+    imageLink.href = project.dataset.image;
+    imageLink.setAttribute('aria-label', t(`View full-size ${project.dataset.name} image (new tab)`, `查看 ${project.dataset.name} 原图（新标签页）`));
+    document.querySelector('#preview-caption').textContent = project.dataset.imageCaption;
+  } else {
+    img.removeAttribute('src');
+    img.alt = '';
+    imageLink.removeAttribute('href');
+    document.querySelector('#preview-caption').textContent = '';
+  }
   document.querySelector('#preview-link').href = `#${project.id}`;
 }
 function filterProjects() {
   const sorted = [...projects].sort((a, b) => sort.value === 'name'
     ? a.dataset.name.localeCompare(b.dataset.name, 'en')
-    : Number(b.dataset.stars) - Number(a.dataset.stars));
+    : sort.value === 'recent'
+      ? b.dataset.updated.localeCompare(a.dataset.updated) || a.dataset.name.localeCompare(b.dataset.name, 'en')
+      : Number(b.dataset.stars) - Number(a.dataset.stars) || a.dataset.name.localeCompare(b.dataset.name, 'en'));
   for (const project of sorted) {
     project.hidden = category !== 'all' && project.dataset.category !== category;
-    document.querySelector('#project-items').append(project);
+    document.querySelector(project.dataset.archived === 'true' ? '#archive-items' : '#project-items').append(project);
   }
   for (const button of filters) button.setAttribute('aria-pressed', String(button.dataset.filter === category));
   const visible = sorted.filter(project => !project.hidden);
-  document.querySelector('#project-count').textContent = t(`${visible.length} projects · Select to explore`, `${visible.length} 个项目 · 点击展开详情`);
-  preview(visible[0]);
+  const active = visible.filter(project => project.dataset.archived !== 'true');
+  const archived = visible.length - active.length;
+  document.querySelector('#project-count').textContent = t(`${active.length} projects · ${archived} archived`, `${active.length} 个项目 · ${archived} 个已归档`);
+  document.querySelector('#archive-count').textContent = archived;
+  document.querySelector('#project-archive').hidden = archived === 0;
+  preview(active[0] || visible[0]);
 }
 for (const button of filters) button.addEventListener('click', () => { category = button.dataset.filter; filterProjects(); });
 sort?.addEventListener('change', filterProjects);
@@ -78,6 +95,7 @@ function revealHash() {
   if (!project) return;
   category = 'all';
   filterProjects();
+  if (project.dataset.archived === 'true') document.querySelector('#project-archive').open = true;
   project.open = true;
   preview(project);
   project.querySelector('summary').focus({ preventScroll: true });

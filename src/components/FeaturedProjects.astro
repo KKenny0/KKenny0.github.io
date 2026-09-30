@@ -1,0 +1,16 @@
+---
+import { activeProjects, featuredProjects, githubSnapshot } from '../data/projects';
+interface Props { lang: 'en' | 'zh' }
+const { lang } = Astro.props;
+const english = lang === 'en';
+const base = english ? '' : '/zh';
+---
+<section aria-labelledby="projects-title">
+  <div class="section-head"><h2 id="projects-title">{english ? 'Selected projects' : '精选项目'}</h2><a href={`${base}/projects/`}>{english ? `All ${activeProjects.length} projects` : `全部 ${activeProjects.length} 个项目`} <span class="arrow" aria-hidden="true">↗</span></a></div>
+  <div class="project-list">
+    {featuredProjects.map((project, index) => <a class="project-row" href={`${base}/projects/#${project.slug}`}>
+      <span class="number">{String(index + 1).padStart(2, '0')}</span><div><strong>{project.name}</strong><p>{english ? project.thesis : project.thesisZh}</p></div><span class="stars" aria-label={english ? `${project.stars} stars` : `${project.stars} 个 Star`}>☆ {project.stars}</span><span class="arrow" aria-hidden="true">↗</span>
+    </a>)}
+  </div>
+  <p class="snapshot-note">{english ? 'GitHub snapshot' : 'GitHub 快照'} · <time datetime={githubSnapshot.date}>{githubSnapshot.date}</time></p>
+</section>
