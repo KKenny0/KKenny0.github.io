@@ -1,13 +1,14 @@
 const themeButton = document.querySelector('.theme');
 const english = document.documentElement.lang === 'en';
 const languageLink = document.querySelector('.language');
-const languageTarget = languageLink.getAttribute('href');
+const languageTarget = languageLink?.getAttribute('href');
 function syncLanguageLink() {
+  if (!languageLink) return;
   languageLink.href = languageTarget + location.search + location.hash;
 }
 syncLanguageLink();
 window.addEventListener('hashchange', syncLanguageLink);
-languageLink.addEventListener('click', () => {
+languageLink?.addEventListener('click', () => {
   syncLanguageLink();
   try { localStorage.setItem('kenny-language', languageLink.dataset.language); } catch {}
 });
@@ -30,7 +31,7 @@ themeButton.addEventListener('click', () => {
   try { localStorage.setItem('kenny-space-theme', theme); } catch {}
 });
 
-const filters = [...document.querySelectorAll('[data-filter]')];
+const filters = [...document.querySelectorAll('.repository-index [data-filter]')];
 const sort = document.querySelector('#sort');
 const archiveGroup = document.querySelector('.archive-group');
 const query = new URLSearchParams(location.search);

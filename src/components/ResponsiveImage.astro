@@ -1,0 +1,16 @@
+---
+import images from '../data/images.generated.json';
+interface Props {
+  src: string; alt: string; sizes: string;
+  loading?: 'eager' | 'lazy'; desktopOnly?: boolean;
+}
+const { src, alt, sizes, loading = 'lazy', desktopOnly = false } = Astro.props;
+const image = (images as Record<string, { src: string; srcset: string; width: number; height: number }>)[src];
+if (!image) throw new Error(`Missing image metadata: ${src}. Run npm run images:build.`);
+const attrs = { src: image.src, srcset: image.srcset || undefined, sizes: image.srcset ? sizes : undefined,
+  width: image.width, height: image.height, alt, loading, decoding: 'async' as const, 'data-original-src': src };
+---
+{desktopOnly ? <picture>
+  <source media="(max-width: 640px)" srcset="data:image/gif;base64,R0lGODlhAQABAIAAAAAAAP///yH5BAEAAAAALAAAAAABAAEAAAIBRAA7" />
+  <img {...attrs} />
+</picture> : <img {...attrs} />}

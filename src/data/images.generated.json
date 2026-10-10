@@ -1,0 +1,80 @@
+{
+  "/assets/img/practices/walk.png": {
+    "width": 1254,
+    "height": 1254,
+    "src": "/assets/optimized/img-practices-walk-320.webp",
+    "srcset": "/assets/optimized/img-practices-walk-160.webp 160w, /assets/optimized/img-practices-walk-320.webp 320w, /assets/optimized/img-practices-walk-480.webp 480w"
+  },
+  "/assets/img/practices/read.png": {
+    "width": 1254,
+    "height": 1254,
+    "src": "/assets/optimized/img-practices-read-320.webp",
+    "srcset": "/assets/optimized/img-practices-read-160.webp 160w, /assets/optimized/img-practices-read-320.webp 320w, /assets/optimized/img-practices-read-480.webp 480w"
+  },
+  "/assets/img/about/self.png": {
+    "width": 1086,
+    "height": 1449,
+    "src": "/assets/optimized/img-about-self-384.webp",
+    "srcset": "/assets/optimized/img-about-self-192.webp 192w, /assets/optimized/img-about-self-384.webp 384w, /assets/optimized/img-about-self-768.webp 768w"
+  },
+  "/assets/img/about/conference.jpg": {
+    "width": 859,
+    "height": 1146,
+    "src": "/assets/optimized/img-about-conference-384.webp",
+    "srcset": "/assets/optimized/img-about-conference-192.webp 192w, /assets/optimized/img-about-conference-384.webp 384w, /assets/optimized/img-about-conference-768.webp 768w"
+  },
+  "/assets/portfolio/focus/card-skill.png": {
+    "width": 2400,
+    "height": 1600,
+    "src": "/assets/optimized/portfolio-focus-card-skill-960.webp",
+    "srcset": "/assets/optimized/portfolio-focus-card-skill-480.webp 480w, /assets/optimized/portfolio-focus-card-skill-960.webp 960w, /assets/optimized/portfolio-focus-card-skill-1520.webp 1520w"
+  },
+  "/assets/portfolio/focus/videowipe.jpg": {
+    "width": 1265,
+    "height": 889,
+    "src": "/assets/optimized/portfolio-focus-videowipe-960.webp",
+    "srcset": "/assets/optimized/portfolio-focus-videowipe-480.webp 480w, /assets/optimized/portfolio-focus-videowipe-960.webp 960w, /assets/optimized/portfolio-focus-videowipe-1265.webp 1265w"
+  },
+  "/assets/portfolio/focus/kami.png": {
+    "width": 1440,
+    "height": 903,
+    "src": "/assets/optimized/portfolio-focus-kami-960.webp",
+    "srcset": "/assets/optimized/portfolio-focus-kami-480.webp 480w, /assets/optimized/portfolio-focus-kami-960.webp 960w, /assets/optimized/portfolio-focus-kami-1440.webp 1440w"
+  },
+  "/assets/portfolio/focus/tracework.webp": {
+    "width": 2172,
+    "height": 724,
+    "src": "/assets/optimized/portfolio-focus-tracework-960.webp",
+    "srcset": "/assets/optimized/portfolio-focus-tracework-480.webp 480w, /assets/optimized/portfolio-focus-tracework-960.webp 960w, /assets/optimized/portfolio-focus-tracework-1520.webp 1520w"
+  },
+  "/assets/portfolio/focus/clipplane-store.png": {
+    "width": 1280,
+    "height": 800,
+    "src": "/assets/optimized/portfolio-focus-clipplane-store-960.webp",
+    "srcset": "/assets/optimized/portfolio-focus-clipplane-store-480.webp 480w, /assets/optimized/portfolio-focus-clipplane-store-960.webp 960w, /assets/optimized/portfolio-focus-clipplane-store-1280.webp 1280w"
+  },
+  "/assets/portfolio/focus/weave.svg": {
+    "width": 128,
+    "height": 128,
+    "src": "/assets/portfolio/focus/weave.svg",
+    "srcset": ""
+  },
+  "/assets/portfolio/focus/buddybar.png": {
+    "width": 2400,
+    "height": 1260,
+    "src": "/assets/optimized/portfolio-focus-buddybar-960.webp",
+    "srcset": "/assets/optimized/portfolio-focus-buddybar-480.webp 480w, /assets/optimized/portfolio-focus-buddybar-960.webp 960w, /assets/optimized/portfolio-focus-buddybar-1520.webp 1520w"
+  },
+  "/assets/portfolio/focus/storyboard.png": {
+    "width": 1672,
+    "height": 941,
+    "src": "/assets/optimized/portfolio-focus-storyboard-960.webp",
+    "srcset": "/assets/optimized/portfolio-focus-storyboard-480.webp 480w, /assets/optimized/portfolio-focus-storyboard-960.webp 960w, /assets/optimized/portfolio-focus-storyboard-1520.webp 1520w"
+  },
+  "/assets/portfolio/focus/taku.png": {
+    "width": 1672,
+    "height": 941,
+    "src": "/assets/optimized/portfolio-focus-taku-960.webp",
+    "srcset": "/assets/optimized/portfolio-focus-taku-480.webp 480w, /assets/optimized/portfolio-focus-taku-960.webp 960w, /assets/optimized/portfolio-focus-taku-1520.webp 1520w"
+  }
+}

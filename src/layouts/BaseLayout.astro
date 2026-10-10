@@ -2,17 +2,18 @@
 import { site } from "../data/site";
 import { projects } from "../data/projects";
 import { writings } from "../data/writings";
+import { navigation, isCurrentNavigation } from "../data/navigation";
 import "../styles/personal-space.css";
-interface Props { title?: string; description?: string; }
-const { title, description = site.description } = Astro.props;
+interface Props { title?: string; description?: string; lang?: 'en' | 'zh'; }
+const { title, description = site.description, lang = 'en' } = Astro.props;
 const pageTitle = title ? `${title} · Kenny Ponders` : "Kenny Ponders · 留一点空间，给思考";
 const canonicalUrl = new URL(Astro.url.pathname, site.canonical).toString();
 const socialImageUrl = new URL(site.avatar, site.canonical).toString();
-const navItems = [{href:'/',label:'Studio'},{href:'/projects/',label:'Projects'},{href:'/notes/',label:'Notes'},{href:'/about/',label:'About'}];
+const navItems = navigation(lang);
 const searchItems = [...navItems.map(item=>({url:item.href,title:item.label})), {url:'/support/',title:'Support 支持创作'}, ...projects.map(p=>({url:`/projects/#${p.slug}`,title:`${p.name} ${p.thesis}`})), ...writings.articles.map(n=>({url:`/notes/#note-${n.id}`,title:n.title}))];
 ---
 <!DOCTYPE html>
-<html lang="zh-CN">
+<html lang={lang === 'zh' ? 'zh-CN' : 'en'}>
 <head>
 <meta charset="UTF-8" />
 <meta name="viewport" content="width=device-width, initial-scale=1" />
@@ -40,10 +41,10 @@ document.documentElement.dataset.theme = dark ? 'dark' : 'light'; })();
 <a class="skip" href="#main">跳到主要内容</a>
 <div class="frame">
 <header class="masthead">
-<a class="identity" href="/">
+<a class="identity" href={navItems[0].href}>
 <span class="glasses" aria-hidden="true">◎—◎</span> Kenny Ponders<span class="identity-cn">肯玩 AI</span>
 </a>
-<nav aria-label="主导航">{navItems.map(item => <a href={item.href} aria-current={Astro.url.pathname === item.href || (item.href !== '/' && Astro.url.pathname.startsWith(item.href)) ? 'page' : undefined}>{item.label}</a>)}</nav>
+<nav aria-label={lang === 'zh' ? '主导航' : 'Main navigation'}>{navItems.map(item => <a href={item.href} aria-current={isCurrentNavigation(Astro.url.pathname, item.href) ? 'page' : undefined}>{item.label}</a>)}</nav>
 <div class="nav-tools">
 <button class="search-open" data-open="search-dialog" type="button" aria-label="搜索全站">搜索 <kbd>/</kbd>
 </button>
@@ -84,6 +85,6 @@ document.documentElement.dataset.theme = dark ? 'dark' : 'light'; })();
 </a>)}</div>
 <p id="search-empty" hidden>暂时没有结果，换一个关键词试试。</p>
 </dialog>
-<script>import '../scripts/personal-space.js';</script>
+<script>import '../scripts/personal-space.js'; import '../scripts/collection.js';</script>
 </body>
 </html>

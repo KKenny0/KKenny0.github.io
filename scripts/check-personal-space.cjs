@@ -59,7 +59,7 @@ const records = [node('one','Memory context'),node('two','Agent engineering'),no
 records.forEach((n,i)=>n.dataset.category=['memory context','agents','memory'][i]);
 const buttons=['all','memory','agents'].map(k=>{const n=node(k);n.dataset.filter=k;return n;});
 const root=node('root');const address={search:'?topic=memory',hash:''};const windowEvents={};
-runInNewContext(readFileSync(`${__dirname}/../src/scripts/personal-space.js`,'utf8'),{
+runInNewContext(readFileSync(`${__dirname}/../src/scripts/personal-space.js`,'utf8') + '\n' + readFileSync(`${__dirname}/../src/scripts/collection.js`,'utf8'),{
   document:{documentElement:root,querySelector:id=>shared.get(id)||null,
     querySelectorAll:s=>s==='[data-entry]'?records:s==='[data-filter]'?buttons:[],addEventListener(){}},
   window:{addEventListener:(k,f)=>windowEvents[k]=f},location:address,URLSearchParams,
@@ -130,7 +130,7 @@ const context = {
   document: {
     body: node(), documentElement: { lang: 'en', dataset: {} },
     querySelector: selector => elements[selector] || null,
-    querySelectorAll: selector => ({ '[data-filter]': filters, '[data-project-list]': lists, '.project': all, details: all, 'a[href^="#"]': [projectLink] })[selector] || [],
+    querySelectorAll: selector => ({ '.repository-index [data-filter]': filters, '[data-project-list]': lists, '.project': all, details: all, 'a[href^="#"]': [projectLink] })[selector] || [],
     addEventListener(name, callback) { documentEvents[name] = callback; }
   },
   window: { addEventListener(name, callback) { windowEvents[name] = callback; } }
@@ -192,7 +192,7 @@ assert.equal(new Set(projectRecords.map(p=>p.slug)).size,projectRecords.length);
 assert.ok(projectRecords.every(p=>Number.isInteger(p.stars)&&p.stars>=0&&Number.isInteger(p.forks)&&p.forks>=0&&!Number.isNaN(Date.parse(p.pushedAt))));
 assert.ok(!projectRecords.some(p=>['future-agi','ragvizexpander','kotaemon','.github','kkenny0','kkenny0.github.io'].includes(p.slug)));
 for (const prefix of ['', 'zh/']) {
-  for (const page of ['index.html', 'projects/index.html', 'about/index.html']) {
+  for (const page of ['index.html', 'projects/index.html', 'about/index.html', 'notes/index.html']) {
     const html = readFileSync(path.join(output, prefix, page), 'utf8');
     assert.ok(html.includes(`lang="${prefix ? 'zh-CN' : 'en'}"`));
     assert.ok(html.includes(`data-language="${prefix ? 'en' : 'zh'}"`));
@@ -232,11 +232,14 @@ for (const [lang, preference, pathname, expected] of [
   ['en', 'zh', '/projects/?test=1#taku', 'https://local.test/zh/projects/?test=1#taku'],
   ['zh-CN', 'en', '/zh/about/#awards', 'https://local.test/about/#awards'],
   ['en', 'invalid', '/', undefined],
+  ['en', null, '/notes/', undefined],
+  ['en', 'zh', '/notes/?topic=memory#note-example', 'https://local.test/zh/notes/?topic=memory#note-example'],
+  ['zh-CN', 'en', '/zh/notes/', 'https://local.test/notes/'],
 ]) {
   let redirected;
   runInNewContext(localeScript, { URL,
     document: { documentElement: { lang, dataset: {} } },
-    location: { href: `https://local.test${pathname}`, replace(url) { redirected = url; } },
+    location: { pathname: new URL(`https://local.test${pathname}`).pathname, href: `https://local.test${pathname}`, replace(url) { redirected = url; } },
     localStorage: { getItem(key) { return key === 'kenny-language' ? preference : null; } },
   });
   assert.equal(redirected, expected);
@@ -254,3 +257,21 @@ for (const prefix of ['', 'zh/']) {
   assert.ok(about.includes('<dialog class="photo-viewer"'));
 }
 console.log('PASS: About experience, company anonymity, CAIL and photo viewer markup.');
+
+// Reserve image geometry and verify every responsive candidate is deployable.
+for (const prefix of ['', 'zh/']) {
+  for (const page of ['index.html', 'projects/index.html', 'about/index.html', 'notes/index.html']) {
+    const html = readFileSync(path.join(output, prefix, page), 'utf8');
+    for (const [tag] of html.matchAll(/<img[^>]*data-original-src="[^"]+"[^>]*>/g)) {
+      assert.match(tag, /width="[1-9][0-9]*"/);
+      assert.match(tag, /height="[1-9][0-9]*"/);
+      const candidates = tag.match(/srcset="([^"]+)"/);
+      if (candidates) for (const candidate of candidates[1].split(',')) {
+        assert.ok(existsSync(path.join(output, candidate.trim().split(/\s+/)[0])), candidate);
+      }
+    }
+    const home = readFileSync(path.join(output, prefix, 'index.html'), 'utf8');
+    assert.ok(home.includes('media="(max-width: 640px)"'));
+  }
+}
+console.log('PASS: image dimensions, responsive candidates and mobile hero source.');

@@ -1,7 +1,8 @@
 ---
 import { site } from '../data/site';
+import { navigation, isCurrentNavigation } from '../data/navigation';
 import '../styles/portfolio.css';
-interface Props { title: string; lang: 'en' | 'zh'; page: 'index' | 'projects' | 'about'; }
+interface Props { title: string; lang: 'en' | 'zh'; page: 'index' | 'projects' | 'about' | 'notes'; }
 const { title, lang, page } = Astro.props;
 const english = lang === 'en';
 const base = english ? '' : '/zh';
@@ -49,9 +50,7 @@ const pageTitle = page === 'index' ? 'Kenny Ponders' : `${title} · Kenny Ponder
   <header class="masthead">
     <a class="identity" href={`${base}/`}><strong>Kenny Ponders<span style="color:var(--red)">.</span></strong></a>
     <nav class="nav" aria-label={english ? 'Main navigation' : '主导航'}>
-      <a href={`${base}/`} aria-current={page === 'index' ? 'page' : undefined}>{english ? 'Home' : '首页'}</a>
-      <a href={`${base}/projects/`} aria-current={page === 'projects' ? 'page' : undefined}>Projects</a>
-      <a href={`${base}/about/`} aria-current={page === 'about' ? 'page' : undefined}>About</a>
+      {navigation(lang).map(item => <a href={item.href} aria-current={isCurrentNavigation(Astro.url.pathname, item.href) ? 'page' : undefined}>{item.label}</a>)}
       <a class="language" href={alternate} data-language={english ? 'zh' : 'en'} lang={english ? 'zh-CN' : 'en'} aria-label={english ? 'Switch to Chinese' : '切换到英文'}>{english ? '中文' : 'EN'}</a>
       <button class="theme" aria-label={english ? 'Switch to dark mode' : '切换到深色外观'} aria-pressed="false">◐</button>
     </nav>

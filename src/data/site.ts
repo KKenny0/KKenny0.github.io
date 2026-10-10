@@ -10,7 +10,7 @@ export const site = {
   github_sponsors_link: "https://github.com/sponsors/KKenny0",
   github_sponsors_live: false,
   avatar: "/assets/img/awkward-neck-profile-avatar-v2.png",
-  favicon: "/assets/img/awkward-neck-profile-avatar-v2.png",
+  favicon: "/assets/optimized/favicon-32.png",
   favicon_dark: "/assets/img/awkward-neck-profile-avatar-v2.png",
   google_scholar: "https://scholar.google.com/citations?user=q9Z8cmIAAAAJ&hl=en",
   github_link: "https://github.com/KKenny0",

@@ -1,10 +1,10 @@
 # Personal space
 
-The Studio, Projects, Notes and About pages share BaseLayout and personal-space.css. Existing project details, support and redirect routes remain available. Legacy styles are imported into a lower CSS layer so those pages retain their presentation.
+Home, Projects, Notes and About share PortfolioLayout and portfolio.css in both languages. BaseLayout and personal-space.css now serve weave, Tracework and Support. The shell imports legacy-common.css in the lower legacy layer; each legacy page imports only its own page styles. Obsolete book-shelf and sheet-reader styles have been removed.
 
 Projects and search read src/data/projects.ts; notes and search read the existing writings data, including stable article IDs for fragment links. Continue using notes:merge for article updates. Do not copy prototype article lists into production pages.
 
-The Clipplane interaction is a single-item, in-memory demonstration. It never contacts an extension, storage host or external service. The theme is the only persisted preference; blocked browser storage must not disable navigation or interactions.
+The Clipplane interaction is a single-item, in-memory demonstration. It never contacts an extension, storage host or external service. Language and theme preferences are persisted; blocked browser storage must not disable navigation or interactions.
 
 Validation before deployment:
 

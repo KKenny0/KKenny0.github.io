@@ -1,0 +1,125 @@
+---
+import ResponsiveImage from "./ResponsiveImage.astro";
+import { writings } from "../data/writings";
+import translations from "../data/writings.en.json";
+interface Props { lang: "en" | "zh"; }
+const { lang } = Astro.props;
+const english = lang === "en";
+const base = english ? "" : "/zh";
+const t = (en: string, zh: string) => english ? en : zh;
+const translated = translations as Record<string, { title: string; teaser: string }>;
+---
+<main id="main" class="notes-page">
+<section class="page-heading notebook-heading">
+<div>
+<span class="eyebrow">THE OPEN NOTEBOOK</span>
+<h1>{t("Stay curious,", "顺着好奇，")}<br><span class="blue">{t("turn a page.", "多翻一页。")}</span>
+</h1>
+<p>{t('Research notes on memory, context, and AI agents. Each question leaves a few paths to explore.', '关于记忆、上下文与 Agent 的研究笔记。一个问题，留几条继续思考的线索。')}</p>
+</div>
+<ResponsiveImage src="/assets/img/practices/read.png" alt={t('Illustration of Kenny reading', 'Kenny 的阅读插画')} sizes="(max-width: 640px) 80px, 148px" loading="eager" />
+</section>
+<section class="collection" aria-label={t('Research notes', '笔记集合')}>
+<div class="notes-controls">
+<div>
+<label class="field-label" for="note-search">{t('Search notes', '在笔记中搜索')}</label>
+<input id="note-search" type="search" placeholder={t('Title, summary, or keyword', '标题、摘要，或一个关键词')}>
+</div>
+<button class="primary" id="random-note" type="button">{t('Read a random note ↗', '随机翻一篇 ↗')}</button>
+</div>
+<div class="filters note-filters" role="group" aria-label={t('Filter notes by topic', '按主题筛选笔记')}>
+<button data-filter="all" aria-pressed="true">{t('All notes', '所有笔记')}</button>
+<button data-filter="memory" aria-pressed="false">{t('Memory', '记忆与遗忘')}</button>
+<button data-filter="context" aria-pressed="false">{t('Context', '上下文')}</button>
+<button data-filter="agents" aria-pressed="false">{t('Agent engineering', 'Agent 工程')}</button>
+</div>
+<p id="collection-count" class="collection-status" role="status">
+</p>
+<div class="notebook-list">{writings.articles.map(note=>
+<details class="note-record" id={`note-${note.id}`} data-entry data-category={note.topic}>
+<summary>
+<span class="note-date">{note.date}<br />{t('Zhihu', note.source)}</span>
+<span class="note-title">{english ? translated[note.id]?.title ?? note.title : note.title}</span>
+<span class="plus" aria-hidden="true">＋</span>
+</summary>
+<div class="note-body">
+{english && <p class="original-title" lang="zh-CN">{note.title}</p>}
+<p>{english ? translated[note.id]?.teaser ?? note.teaser : note.teaser}</p>
+<div class="links">
+<a href={note.url} target="_blank" rel="noopener noreferrer">{t('Read on Zhihu (Chinese) ↗', '去知乎读全文 ↗')}</a>
+<a href={`${base}/projects/${note.topic === 'memory' ? '#tracework' : ''}`}>{t('Explore related tools →', '看看相关工具 →')}</a>
+</div>
+</div>
+</details>)}</div>
+<div class="no-results" id="collection-empty" hidden>
+<h3>{t('No notes found.', '这一页暂时是空白。')}</h3>
+<p>{t('Try another keyword or clear the filters.', '换个词，或清除筛选再翻翻。')}</p>
+<button class="text-button" id="clear-filters" type="button">{t('Clear search and filters ↺', '清除搜索与筛选 ↺')}</button>
+</div>
+<p class="editor-note caption">{t('Titles and summaries are translated here. Full articles are in Chinese on Zhihu.', '这里展示已有文章的摘要与线索，全文在原发布平台阅读。')}</p>
+</section>
+<aside class="notes-next">
+<span>{t('From ideas to practice', '想法怎样落到实践')}</span>
+<a class="text-link" href={`${base}/projects/`}>{t('Explore the projects behind these ideas →', '看看这些想法做成的项目 →')}</a>
+</aside>
+</main>
+<script>import "../scripts/collection.js";</script>
+
+
+<style>
+.notebook-heading { display: grid; grid-template-columns: minmax(0, 1fr) 148px; gap: 44px; align-items: center; }
+.notebook-heading :global(img) { width: 148px; mix-blend-mode: multiply; }
+:global([data-theme="dark"]) .notebook-heading :global(img) { mix-blend-mode: normal; }
+.notebook-heading p { font-size: 16px; line-height: 1.8; }
+.notes-controls { display: flex; align-items: flex-end; gap: 24px; padding-block: 24px; border-top: 1px solid var(--line); }
+.notes-controls > div { flex: 1; max-width: 540px; }
+.field-label { display: block; color: var(--muted); font-size: 13px; margin-bottom: 8px; }
+input { width: 100%; min-height: 44px; padding: 9px 12px; border: 1px solid var(--line); border-radius: 0; background: var(--paper); font-size: 16px; }
+input:focus-visible { outline: 2px solid var(--blue); outline-offset: 3px; }
+.notes-controls button { min-height: 44px; padding: 9px 17px; border: 1px solid var(--blue); color: var(--blue); font-size: 14px; white-space: nowrap; }
+.note-filters { padding-bottom: 12px; border-bottom: 1px solid var(--line); }
+.note-record { border-bottom: 1px solid var(--line); scroll-margin-top: 24px; }
+.note-record summary { display: grid; grid-template-columns: 100px minmax(0, 1fr) 20px; gap: 24px; align-items: center; padding: 22px 0; cursor: pointer; list-style: none; }
+.note-record summary::-webkit-details-marker { display: none; }
+.note-date { font: 12px/1.8 var(--mono); color: var(--muted); }
+.note-title { font-size: 22px; line-height: 1.6; overflow-wrap: anywhere; }
+.note-record[open] .note-title { color: var(--blue); }
+.note-record[open] .plus { transform: rotate(45deg); }
+.note-body { padding: 0 44px 24px 124px; }
+.note-body p { max-width: 65ch; font-size: 15px; line-height: 1.8; color: var(--muted); }
+.note-body .original-title { font-size: 13px; margin-bottom: 12px; }
+.note-body .links { margin-top: 12px; }
+.editor-note { margin-top: 24px; }
+.no-results { padding: 32px 0; }
+.no-results h3 { font-size: 24px; }
+.no-results p { margin-top: 8px; color: var(--muted); }
+.text-button { min-height: 44px; padding: 0; color: var(--blue); margin-top: 12px; }
+.notes-next { margin-top: 40px; padding-block: 24px; border-top: 1px solid var(--line); }
+.notes-next > span { font-size: 14px; color: var(--muted); display: block; }
+.notes-next a { margin-top: 4px; }
+button:disabled { opacity: .5; cursor: default; }
+:global(body:not([data-keyboard])) .notes-controls button:active,
+:global(body:not([data-keyboard])) .text-button:active { transform: translateY(1px); }
+@media (hover: hover) {
+  .note-record summary:hover .note-title { color: var(--blue); text-decoration: underline; text-underline-offset: 5px; }
+  .notes-controls button:not(:disabled):hover { background: var(--blue); color: var(--paper); }
+}
+@media (max-width: 640px) {
+  .notebook-heading { grid-template-columns: minmax(0, 1fr) 80px; gap: 16px; }
+  .notebook-heading :global(img) { width: 80px; }
+  .notebook-heading > div { display: contents; }
+  .notebook-heading .eyebrow { grid-column: 1 / -1; }
+  .notebook-heading h1 { grid-column: 1; margin: 0; }
+  .notebook-heading :global(img) { grid-column: 2; grid-row: 2; }
+  .notebook-heading p { grid-column: 1 / -1; font-size: 15px; }
+  .notes-controls { align-items: stretch; flex-direction: column; gap: 12px; }
+  .notes-controls button { align-self: flex-start; }
+  .note-record summary { grid-template-columns: minmax(0, 1fr) 20px; gap: 8px 12px; }
+  .note-date { grid-column: 1 / -1; }
+  .note-title { font-size: 20px; }
+  .note-body { padding: 0 0 24px; }
+}
+@media (prefers-reduced-motion: reduce) {
+  .notes-controls button:active, .text-button:active { transform: none !important; }
+}
+</style>

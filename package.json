@@ -8,9 +8,13 @@
     "preview": "astro preview",
     "notes:check": "node scripts/merge-zhihu-notes.mjs --check",
     "notes:merge": "node scripts/merge-zhihu-notes.mjs",
-    "check:site": "node scripts/check-personal-space.cjs"
+    "check:site": "node scripts/check-personal-space.cjs",
+    "images:build": "node scripts/optimize-images.mjs"
   },
   "dependencies": {
     "astro": "^7.2.8"
+  },
+  "devDependencies": {
+    "sharp": "0.35.4"
   }
 }

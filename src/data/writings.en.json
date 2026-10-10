@@ -1,0 +1,66 @@
+{
+  "2049593726360721196": {
+    "title": "Blind spots in agent search systems",
+    "teaser": "Using agents that search past conversations as an example, this note examines why grep-based search struggles with large archives, paraphrased queries, and questions spanning multiple sessions."
+  },
+  "2060715503174341318": {
+    "title": "Why Codex and ChatGPT are converging: what matters when implementation gets cheaper",
+    "teaser": "As turning ideas into working products becomes cheaper, the bottleneck in knowledge work shifts toward selection, tradeoffs, coordination, and judgment. This offers a way to understand the convergence of Codex and ChatGPT."
+  },
+  "2062215260971521921": {
+    "title": "What does Anthropic’s J-space actually demonstrate?",
+    "teaser": "Anthropic’s experiments suggest that continuing text in a language and identifying that language may use different internal paths. This note revisits what the J-space results actually establish."
+  },
+  "2067243428048532935": {
+    "title": "Reading notes: context engineering for AI agents, lessons from Manus",
+    "teaser": "Drawing on the engineering of Manus, this note explores why using frontier models’ in-context learning and focusing engineering effort outside the model can help build reliable agents."
+  },
+  "2072291792742098269": {
+    "title": "Reading notes: how Perplexity designs agent skills",
+    "teaser": "The Perplexity Agents team treats skill quality as code quality, while questioning whether familiar software practices transfer to skill development. This note explores context efficiency and exception handling."
+  },
+  "2064505443020493922": {
+    "title": "Reading notes: reinforcement learning explained",
+    "teaser": "From ChatGPT and AlphaGo to DeepSeek-R1, this note explains how reinforcement learning goes beyond large datasets, using reward feedback to learn through trial and error."
+  },
+  "2062205073929852736": {
+    "title": "What is Anthropic’s J-space?",
+    "teaser": "A language model can continue Spanish text or name the language it is written in. Anthropic’s experiments suggest that these tasks may follow different internal paths."
+  },
+  "2060032007506334292": {
+    "title": "Agent memory systems: four control planes for long-term memory",
+    "teaser": "Reframing agent memory as four control planes rather than a list of storage containers helps explain why identical storage components can produce very different memory systems."
+  },
+  "2058836696989430641": {
+    "title": "The filesystem as a database: building a personal operating system for AI agents",
+    "teaser": "A translation and reading note on building a personal operating system around the filesystem, so memory, voice, and judgment can persist across conversations."
+  },
+  "2056779362637197627": {
+    "title": "Inside Hermes Agent",
+    "teaser": "A source-level walkthrough of Hermes Agent, connecting prompt assembly, context compression, and its multi-platform gateway to their implementations."
+  },
+  "2046699626565219617": {
+    "title": "What ChatGPT’s Dreaming memory does",
+    "teaser": "Starting from ChatGPT’s memory features, this note examines three engineering challenges for AI memory systems: storage, retrieval, and forgetting."
+  },
+  "2044166992513520802": {
+    "title": "Beyond the prompt: an in-depth guide to Claude Code",
+    "teaser": "Advanced Claude Code workflows organized around verification, planning, and configuration, covering everyday development and team collaboration."
+  },
+  "2036754568097296982": {
+    "title": "Claude Code: session, context, and memory management",
+    "teaser": "A source-level analysis of Claude Code’s session, context, and memory layers, exploring how an AI coding assistant manages its working state."
+  },
+  "2031687123431051328": {
+    "title": "Claude Code compaction: from context compression to recoverable agent memory",
+    "teaser": "How Claude Code compresses context near the window limit, and how a resumed session reconstructs working memory from summaries."
+  },
+  "2026240034802528822": {
+    "title": "Why can the same model perform better in Hermes than in OpenClaw?",
+    "teaser": "System-level reasons for quality differences across agent platforms, including tool design, system prompts, and the less visible effects of context management."
+  },
+  "2023716322018619767": {
+    "title": "Inside Claude Code: architecture through 520,000 lines of source",
+    "teaser": "A layer-by-layer walkthrough of Claude Code, from the CLI entry point and agent loop to tool calls and context management."
+  }
+}
