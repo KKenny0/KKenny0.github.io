@@ -45,6 +45,10 @@
 .story-cta { border-bottom: 0; }
 @media (max-width: 850px) {
   .story-hero { gap: 28px; }
+  /* Reserve two metadata rows before the webfont arrives. */
+  .story-hero-meta { display: grid; grid-template-columns: 96px minmax(0, 1fr); }
+  .story-hero-meta > span:last-child { grid-column: 1 / -1; }
+  .story-board-heading { flex-direction: column; }
   .story-question, .story-section-intro, .story-cta { grid-template-columns: 140px minmax(0, 1fr); gap: 24px; }
   .story-boundary-grid { margin-left: 164px; gap: 24px; }
   .story-board-flow { flex-direction: column; gap: 8px; }
