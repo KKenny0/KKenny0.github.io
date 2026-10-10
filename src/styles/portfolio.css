@@ -1562,7 +1562,7 @@ nav .language {
   --serif: Charter, Georgia, "Songti SC", "Noto Serif SC", serif;
 }
 /* Chinese prose needs more vertical space; headings and metrics keep their scale. */
-html:lang(zh-CN) :is(.lead, .case-copy > p, .support-case p, .judgment-grid p,
+html:lang(zh-CN) :is(.lead, .case-copy > p:not(.case-thesis), .page-heading p:not(.eyebrow), .support-case p, .judgment-grid p,
   .project-body p, .about-hero p:not(.eyebrow), .timeline p, .timeline li,
   #awards .timeline p, #awards .timeline li, .story-page p,
   .story-boundary-grid li, .support-heading > p:last-child,
