@@ -29,10 +29,10 @@ small personal illustration as a supporting identity detail.
 - Invite collaboration on technical planning and engineering delivery for AI
   applications. Quality and stability improvement are capabilities within this work.
 
-## Proposed page changes
+## Implemented page direction
 
-This proposal awaits confirmation of the complete direction before page edits.
-The implementation scope is the homepage, Projects, and About in both languages.
+The direction is approved and implemented across the homepage, Projects, Notes,
+About, project stories and Support in both languages.
 
 - Homepage: a clear professional introduction, a prominent AI comics delivery
   case with a workflow illustration and visible outcomes, a compact enterprise
@@ -73,7 +73,7 @@ JetBrains Mono, then Consolas. Titles and body share the serif family.
 
 - Display: 40-56px homepage, 32-38px subpages, weight 500, line-height 1.2.
 - Section and project titles: 22-24px, weight 500.
-- Reading: 16px, weight 400, line-height 1.55; supporting copy 14px.
+- Reading: 16px, weight 400, line-height 1.65; Chinese prose uses 1.8 with long paragraphs capped at 38em; supporting copy 14px.
 - Metadata and captions: 11-12px; numeric columns use tabular figures.
 - No negative tracking on Chinese headings. Use the real 400/500 font files.
 - Native small controls retain clear focus outlines and at least 44px height.
@@ -109,7 +109,7 @@ Keyboard changes and reduced-motion preferences suppress motion.
 - GitHub stars/forks use all non-fork public repositories. The showcase excludes forks and profile/configuration/site repositories.
 - Keep archived projects discoverable and their old fragment links valid.
 - Do not fetch GitHub or fonts from third-party services when visitors load pages.
-- Keep notes, support and existing case-study routes on their current styles.
+- Keep every public content page on PortfolioLayout. Project stories share project-story.css; Support uses scoped styles with the same tokens.
 
 ## Responsive
 
@@ -127,3 +127,17 @@ scripting is on.
 - Keep project metrics inline: 12px JetBrains Mono, tabular numbers, no shadow or colored card; controls retain 44px targets and visible focus.
 
 Reference: https://kami.tw93.fun/index-zh.html, verified 2026-09-30.
+
+## Verified continuation, 2026-10-10
+
+Weave, Tracework and Support use the same masthead, theme, locale controls and
+1096px content frame as the portfolio. Preserve the full project descriptions
+and stable heading fragments. Project stories use a 38px title, 24px section
+headings and a quiet workflow diagram; at 850px the diagram becomes vertical.
+At 640px the reading sections and support options become a single column.
+No scroll-triggered content hiding. Keep payment QR images unmodified, with
+720 × 720 intrinsic dimensions and a white quiet zone in both themes.
+
+Homepage hierarchy remains intentional: professional delivery and contact lead,
+with a small personal illustration secondary. Chinese long-form reading gets
+1.8 line-height; metadata and metrics retain their compact scale.

@@ -192,7 +192,7 @@ assert.equal(new Set(projectRecords.map(p=>p.slug)).size,projectRecords.length);
 assert.ok(projectRecords.every(p=>Number.isInteger(p.stars)&&p.stars>=0&&Number.isInteger(p.forks)&&p.forks>=0&&!Number.isNaN(Date.parse(p.pushedAt))));
 assert.ok(!projectRecords.some(p=>['future-agi','ragvizexpander','kotaemon','.github','kkenny0','kkenny0.github.io'].includes(p.slug)));
 for (const prefix of ['', 'zh/']) {
-  for (const page of ['index.html', 'projects/index.html', 'about/index.html', 'notes/index.html']) {
+  for (const page of ['index.html', 'projects/index.html', 'about/index.html', 'notes/index.html', 'projects/weave/index.html', 'projects/tracework/index.html', 'support/index.html']) {
     const html = readFileSync(path.join(output, prefix, page), 'utf8');
     assert.ok(html.includes(`lang="${prefix ? 'zh-CN' : 'en'}"`));
     assert.ok(html.includes(`data-language="${prefix ? 'en' : 'zh'}"`));
@@ -235,6 +235,9 @@ for (const [lang, preference, pathname, expected] of [
   ['en', null, '/notes/', undefined],
   ['en', 'zh', '/notes/?topic=memory#note-example', 'https://local.test/zh/notes/?topic=memory#note-example'],
   ['zh-CN', 'en', '/zh/notes/', 'https://local.test/notes/'],
+  ['en', 'zh', '/projects/weave/?ref=portfolio#weave-gates-title', 'https://local.test/zh/projects/weave/?ref=portfolio#weave-gates-title'],
+  ['zh-CN', 'en', '/zh/projects/tracework/', 'https://local.test/projects/tracework/'],
+  ['en', 'zh', '/support/', 'https://local.test/zh/support/'],
 ]) {
   let redirected;
   runInNewContext(localeScript, { URL,

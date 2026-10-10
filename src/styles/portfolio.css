@@ -1561,6 +1561,18 @@ nav .language {
 :lang(en) {
   --serif: Charter, Georgia, "Songti SC", "Noto Serif SC", serif;
 }
+/* Chinese prose needs more vertical space; headings and metrics keep their scale. */
+html:lang(zh-CN) :is(.lead, .case-copy > p, .support-case p, .judgment-grid p,
+  .project-body p, .about-hero p:not(.eyebrow), .timeline p, .timeline li,
+  #awards .timeline p, #awards .timeline li, .story-page p,
+  .story-boundary-grid li, .support-heading > p:last-child,
+  .support-options p:not(.label), .support-options li) {
+  line-height: 1.8;
+}
+html:lang(zh-CN) :is(.timeline p, .timeline ul, .story-question p,
+  .story-section-intro p, .story-cta p) {
+  max-width: 38em;
+}
 :lang(en) .hero h1 {
   font-size: clamp(40px, 4.5vw, 58px);
 }

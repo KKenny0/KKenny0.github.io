@@ -2,7 +2,7 @@
 import { site } from '../data/site';
 import { navigation, isCurrentNavigation } from '../data/navigation';
 import '../styles/portfolio.css';
-interface Props { title: string; lang: 'en' | 'zh'; page: 'index' | 'projects' | 'about' | 'notes'; }
+interface Props { title: string; lang: 'en' | 'zh'; page: 'index' | 'projects' | 'about' | 'notes' | 'projects/weave' | 'projects/tracework' | 'support'; }
 const { title, lang, page } = Astro.props;
 const english = lang === 'en';
 const base = english ? '' : '/zh';

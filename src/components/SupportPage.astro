@@ -1,0 +1,64 @@
+---
+import PortfolioLayout from '../layouts/PortfolioLayout.astro';
+interface Props { lang: 'en' | 'zh'; }
+const { lang } = Astro.props;
+const t = (en: string, zh: string) => lang === 'en' ? en : zh;
+---
+<PortfolioLayout title={t('Support', '支持')} lang={lang} page="support">
+  <main id="main" class="support-page">
+    <header class="support-heading">
+      <p class="label">{t('SUPPORT THE WORK', '支持这些工作')}</p>
+      <h1>{t('Help useful experiments stay maintained.', '让有用的尝试继续得到维护。')}</h1>
+      <p>{t('Stars, issues, thoughtful notes, and sponsorship all help local-first tools and agent workflows remain documented and usable.', '标星、问题反馈、认真写下的建议，以及赞助，都能帮助这些本地工具与智能体工作流继续完善文档、保持可用。')}</p>
+    </header>
+    <div class="support-options">
+      <section>
+        <p class="label">{t('01 / DIRECT SUPPORT', '01 / 直接支持')}</p>
+        <h2>{t('Alipay & WeChat Pay', '支付宝与微信支付')}</h2>
+        <div class="qr-pair">
+          <figure><img src="/assets/img/support/alipay-qr.png" width="720" height="720" alt={t('Alipay payment QR code', '支付宝收款二维码')} /><figcaption>{t('Alipay', '支付宝')}</figcaption></figure>
+          <figure><img src="/assets/img/support/wechat-qr.png" width="720" height="720" alt={t('WeChat Pay payment QR code', '微信收款二维码')} /><figcaption>{t('WeChat Pay', '微信支付')}</figcaption></figure>
+        </div>
+      </section>
+      <section>
+        <p class="label">{t('02 / OTHER WAYS', '02 / 其他方式')}</p>
+        <h2>{t('Support from anywhere', '从任何地方支持')}</h2>
+        <p>{t('If these tools have been useful, you can make an optional contribution through PayPal. Support never unlocks features or changes access.', '如果这些工具对你有用，可以通过 PayPal 自愿支持。是否支持不会影响功能或使用权限。')}</p>
+        <a class="text-link" href="https://www.paypal.me/Kennywu96" target="_blank" rel="noopener noreferrer">{t('Support via PayPal ↗', '通过 PayPal 支持 ↗')}</a>
+        <ul>
+          <li>{t('Star a project you actually use.', '给实际用到的项目标星。')}</li>
+          <li>{t('Open an issue with a concrete failure.', '提交能说明具体故障的问题反馈。')}</li>
+          <li>{t('Share a tool with the person who needs it.', '把工具分享给需要的人。')}</li>
+          <li>{t('Tell me what should stay quiet.', '告诉我哪些地方应当保持简单、不打扰。')}</li>
+        </ul>
+        <a class="text-link" href="https://github.com/KKenny0" target="_blank" rel="noopener noreferrer">{t('Visit GitHub ↗', '访问 GitHub ↗')}</a>
+      </section>
+    </div>
+  </main>
+</PortfolioLayout>
+<style>
+  .support-heading { padding: 48px 0 36px; border-bottom: 1px solid var(--line); }
+  h1 { font-size: 38px; line-height: 1.3; margin: 12px 0 20px; max-width: 26ch; }
+  .support-heading > p:last-child { max-width: 65ch; color: var(--muted); }
+  .support-options { display: grid; grid-template-columns: 1fr 1fr; gap: 64px; padding: 40px 0 48px; }
+  h2 { font-size: 24px; margin: 8px 0 24px; line-height: 1.4; }
+  .support-options section { min-width: 0; }
+  .support-options section > p:not(.label), ul { color: var(--muted); }
+  .qr-pair { display: grid; grid-template-columns: 1fr 1fr; gap: 20px; max-width: 440px; }
+  figure { padding: 16px; background: white; border: 1px solid var(--line); }
+  figcaption { color: #333; font-size: 14px; text-align: center; margin-top: 12px; }
+  ul { padding-left: 20px; margin: 24px 0 8px; }
+  li + li { margin-top: 8px; }
+  .text-link { margin-top: 12px; min-height: 44px; display: inline-flex; align-items: center; }
+  @media (prefers-reduced-motion: no-preference) {
+    :global(body:not([data-keyboard])) .text-link:active { transform: translateY(1px); }
+  }
+  @media (max-width: 850px) { .support-options { gap: 32px; } }
+  @media (max-width: 640px) {
+    .support-heading { padding-top: 32px; }
+    h1 { font-size: 32px; }
+    .support-options { grid-template-columns: 1fr; gap: 40px; }
+    .qr-pair { gap: 16px; }
+    figure { padding: 12px; }
+  }
+</style>

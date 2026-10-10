@@ -1,0 +1,126 @@
+---
+import PortfolioLayout from '../layouts/PortfolioLayout.astro';
+import '../styles/project-story.css';
+interface Props { lang: 'en' | 'zh'; }
+const { lang } = Astro.props;
+const base = lang === 'en' ? '' : '/zh';
+const t = (en: string, zh: string) => lang === 'en' ? en : zh;
+---
+<PortfolioLayout title="weave" lang={lang} page="projects/weave">
+<main id="main" class="story-page">
+    <section class="story-hero" aria-labelledby="weave-title">
+      <div class="story-hero-copy">
+        <a class="story-back" href={`${base}/projects/`}>{t("← Projects", "← 项目")}</a>
+        <div class="story-hero-meta"><span>{t("02 / Think", "02 / 思考")}</span><span>{t("Research skill", "研究技能")}</span><span>{t("Claude Code + Codex", "Claude Code + Codex")}</span></div>
+        <h1 id="weave-title">{t("weave", "weave")}</h1>
+        <p class="story-hero-subtitle">{t("Find the frame that makes a question clear.", "找到能把问题讲清楚的取景框。")}</p>
+      </div>
+
+      <div class="story-hero-aside">
+        <p>{t("When a smooth summary hides where the ground is weak, weave keeps the evidence visible and lets the material choose its shape.", "流畅的总结可能掩盖证据的薄弱处。weave 保留证据，让材料决定文章的结构。")}</p>
+        <div class="story-hero-actions">
+          <a class="story-link" href="https://github.com/KKenny0/weave" target="_blank" rel="noopener">{t("Read the repository ↗", "查看代码仓库 ↗")}</a>
+          <span class="story-hero-note">{t("Evidence first. Then the frame.", "证据先行，取景框决定文章")}</span>
+        </div>
+      </div>
+
+      <div class="story-board">
+        <div class="story-board-heading"><span>{t("Frame Decision", "取景框选择")}</span><span>{t("the article is the last step", "文章是最后一步")}</span></div>
+        <div class="story-board-flow">
+          <div class="story-board-node"><strong>{t("x", "x")}</strong><span>{t("material", "材料")}</span></div>
+          <span class="story-board-arrow" aria-hidden="true">→</span>
+          <div class="story-board-node"><strong>{t("E", "E")}</strong><span>{t("evidence", "证据")}</span></div>
+          <span class="story-board-arrow" aria-hidden="true">→</span>
+          <div class="story-board-node story-board-node--candidate"><strong>{t("f₁ · f₂ · f₃", "f₁ · f₂ · f₃")}</strong><span>{t("candidate frames", "候选取景框")}</span></div>
+          <span class="story-board-arrow" aria-hidden="true">→</span>
+          <div class="story-board-node story-board-node--winner"><strong>{t("f*", "f*")}</strong><span>{t("selected frame", "选定取景框")}</span></div>
+          <span class="story-board-arrow" aria-hidden="true">→</span>
+          <div class="story-board-node"><strong>{t("f*(x)", "f*(x)")}</strong><span>{t("article", "文章")}</span></div>
+        </div>
+        <p class="story-board-caption">{t("A frame earns its place when it changes what the article keeps, how it moves, and where it stops.", "一个取景框只有真正改变文章保留什么、如何展开、在哪里停下，才值得使用。")}</p>
+      </div>
+    </section>
+
+    <section class="story-question" aria-labelledby="weave-question-title">
+      <span class="story-section-label">{t("01 / The question", "01 / 问题")}</span>
+      <div>
+        <h2 id="weave-question-title">{t("A readable answer can still hide its ground.", "读得顺的回答，也可能藏住依据。")}</h2>
+        <p>{t("Research agents are good at making scattered material sound coherent. The dangerous part is what disappears in the smoothing: disagreement, weak evidence, and the boundary where a claim stops working.", "研究智能体善于把分散材料组织成连贯的文字。危险在于，分歧、薄弱证据和结论失效的边界可能在这个过程中消失。")}</p>
+        <p>{t("weave treats the article as a view over evidence, not as a summary of everything the model can say.", "weave 把文章视为对证据的一种组织方式，而非模型所能说的一切的汇总。")}</p>
+      </div>
+    </section>
+
+    <section class="story-routes" aria-labelledby="weave-routes-title">
+      <div class="story-section-intro">
+        <span class="story-section-label">{t("02 / Three routes", "02 / 三条路径")}</span>
+        <div>
+          <h2 id="weave-routes-title">{t("The material changes the lens.", "材料不同，观察角度也不同。")}</h2>
+          <p>{t("One pipeline, three ways into a question. The route decides what counts as evidence before any frame is allowed to lead.", "同一套流程，从三个入口研究问题。先确定哪些材料算证据，再选择文章的取景框。")}</p>
+        </div>
+      </div>
+      <div class="story-route-list">
+        <div class="story-route story-route-heading" aria-hidden="true"><span>{t("No.", "序号")}</span><span>{t("Route", "路径")}</span><span>{t("Input", "输入材料")}</span><span>{t("Leaves you with", "产出")}</span></div>
+        <div class="story-route"><strong>{t("01", "01")}</strong><h3>{t("deep-read", "deep-read")}</h3><p>{t("Papers, articles, interviews, reports", "论文、文章、访谈、报告")}</p><p>{t("Evidence-grounded Chinese longform", "以证据为基础的中文长文")}</p></div>
+        <div class="story-route"><strong>{t("02", "02")}</strong><h3>{t("source-dive", "source-dive")}</h3><p>{t("Repositories, frameworks, technical projects", "代码仓库、框架、技术项目")}</p><p>{t("Behavior paths, state owners, failure boundaries", "行为路径、状态归属、失败边界")}</p></div>
+        <div class="story-route"><strong>{t("03", "03")}</strong><h3>{t("survey", "survey")}</h3><p>{t("Domains and research directions", "领域与研究方向")}</p><p>{t("A map whose structure follows the source set", "结构随材料而定的领域地图")}</p></div>
+      </div>
+    </section>
+
+    <section class="story-gates" aria-labelledby="weave-gates-title">
+      <div class="story-section-intro">
+        <span class="story-section-label">{t("03 / Frame gates", "03 / 取景框检查")}</span>
+        <div>
+          <h2 id="weave-gates-title">{t("A frame is useful only when it earns the crop.", "取舍有依据，取景框才有用。")}</h2>
+          <p>{t("Candidate count is not the goal. A frame survives only when it is faithful, specific, selective, honest about its limits, and meaningfully different from the alternatives.", "目标不在于凑够候选数量。只有忠于证据、具体、有取舍、坦诚说明边界，并且与其他选项有实质区别的取景框，才能留下。")}</p>
+        </div>
+      </div>
+      <ol class="story-gate-list">
+        <li><span>{t("01", "01")}</span><strong>{t("Evidence fidelity", "忠于证据")}</strong><p>{t("Every load-bearing part can be traced back to the evidence model.", "支撑结论的每个关键部分，都能追溯到证据模型。")}</p></li>
+        <li><span>{t("02", "02")}</span><strong>{t("Specificity", "具体性")}</strong><p>{t("It cannot be moved unchanged onto the next source or neighboring topic.", "不能原封不动地套用到下一份材料或相邻话题。")}</p></li>
+        <li><span>{t("03", "03")}</span><strong>{t("Selection effect", "取舍效果")}</strong><p>{t("It changes the evidence, chapter order, causal story, or predicted boundary.", "确实改变证据选择、章节顺序、因果解释或预期边界。")}</p></li>
+        <li><span>{t("04", "04")}</span><strong>{t("Boundary honesty", "边界诚实")}</strong><p>{t("It names the condition, counterexample, or evidence gap that limits it.", "说明限制结论的条件、反例或证据缺口。")}</p></li>
+        <li><span>{t("05", "05")}</span><strong>{t("Distinctness", "实质区别")}</strong><p>{t("It is not a synonym wearing a different title.", "不能只换一个近义标题。")}</p></li>
+      </ol>
+    </section>
+
+    <section class="story-boundary" aria-labelledby="weave-boundary-title">
+      <div class="story-section-intro">
+        <span class="story-section-label">{t("04 / Boundary", "04 / 边界")}</span>
+        <div>
+          <h2 id="weave-boundary-title">{t("The honest part is part of the product.", "诚实呈现边界，也是产品的一部分。")}</h2>
+          <p>{t("weave does not promise a perfect view. It makes the crop inspectable, then leaves the edge visible.", "weave 不承诺完美的视角。它让取舍可以检查，也让未覆盖的部分保持可见。")}</p>
+        </div>
+      </div>
+      <div class="story-boundary-grid">
+        <div>
+          <span class="story-boundary-mark">{t("It does", "会做什么")}</span>
+          <ul>
+            <li>{t("Collect sources before composing.", "先收集材料，再组织文章。")}</li>
+            <li>{t("Reserve evidence and test the selected frame against it.", "留出部分证据，用来检验选定的取景框。")}</li>
+            <li>{t("Separate verified behavior from static inference.", "区分已验证的行为与静态推断。")}</li>
+          </ul>
+        </div>
+        <div>
+          <span class="story-boundary-mark">{t("It does not", "不会做什么")}</span>
+          <ul>
+            <li>{t("Turn one thin source into a field-wide claim.", "凭一份薄弱材料推导整个领域的结论。")}</li>
+            <li>{t("Keep a frame alive just to manufacture a choice.", "为了凑出选择而保留无用的取景框。")}</li>
+            <li>{t("Replace the archived Loom thinking and vault utilities.", "替代已归档的 Loom 思考与知识库工具。")}</li>
+          </ul>
+        </div>
+      </div>
+    </section>
+
+    <section class="story-cta" aria-labelledby="weave-cta-title">
+      <span class="story-section-label">{t("05 / Continue", "05 / 继续探索")}</span>
+      <div>
+        <h2 id="weave-cta-title">{t("Bring a question with a little weight.", "带来一个值得认真研究的问题。")}</h2>
+        <p>{t("Install the skill, give it your material, and see which frame the evidence can actually carry.", "安装技能，提供材料，看看证据究竟能支撑怎样的取景框。")}</p>
+        <div class="story-cta-links">
+          <a class="story-link" href="https://github.com/KKenny0/weave" target="_blank" rel="noopener">{t("Open weave on GitHub ↗", "在 GitHub 查看 weave ↗")}</a>
+          <a class="story-link story-link--quiet" href={`${base}/projects/`}>{t("Back to the project index ↗", "返回项目列表 ↗")}</a>
+        </div>
+      </div>
+    </section>
+  </main>
+</PortfolioLayout>

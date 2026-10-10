@@ -1,0 +1,129 @@
+---
+import PortfolioLayout from '../layouts/PortfolioLayout.astro';
+import '../styles/project-story.css';
+interface Props { lang: 'en' | 'zh'; }
+const { lang } = Astro.props;
+const base = lang === 'en' ? '' : '/zh';
+const t = (en: string, zh: string) => lang === 'en' ? en : zh;
+---
+<PortfolioLayout title="Tracework" lang={lang} page="projects/tracework">
+<main id="main" class="story-page">
+    <section class="story-hero" aria-labelledby="tracework-title">
+      <div class="story-hero-copy">
+        <a class="story-back" href={`${base}/projects/`}>{t("← Projects", "← 项目")}</a>
+        <div class="story-hero-meta"><span>{t("01 / Capture", "01 / 记录")}</span><span>{t("Codex + Claude plugin", "Codex + Claude 插件")}</span><span>{t("Local-first", "本地优先")}</span></div>
+        <h1 id="tracework-title">{t("Tracework", "Tracework")}</h1>
+        <p class="story-hero-subtitle">{t("Replay why the work took this path.", "回看工作为什么走到了这一步。")}</p>
+      </div>
+
+      <div class="story-hero-aside">
+        <p>{t("Git can show changed files. It cannot, by itself, explain the decision, rejected path, or risk boundary that made the work take this shape.", "Git 能记录文件变化，却无法独自解释促成这些变化的决策、被放弃的路径，以及风险边界。")}</p>
+        <div class="story-hero-actions">
+          <a class="story-link" href="https://github.com/KKenny0/Tracework" target="_blank" rel="noopener">{t("Read the repository ↗", "查看代码仓库 ↗")}</a>
+          <a class="story-link story-link--quiet" href="https://kkenny0.github.io/Tracework/" target="_blank" rel="noopener">{t("Open the documentation ↗", "打开使用文档 ↗")}</a>
+        </div>
+      </div>
+
+      <div class="story-board">
+        <div class="story-board-heading"><span>{t("Decision Replay Loop", "决策回看流程")}</span><span>{t("the report is a view over evidence", "报告是对证据的组织")}</span></div>
+        <div class="story-board-flow">
+          <div class="story-board-node"><strong>{t("session", "会话")}</strong><span>{t("goal · choice · risk · next step", "目标 · 选择 · 风险 · 下一步")}</span></div>
+          <span class="story-board-arrow" aria-hidden="true">→</span>
+          <div class="story-board-node"><strong>{t("signals", "信号")}</strong><span>{t("lite · standard · deep", "轻量 · 标准 · 深入")}</span></div>
+          <span class="story-board-arrow" aria-hidden="true">→</span>
+          <div class="story-board-node story-board-node--candidate"><strong>{t("raw record", "原始记录")}</strong><span>{t("entries · artifacts · decisions", "条目 · 产物 · 决策")}</span></div>
+          <span class="story-board-arrow" aria-hidden="true">→</span>
+          <div class="story-board-node"><strong>{t("report surfaces", "报告")}</strong><span>{t("Daily · Weekly · Monthly · Roadmap", "日报 · 周报 · 月报 · 路线图")}</span></div>
+          <span class="story-board-arrow" aria-hidden="true">→</span>
+          <div class="story-board-node story-board-node--winner"><strong>{t("why", "原因")}</strong><span>{t("only when the evidence can carry it", "只回答证据能支撑的部分")}</span></div>
+        </div>
+        <p class="story-board-caption">{t("Reports are views over the raw record. Query can replay what local evidence supports; it cannot manufacture history.", "报告来自原始记录。查询可以回看本地证据支持的历史，但不能制造历史。")}</p>
+      </div>
+    </section>
+
+    <section class="story-question" aria-labelledby="tracework-question-title">
+      <span class="story-section-label">{t("01 / The question", "01 / 问题")}</span>
+      <div>
+        <h2 id="tracework-question-title">{t("Git can tell you what changed. It cannot tell you why the path was chosen.", "Git 记录了改动，却未必留下选择这条路的原因。")}</h2>
+        <p>{t("The missing layer is not another activity stream. It is the decision context around the change: the alternatives that were rejected, the evidence that mattered, the risk boundary that stayed open, and the next step that made the work continue.", "缺少的不是另一份活动流水，而是改动周围的决策背景：放弃过哪些选项、哪些证据起了作用、哪些风险仍然存在，以及推动工作继续的下一步。")}</p>
+        <p>{t("Tracework keeps that context close to the session, then lets reports and later queries point back to the raw record instead of smoothing the history into a confident summary.", "Tracework 在会话附近保留这些背景，让报告和后续查询回到原始记录，避免把历史压成一份过度自信的总结。")}</p>
+      </div>
+    </section>
+
+    <section class="story-routes" aria-labelledby="tracework-surfaces-title">
+      <div class="story-section-intro">
+        <span class="story-section-label">{t("02 / The surfaces", "02 / 使用入口")}</span>
+        <div>
+          <h2 id="tracework-surfaces-title">{t("One record, different moments of return.", "一份记录，在不同的时刻回来查看。")}</h2>
+          <p>{t("The surfaces are views into the same evidence layer, not separate products competing to become the source of truth.", "这些入口读取同一层证据，不是各自维护一套事实的独立产品。")}</p>
+        </div>
+      </div>
+      <div class="story-route-list">
+        <div class="story-route story-route-heading" aria-hidden="true"><span>{t("No.", "序号")}</span><span>{t("Surface", "入口")}</span><span>{t("Reads for", "读取内容")}</span><span>{t("Leaves you with", "产出")}</span></div>
+        <div class="story-route"><strong>{t("01", "01")}</strong><h3>{t("capture", "capture")}</h3><p>{t("session goal, decision, rejected path, risk, artifact, next step", "会话目标、决策、放弃的路径、风险、产物、下一步")}</p><p>{t("durable raw entry", "可保留的原始条目")}</p></div>
+        <div class="story-route"><strong>{t("02", "02")}</strong><h3>{t("recall", "recall")}</h3><p>{t("recent decisions, risks, open questions, relevant artifacts", "近期决策、风险、未解决问题、相关产物")}</p><p>{t("usable session context", "可用于继续工作的会话背景")}</p></div>
+        <div class="story-route"><strong>{t("03", "03")}</strong><h3>{t("query", "query")}</h3><p>{t("why, alternatives, source refs, answerability", "原因、替代方案、来源引用、能否回答")}</p><p>{t("cited answer or explicit evidence gap", "带引用的回答，或明确的证据缺口")}</p></div>
+        <div class="story-route"><strong>{t("04", "04")}</strong><h3>{t("daily / weekly / monthly", "daily / weekly / monthly")}</h3><p>{t("outcomes, work streams, decisions, evidence audit", "成果、工作线、决策、证据审视")}</p><p>{t("workplace-facing report", "面向工作沟通的报告")}</p></div>
+        <div class="story-route"><strong>{t("05", "05")}</strong><h3>{t("roadmap", "roadmap")}</h3><p>{t("decision threads, accumulating risks, recurring questions", "决策线索、累积风险、反复出现的问题")}</p><p>{t("long-cycle direction with its edges intact", "保留边界的长期方向")}</p></div>
+      </div>
+    </section>
+
+    <section class="story-gates" aria-labelledby="tracework-gates-title">
+      <div class="story-section-intro">
+        <span class="story-section-label">{t("03 / Trust gates", "03 / 可信性检查")}</span>
+        <div>
+          <h2 id="tracework-gates-title">{t("A report earns trust by showing where it stops.", "报告说明自己知道多少，才值得信任。")}</h2>
+          <p>{t("Tracework treats evidence boundaries as product behavior, not a disclaimer added after the answer.", "Tracework 把证据边界落实为产品行为，而非在回答末尾附上一段声明。")}</p>
+        </div>
+      </div>
+      <ol class="story-gate-list">
+        <li><span>{t("01", "01")}</span><strong>{t("Raw first", "原始记录优先")}</strong><p>{t("Raw entries are the semantic source. Git is only a limited fallback for coverage gaps.", "原始条目是语义来源。记录有缺口时，Git 只能提供有限的补充。")}</p></li>
+        <li><span>{t("02", "02")}</span><strong>{t("Scope before selection", "先分范围，再选内容")}</strong><p>{t("Reporting groups are separated before headlines are selected, so work and personal context do not blur together.", "先区分报告所属的工作组，再选择重点，避免工作与个人背景混在一起。")}</p></li>
+        <li><span>{t("03", "03")}</span><strong>{t("Evidence boundary", "证据边界")}</strong><p>{t("Source refs show provenance; they do not automatically become independent verification.", "来源引用说明出处，并不自动构成独立验证。")}</p></li>
+        <li><span>{t("04", "04")}</span><strong>{t("Refusal is a feature", "允许拒绝回答")}</strong><p>{t("When the local record cannot support the question, query returns an evidence gap instead of inventing history.", "本地记录无法支撑问题时，查询返回证据缺口，而非编造历史。")}</p></li>
+        <li><span>{t("05", "05")}</span><strong>{t("Coverage is not outcome", "记录覆盖不等于成果")}</strong><p>{t("Activity counts describe coverage metadata. They do not prove that the work produced a result.", "活动数量只说明记录覆盖情况，不能证明工作取得了成果。")}</p></li>
+      </ol>
+    </section>
+
+    <section class="story-boundary" aria-labelledby="tracework-boundary-title">
+      <div class="story-section-intro">
+        <span class="story-section-label">{t("04 / Boundary", "04 / 边界")}</span>
+        <div>
+          <h2 id="tracework-boundary-title">{t("The boundary is part of the promise.", "边界也是承诺的一部分。")}</h2>
+          <p>{t("Tracework is useful because it keeps the memory inspectable without turning work into surveillance.", "Tracework 让工作记忆可以检查，同时避免把工作记录变成监控。")}</p>
+        </div>
+      </div>
+      <div class="story-boundary-grid">
+        <div>
+          <span class="story-boundary-mark">{t("It does", "会做什么")}</span>
+          <ul>
+            <li>{t("Keep work choices, risks, artifacts, and next steps close to their evidence.", "把选择、风险、产物和下一步与对应证据放在一起。")}</li>
+            <li>{t("Let daily, weekly, and monthly reports return to the raw record.", "让日报、周报和月报可以回到原始记录。")}</li>
+            <li>{t("Give the next session bounded context for continuing the work.", "为下一次会话提供范围明确的工作背景。")}</li>
+          </ul>
+        </div>
+        <div>
+          <span class="story-boundary-mark">{t("It does not", "不会做什么")}</span>
+          <ul>
+            <li>{t("Package activity records as performance outcomes.", "把活动记录包装成绩效成果。")}</li>
+            <li>{t("Use one thin source to support a claim across an entire field.", "用一份薄弱材料支持跨越整个领域的结论。")}</li>
+            <li>{t("Turn local work memory into an approval or monitoring system.", "把本地工作记忆变成审批或监控系统。")}</li>
+          </ul>
+        </div>
+      </div>
+    </section>
+
+    <section class="story-cta" aria-labelledby="tracework-cta-title">
+      <span class="story-section-label">{t("05 / Continue", "05 / 继续探索")}</span>
+      <div>
+        <h2 id="tracework-cta-title">{t("Keep the why close to the work.", "把原因留在工作附近。")}</h2>
+        <p>{t("Read the repository for the contracts and workflows, then use the documentation when you are ready to make the loop part of a real project.", "先在代码仓库了解约定与流程，再通过文档把这套流程用到真实项目中。")}</p>
+        <div class="story-cta-links">
+          <a class="story-link" href="https://github.com/KKenny0/Tracework" target="_blank" rel="noopener">{t("Open the GitHub repository ↗", "在 GitHub 查看代码 ↗")}</a>
+          <a class="story-link" href="https://kkenny0.github.io/Tracework/" target="_blank" rel="noopener">{t("Read the Tracework documentation ↗", "阅读 Tracework 文档 ↗")}</a>
+          <a class="story-link story-link--quiet" href={`${base}/projects/`}>{t("Back to the project index ↗", "返回项目列表 ↗")}</a>
+        </div>
+      </div>
+    </section>
+  </main>
+</PortfolioLayout>

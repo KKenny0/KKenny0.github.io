@@ -7,7 +7,8 @@ share `src/layouts/PortfolioLayout.astro`, `src/styles/portfolio.css`, and
 `src/scripts/portfolio.js`. Keep corresponding page copy in sync when editing.
 Language and theme choices are remembered locally; project filters and sorting
 are preserved in the URL and across language changes. Notes share the portfolio layout, with English at `/notes/` and Chinese at `/zh/notes/`.
-Support, case studies, and legacy redirects retain their existing layouts and routes.
+Weave, Tracework and Support also use PortfolioLayout, with matching `/zh/` routes.
+Project stories share `src/styles/project-story.css`; legacy redirects retain their routes.
 Collection filtering is shared through `src/scripts/collection.js`.
 
 The portfolio prioritizes professional credibility and project conversations.

@@ -1,6 +1,6 @@
 # Personal space
 
-Home, Projects, Notes and About share PortfolioLayout and portfolio.css in both languages. BaseLayout and personal-space.css now serve weave, Tracework and Support. The shell imports legacy-common.css in the lower legacy layer; each legacy page imports only its own page styles. Obsolete book-shelf and sheet-reader styles have been removed.
+Home, Projects, Notes, About, weave, Tracework and Support share PortfolioLayout and portfolio.css in both languages. Project stories share project-story.css; Support uses scoped styles. BaseLayout and personal-space.css are retained as unused legacy source, not loaded by these pages.
 
 Projects and search read src/data/projects.ts; notes and search read the existing writings data, including stable article IDs for fragment links. Continue using notes:merge for article updates. Do not copy prototype article lists into production pages.
 
@@ -15,6 +15,6 @@ npm run build
 npm run check:site
 ```
 
-Also inspect desktop and mobile layouts, themes, search and deep links, capture/undo/reset, notes filters, and the existing Tracework, weave and support pages in the built preview. Automated checks validate local routes/assets/fragments and all article IDs, but do not check remote websites or replace visual inspection.
+Also inspect desktop and mobile layouts, themes, language switching and deep links, notes filters, and the Tracework, weave and support pages in the built preview. Automated checks validate local routes/assets/fragments and all article IDs, but do not check remote websites or replace visual inspection.
 
 The existing GitHub Pages workflow deploys pushes to master. Keep site changes scoped; a rollback should revert only the design change so later article updates remain intact.
