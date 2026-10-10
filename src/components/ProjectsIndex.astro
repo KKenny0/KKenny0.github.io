@@ -11,7 +11,7 @@ const categories = [['all','All','全部'],['capture','Capture','信息收集'],
 const date = (value: string) => new Intl.DateTimeFormat('sv-SE', { timeZone: 'Asia/Shanghai', year: 'numeric', month: '2-digit', day: '2-digit' }).format(new Date(value));
 ---
 <main id="main" data-screen-label={t('Projects · Project index','Projects · 项目索引')}>
-<section class="page-heading"><p class="eyebrow">PROJECTS / TOOLS & EXPERIMENTS</p><h1>{t('Ideas, made tangible.', "想法，落在作品里。")}</h1><p>{t('These are tools and public experiments I build independently. For professional delivery work, see', "这里是我独立制作的工具与公开实验。工作中的交付案例，可以在")} <a class="blue" href={`${base}/about/#experience`}>About</a>{t('.', ' 经历。')}</p></section>
+<section class="page-heading"><p class="eyebrow">PROJECTS / TOOLS & EXPERIMENTS</p><h1>{t('Ideas, made tangible.', "想法，落在作品里。")}</h1><p>{t('These are tools and public experiments I build independently. For professional delivery work, see', "这里是我独立制作的工具与公开实验。工作中的交付案例，见")} <a class="blue" href={`${base}/about/#experience`}>{t('About', '「关于」页的工作经历')}</a>{t('.', '。')}</p></section>
 <section class="featured-grid" aria-label={t('Featured projects','代表项目')}>
 {featured.map(project => <article class="featured-item"><a href={`#${project.slug}`}><figure class="preview"><ResponsiveImage src={project.focus!.src} alt={t(project.focus!.alt,project.focus!.altZh)} sizes="(max-width: 640px) calc(100vw - 78px), (max-width: 1168px) calc((100vw - 140px) / 2), 496px" /></figure><h2>{project.name} ↗</h2><p>{t(project.thesis,project.thesisZh)}</p></a><div class="links"><a href={`#${project.slug}`}>{t('Explore project','展开项目')} ↓</a><a href={project.url} target="_blank" rel="noopener noreferrer">GitHub ↗</a></div></article>)}
 </section>

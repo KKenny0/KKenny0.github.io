@@ -1001,7 +1001,10 @@ footer a {
   }
   .case-grid {
     gap: 26px;
-    grid-template-columns: 1fr 1.6fr;
+    grid-template-columns: 1fr;
+  }
+  .case-copy > p:not(.case-thesis):not(.label):not(.case-role) {
+    max-width: 65ch;
   }
   .workflow {
     padding: 20px;
