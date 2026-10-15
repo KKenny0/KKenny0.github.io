@@ -2,6 +2,9 @@
 const assert = require('node:assert/strict');
 const { readFileSync } = require('node:fs');
 const { runInNewContext } = require('node:vm');
+const lock = JSON.parse(readFileSync(`${__dirname}/../package-lock.json`, 'utf8'));
+const incompletePackages = Object.entries(lock.packages).filter(([path, pkg]) => path && !pkg.version);
+assert.equal(incompletePackages.length, 0, `Lockfile entries need versions: ${incompletePackages.map(([path]) => path).join(', ')}`);
 const elements = new Map();
 function element(id) {
   if (!elements.has(id)) elements.set(id, {

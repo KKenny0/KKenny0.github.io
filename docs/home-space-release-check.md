@@ -126,3 +126,10 @@ advisor 最终按实际CSS视口320/390px复核中英文长观察、较早观察
 并在355px抽查AI和项目模板，结论为验收通过，未发现新的阻塞或布局退化。
 手机截图：output/home-space-review/online-mobile-layout-fixed.jpg。
 外部文章网站及真实设备帧率不属于本次排版验证范围。
+
+## 发布环境兼容性
+
+首次 Pages 运行在 npm 11.19.0 安装依赖时因锁文件可选平台条目缺少版本而失败。
+补全 Rolldown 的 Darwin x64 条目和遗漏的 emnapi 依赖记录，保留已有应用依赖版本。
+独立目录使用 npm 11.19.0 完成 npm ci、notes:check、build 和 check:site。
+站点检查新增锁文件条目版本断言，已验证原锁文件失败、修复后通过。
