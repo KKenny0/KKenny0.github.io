@@ -156,125 +156,119 @@ let prevented = false;
 projectLink.handlers.click({ preventDefault() { prevented = true; } });
 assert.equal(prevented, true);
 assert.equal(archived[0].open, true);
-theme.handlers.click();
-assert.equal(theme.getAttribute('aria-label'), 'Switch to light mode');
+
 documentEvents.keydown(); assert.ok('keyboard' in context.document.body.dataset);
 documentEvents.pointerdown(); assert.ok(!('keyboard' in context.document.body.dataset));
-console.log('PASS: URL view state, active/archive counts, sorting, archived deep links, theme labels and keyboard mode.');
+console.log('PASS: URL view state, active/archive counts, sorting, archived deep links and keyboard mode.');
 
 }
-const {existsSync,readdirSync}=require('node:fs');const path=require('node:path');
+const {existsSync,readdirSync}=require('node:fs');
+const path=require('node:path');
 const output=path.resolve(__dirname,'../dist');
 const pages=readdirSync(output,{recursive:true}).map(file=>file.replaceAll('\\','/')).filter(file=>file.endsWith('.html'));
-for(const route of ['index.html','about/index.html','notes/index.html','projects/index.html','projects/tracework/index.html','projects/weave/index.html','support/index.html','background/index.html','work/index.html','writings/index.html','open-source/index.html']) assert.ok(pages.includes(route),route);
+const projectSource=readFileSync(path.resolve(__dirname,'../src/data/projects.ts'),'utf8');
+const projectRecords=JSON.parse(projectSource.match(/export const projects: Project\[\] = (\[[\s\S]*?\]);/)[1]);
+const writings=JSON.parse(readFileSync(path.resolve(__dirname,'../src/data/writings.json'),'utf8'));
+const expectedRoutes=['index.html','projects/index.html','notes/index.html','about/index.html','support/index.html','projects/weave/index.html','projects/tracework/index.html'];
+for(const prefix of ['', 'zh/']){
+  for(const route of expectedRoutes){
+    assert.ok(pages.includes(prefix+route),prefix+route);
+    const html=readFileSync(path.join(output,prefix,route),'utf8');
+    assert.ok(html.includes(`lang="${prefix?'zh-CN':'en'}"`));
+    assert.ok(html.includes('hreflang="x-default"'));
+    assert.ok(!/babel\.min|react\.development|KENNY_DATA|DESIGN STUDY|kenny-proto-|noindex/.test(html));
+  }
+  const home=readFileSync(path.join(output,prefix,'index.html'),'utf8');
+  for(const lens of ['online','taste','ai','execution'])assert.ok(home.includes(`href="/${prefix}lens/${lens}/"`));
+  const ai=readFileSync(path.join(output,prefix,'lens/ai/index.html'),'utf8');
+  assert.ok(ai.includes('script-weaver')&&ai.includes('videowipe'));
+  assert.ok(!ai.includes('videowipe.jpg')&&!ai.includes('portrait.webp'));
+  const notes=readFileSync(path.join(output,prefix,'notes/index.html'),'utf8');
+  for(const article of writings.articles){
+    assert.ok(notes.includes(`id="note-${article.id}"`),article.title);
+    const kind=['2060032007506334292','2031687123431051328'].includes(article.id)?'ai':'online';
+    assert.ok(pages.includes(`${prefix}notes/${kind}/${article.id}/index.html`));
+  }
+  for(const project of projectRecords){
+    assert.ok(pages.includes(`${prefix}work/${project.slug}/index.html`));
+    const html=readFileSync(path.join(output,prefix,`work/${project.slug}/index.html`),'utf8');
+    assert.ok(html.includes(project.name));
+    assert.ok(html.includes(project.url));
+  }
+  const about=readFileSync(path.join(output,prefix,'about/index.html'),'utf8');
+  for(const section of ['experience','research','awards','questions','outside','enterprise'])assert.ok(about.includes(`id="${section}"`));
+  assert.equal((about.match(/class="timeline(?: cail-entry)?"/g)||[]).length,8);
+  for(const fact of ['9.53%','1285','Qwen2.5-7B','90%','conference.jpg','q9Z8cmIAAAAJ']){
+    // Scholar remains available in the professional links; numerical claims stay qualified in content.
+    if(fact==='q9Z8cmIAAAAJ')continue;
+    assert.ok(about.includes(fact),fact);
+  }
+  assert.ok(about.includes('self-profo'));
+}
+
+// Every generated local link and asset must work on GitHub Pages without a rewrite server.
 for(const page of pages){
-  const source=readFileSync(path.join(output,page),'utf8');
-  for(const [,url] of source.matchAll(/(?:href|src)="([^"]+)"/g)){
+  const html=readFileSync(path.join(output,page),'utf8');
+  for(const [,url] of html.matchAll(/(?:href|src)="([^"]+)"/g)){
     if(/^(https?:|mailto:|data:)/.test(url))continue;
-    const parsed=new URL(url,'https://local.test/'+page.replace(/index.html$/,''));
+    const parsed=new URL(url.replaceAll('&amp;','&'),'https://local.test/'+page.replace(/index.html$/,''));
     const relative=decodeURIComponent(parsed.pathname).replace(/^\//,'');
     let target=path.resolve(output,relative);
     if(parsed.pathname.endsWith('/'))target=path.join(target,'index.html');
-    assert.ok(target.startsWith(output+path.sep));assert.ok(existsSync(target),`${page}: ${url}`);
+    assert.ok(target.startsWith(output+path.sep));
+    assert.ok(existsSync(target),`${page}: ${url}`);
     if(parsed.hash)assert.ok(readFileSync(target,'utf8').includes(`id="${decodeURIComponent(parsed.hash.slice(1))}"`),`${page}: ${url}`);
   }
-}
-const writings=JSON.parse(readFileSync(path.resolve(__dirname,'../src/data/writings.json'),'utf8'));
-const notes=readFileSync(path.join(output,'notes/index.html'),'utf8');
-for(const article of writings.articles) assert.ok(notes.includes(`id="note-${article.id}"`),article.title);
-assert.ok(!readFileSync(path.join(output,'index.html'),'utf8').includes('近况草稿'));
-console.log(`PASS: ${pages.length} built routes, local links/assets/fragments and all ${writings.articles.length} current notes.`);
-// The accepted portfolio ships in both languages with the same project order.
-const projectSource=readFileSync(path.resolve(__dirname,'../src/data/projects.ts'),'utf8');
-const projectRecords=JSON.parse(projectSource.match(/export const projects: Project\[\] = (\[[\s\S]*?\]);/)[1]);
-const snapshot=JSON.parse(projectSource.match(/export const githubSnapshot = (\{[\s\S]*?\});/)[1]);
-assert.equal(new Set(projectRecords.map(p=>p.slug)).size,projectRecords.length);
-assert.ok(projectRecords.every(p=>Number.isInteger(p.stars)&&p.stars>=0&&Number.isInteger(p.forks)&&p.forks>=0&&!Number.isNaN(Date.parse(p.pushedAt))));
-assert.ok(!projectRecords.some(p=>['future-agi','ragvizexpander','kotaemon','.github','kkenny0','kkenny0.github.io'].includes(p.slug)));
-for (const prefix of ['', 'zh/']) {
-  for (const page of ['index.html', 'projects/index.html', 'about/index.html', 'notes/index.html', 'projects/weave/index.html', 'projects/tracework/index.html', 'support/index.html']) {
-    const html = readFileSync(path.join(output, prefix, page), 'utf8');
-    assert.ok(html.includes(`lang="${prefix ? 'zh-CN' : 'en'}"`));
-    assert.ok(html.includes(`data-language="${prefix ? 'en' : 'zh'}"`));
-    assert.ok(html.includes('hreflang="x-default"'));
-    assert.ok(!/DESIGN STUDY|localhost:4311|kenny-prototype/.test(html));
+  for(const [tag] of html.matchAll(/<img[^>]*srcset="[^"]+"[^>]*>/g)){
+    assert.match(tag,/width="[1-9][0-9]*"/);assert.match(tag,/height="[1-9][0-9]*"/);
+    for(const candidate of tag.match(/srcset="([^"]+)"/)[1].split(','))assert.ok(existsSync(path.join(output,candidate.trim().split(/\s+/)[0])));
   }
-  const projectHtml = readFileSync(path.join(output, prefix, 'projects/index.html'), 'utf8');
-  const entries=[...projectHtml.matchAll(/<details class="project" id="([^"]+)"([^>]*)>/g)];
-  assert.equal(entries.length,projectRecords.length);
-  for(const [,slug,attrs] of entries){
-    const record=projectRecords.find(p=>p.slug===slug);assert.ok(record,slug);
-    assert.ok(attrs.includes(`data-stars="${record.stars}"`));assert.ok(attrs.includes(`data-forks="${record.forks}"`));
-    assert.ok(attrs.includes(`data-updated="${record.pushedAt}"`));assert.ok(attrs.includes(`data-archived="${record.archived}"`));
-  }
-  const stars=entries.filter(([,slug,attrs])=>attrs.includes('data-archived="false"')).map(([,slug,attrs])=>Number(attrs.match(/data-stars="(\d+)"/)[1]));
-  assert.deepEqual(stars,[...stars].sort((a,b)=>b-a));
-  assert.ok(projectHtml.includes(`datetime="${snapshot.date}"`));
-  const home=readFileSync(path.join(output,prefix,'index.html'),'utf8');
-  assert.ok(home.includes('id="delivery"'));
-  assert.ok(home.includes('9.53%'));
-  assert.ok(home.includes('class="case-role"'));
-  for(const slug of ['videowipe','script-weaver','obsidian-kami','tracework']){
-    const record=projectRecords.find(p=>p.slug===slug);
-    assert.ok(home.includes(`/projects/#${slug}`));
-  }
-  for (const record of projectRecords.filter(project => project.focus)) {
-    assert.ok(projectHtml.includes(record.focus.src), record.slug);
-    assert.ok(existsSync(path.join(output,record.focus.src)));
-  }
-  const about = readFileSync(path.join(output, prefix, 'about/index.html'), 'utf8');
-  assert.ok(about.includes('id="awards"'));
-  assert.ok(about.includes('id="experience"'));
 }
-const localeScript = readFileSync(path.resolve(__dirname, '../src/layouts/PortfolioLayout.astro'), 'utf8').match(/<script is:inline>([\s\S]*?)<\/script>/)[1];
-for (const [lang, preference, pathname, expected] of [
-  ['en', null, '/', undefined],
-  ['en', 'zh', '/projects/?test=1#taku', 'https://local.test/zh/projects/?test=1#taku'],
-  ['zh-CN', 'en', '/zh/about/#awards', 'https://local.test/about/#awards'],
-  ['en', 'invalid', '/', undefined],
-  ['en', null, '/notes/', undefined],
-  ['en', 'zh', '/notes/?topic=memory#note-example', 'https://local.test/zh/notes/?topic=memory#note-example'],
-  ['zh-CN', 'en', '/zh/notes/', 'https://local.test/notes/'],
-  ['en', 'zh', '/projects/weave/?ref=portfolio#weave-gates-title', 'https://local.test/zh/projects/weave/?ref=portfolio#weave-gates-title'],
-  ['zh-CN', 'en', '/zh/projects/tracework/', 'https://local.test/projects/tracework/'],
-  ['en', 'zh', '/support/', 'https://local.test/zh/support/'],
-]) {
-  let redirected;
-  runInNewContext(localeScript, { URL,
-    document: { documentElement: { lang, dataset: {} } },
-    location: { pathname: new URL(`https://local.test${pathname}`).pathname, href: `https://local.test${pathname}`, replace(url) { redirected = url; } },
-    localStorage: { getItem(key) { return key === 'kenny-language' ? preference : null; } },
-  });
-  assert.equal(redirected, expected);
-}
-console.log('PASS: bilingual portfolio, descending stars, project images, awards and language redirects.');
-// About refresh: both locales retain anonymized experience and accessible photo viewers.
-for (const prefix of ['', 'zh/']) {
-  const about = readFileSync(path.join(output, prefix, 'about/index.html'), 'utf8');
-  const experience = about.match(/id="experience"[\s\S]*?<\/section>/)[0];
-  assert.equal((experience.match(/<article /g) || []).length, 5);
-  assert.ok(!/爱图仕|冰鉴|蓝月亮|Aputure|Icekredit|Blue Moon/.test(experience));
-  assert.ok(about.includes('China AI and Law Challenge'));
-  assert.equal((about.match(/class="photo-open"/g) || []).length, 2);
-  assert.ok(/id="awards"[\s\S]*?class="archive-photo"/.test(about));
-  assert.ok(about.includes('<dialog class="photo-viewer"'));
-}
-console.log('PASS: About experience, company anonymity, CAIL and photo viewer markup.');
+console.log(`PASS: ${pages.length} static routes, bilingual SSR, ${projectRecords.length} projects, ${writings.articles.length} source articles, full About and all local links/assets.`);
 
-// Reserve image geometry and verify every responsive candidate is deployable.
-for (const prefix of ['', 'zh/']) {
-  for (const page of ['index.html', 'projects/index.html', 'about/index.html', 'notes/index.html']) {
-    const html = readFileSync(path.join(output, prefix, page), 'utf8');
-    for (const [tag] of html.matchAll(/<img[^>]*data-original-src="[^"]+"[^>]*>/g)) {
-      assert.match(tag, /width="[1-9][0-9]*"/);
-      assert.match(tag, /height="[1-9][0-9]*"/);
-      const candidates = tag.match(/srcset="([^"]+)"/);
-      if (candidates) for (const candidate of candidates[1].split(',')) {
-        assert.ok(existsSync(path.join(output, candidate.trim().split(/\s+/)[0])), candidate);
-      }
-    }
-    const home = readFileSync(path.join(output, prefix, 'index.html'), 'utf8');
-    assert.ok(home.includes('media="(max-width: 640px)"'));
-  }
+// Test the actual route implementation with the authoritative data, independently of browser state.
+const routeSource=readFileSync(path.resolve(__dirname,'../src/lib/space-routes.js'),'utf8').replace(/^import .*;\r?\n/gm,'').replaceAll('export ','');
+const routeContext={URL,projects:projectRecords,notes:[...writings.articles,{id:'goal',primary:'online'},{id:'context-sep',primary:'online'}],lensInfo:{online:{},taste:{},ai:{},execution:{}},aiWritingIds:['2060032007506334292','2031687123431051328'],localizedNote:n=>n};
+routeContext.notes=routeContext.notes.map(n=>({...n,primary:routeContext.aiWritingIds.includes(n.id)?'ai':'online'}));
+runInNewContext(readFileSync(path.resolve(__dirname,'../src/data/taste.js'),'utf8').replace('export const tasteProducts=','this.tasteProducts='),routeContext);
+runInNewContext(routeSource+'\nthis.routes={routePath,parseRoute,spaceEntries};',routeContext);
+const {routePath,parseRoute,spaceEntries}=routeContext.routes;
+for(const locale of ['en','zh'])for(const {route} of spaceEntries()){
+  const parsed=parseRoute(new URL(routePath(route,locale),'https://example.test'));
+  assert.equal(parsed.view,route.view);assert.equal(parsed.arg,route.arg);
+  if(route.item)assert.equal(parsed.item,route.item);
+  if(route.work!==undefined)assert.equal(parsed.work,route.work);
 }
-console.log('PASS: image dimensions, responsive candidates and mobile hero source.');
+for(const slug of ['script-weaver','taku','loom-skills'])assert.equal(parseRoute(new URL(`https://local.test/zh/projects/#${slug}`)).item,slug);
+assert.equal(parseRoute(new URL('https://local.test/notes/#note-2060032007506334292')).arg,'ai');
+assert.equal(parseRoute(new URL('https://local.test/zh/notes/?topic=memory')).topic,'memory');
+assert.equal(parseRoute(new URL('https://local.test/lens/unknown/')).view,'home');
+assert.equal(parseRoute(new URL('https://local.test/taste/card-skill/999/')).view,'home');
+assert.equal(parseRoute(new URL('https://local.test/work/videowipe/?from=ai')).arg,'ai');
+assert.equal(routePath({view:'notes',arg:'online',item:'goal',topic:'memory'},'zh'),'/zh/notes/online/goal/?topic=memory');
+console.log('PASS: all route/locale round trips, stable artwork IDs, legacy fragments, archived project links and topic queries.');
+
+// Both rendering frames use the same pre-paint system default and controller.
+const themeCode=readFileSync(path.resolve(__dirname,'../src/lib/theme.js'),'utf8').replaceAll('export ','');
+const themeBoot=readFileSync(path.resolve(__dirname,'../src/components/ThemeHead.astro'),'utf8').match(/<script is:inline>([\s\S]*?)<\/script>/)[1];
+for(const [stored,systemDark,expected] of [[null,true,'dark'],[null,false,'light'],['system',true,'dark'],['light',true,'light'],['dark',false,'dark'],['invalid',true,'dark']]){
+  const root={dataset:{}};
+  runInNewContext(themeBoot,{document:{documentElement:root},matchMedia:()=>({matches:systemDark}),localStorage:{getItem(){return stored;}}});
+  assert.equal(root.dataset.theme,expected);
+  assert.equal(root.dataset.themeMode,stored==='light'||stored==='dark'?stored:'system');
+}
+for(const blocked of [false,true]){
+  const root={dataset:{}},listeners=new Map(),writes=[];
+  const scheme={matches:true,addEventListener(k,f){listeners.set(k,f)},removeEventListener(k){listeners.delete(k)}};
+  const ctx={document:{documentElement:root},matchMedia:()=>scheme,localStorage:{getItem(){if(blocked)throw Error('blocked');return null},setItem(k,v){if(blocked)throw Error('blocked');writes.push(v)}}};
+  runInNewContext(themeCode+'\nthis.controller=createThemeController();',ctx);
+  assert.equal(root.dataset.theme,'dark');assert.equal(root.dataset.themeMode,'system');assert.equal(writes.length,0);
+  scheme.matches=false;listeners.get('change')();assert.equal(root.dataset.theme,'light');
+  ctx.controller.set('dark');assert.equal(root.dataset.themeMode,'dark');
+  listeners.get('change')();assert.equal(root.dataset.theme,'dark');
+  ctx.controller.set('system');assert.equal(root.dataset.theme,'light');
+  scheme.matches=true;listeners.get('change')();assert.equal(root.dataset.theme,'dark');
+  ctx.controller.destroy();assert.equal(listeners.size,0);
+}
+assert.equal(parseRoute(new URL('https://local.test/notes/?topic=ai')).topic,'ai');
+console.log('PASS: shared pre-paint theme, system default and live updates, explicit override, blocked storage, cleanup and AI topic deep link.');

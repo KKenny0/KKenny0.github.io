@@ -1,7 +1,8 @@
 ---
 import { site } from '../data/site';
-import { navigation, isCurrentNavigation } from '../data/navigation';
+import ThemeHead from '../components/ThemeHead.astro';
 import '../styles/portfolio.css';
+import '../styles/space-legacy.css';
 interface Props { title: string; lang: 'en' | 'zh'; page: 'index' | 'projects' | 'about' | 'notes' | 'projects/weave' | 'projects/tracework' | 'support'; }
 const { title, lang, page } = Astro.props;
 const english = lang === 'en';
@@ -24,40 +25,35 @@ const pageTitle = page === 'index' ? 'Kenny Ponders' : `${title} · Kenny Ponder
   <link rel="alternate" hreflang="zh-CN" href={new URL(`/zh${path}`, site.canonical).href} />
   <link rel="alternate" hreflang="x-default" href={new URL(path, site.canonical).href} />
   <link rel="icon" href={site.favicon} />
-  {lang === 'zh' && <link rel="preload" href="/assets/fonts/TsangerJinKai02-Regular.woff2" as="font" type="font/woff2" crossorigin />}
+  <link rel="preload" href={lang==='zh'?'/assets/space/JinKai-Regular.woff2':'/assets/space/Charter-Regular.woff2'} as="font" type="font/woff2" crossorigin />
   <meta property="og:title" content={pageTitle} />
   <meta property="og:description" content={description} />
   <meta property="og:url" content={canonical} />
   <meta property="og:type" content="website" />
   <meta property="og:image" content={new URL(site.avatar, site.canonical).href} />
   <meta name="twitter:card" content="summary" />
-  <script is:inline>
-    try {
-      const preferred = localStorage.getItem('kenny-language');
-      const current = document.documentElement.lang === 'en' ? 'en' : 'zh';
-      if ((preferred === 'en' || preferred === 'zh') && preferred !== current) {
-        const url = new URL(location.href);
-        url.pathname = (preferred === 'zh' ? '/zh' : '') + url.pathname.replace(/^\/zh(?=\/)/, '');
-        location.replace(url.href);
-      }
-      document.documentElement.dataset.theme = localStorage.getItem('kenny-space-theme') === 'dark' ? 'dark' : 'light';
-    } catch {}
-  </script>
+  <ThemeHead/>
 </head>
 <body>
 <a class="skip" href="#main">{english ? 'Skip to content' : '跳到主要内容'}</a>
 <div class="wrap">
   <header class="masthead">
-    <a class="identity" href={`${base}/`}><strong>Kenny Ponders<span style="color:var(--red)">.</span></strong></a>
+    <a class="identity" href={`${base}/`}><strong>Kenny Wu <span aria-hidden="true">↗</span></strong></a>
     <nav class="nav" aria-label={english ? 'Main navigation' : '主导航'}>
-      {navigation(lang).map(item => <a href={item.href} aria-current={isCurrentNavigation(Astro.url.pathname, item.href) ? 'page' : undefined}>{item.label}</a>)}
-      <a class="language" href={alternate} data-language={english ? 'zh' : 'en'} lang={english ? 'zh-CN' : 'en'} aria-label={english ? 'Switch to Chinese' : '切换到英文'}>{english ? '中文' : 'EN'}</a>
-      <button class="theme" aria-label={english ? 'Switch to dark mode' : '切换到深色外观'} aria-pressed="false">◐</button>
+      <a href={`mailto:${site.email}`}>{english?'Contact ↗':'联系 ↗'}</a>
+      <details class="legacy-settings"><summary>{english?'◐ Settings':'◐ 设置'}</summary><div>
+        <a class="language" href={alternate} data-language={english ? 'zh' : 'en'} lang={english ? 'zh-CN' : 'en'} aria-label={english ? 'Switch to Chinese' : '切换到英文'}>{english ? '中文' : 'EN'}</a>
+        <div class="legacy-theme-options" aria-label={english?'Theme':'明暗'}>
+          <button data-theme-mode="system" aria-pressed="true">{english?'System':'跟随系统'}</button>
+          <button data-theme-mode="light" aria-pressed="false">{english?'Light':'亮色'}</button>
+          <button data-theme-mode="dark" aria-pressed="false">{english?'Dark':'暗色'}</button>
+        </div>
+      </div></details>
     </nav>
   </header>
   <slot />
   <footer><p>Kenny Ponders · {english ? 'Shenzhen' : '深圳'}</p><a href={site.github_link} target="_blank" rel="noopener noreferrer">GitHub ↗</a></footer>
 </div>
-<script>import '../scripts/portfolio.js';</script>
+<script>import '../scripts/portfolio.js';import {bindThemeControls} from '../lib/theme';bindThemeControls();</script>
 </body>
 </html>

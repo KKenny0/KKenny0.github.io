@@ -1,7 +1,4 @@
 ---
-import PortfolioLayout from "../layouts/PortfolioLayout.astro";
-import NotesIndex from "../components/NotesIndex.astro";
+import SpacePage from '../components/SpacePage.astro';
 ---
-<PortfolioLayout title="Notes" lang="en" page="notes">
-  <NotesIndex lang="en" />
-</PortfolioLayout>
+<SpacePage lang="en" route={{view:'notes',arg:'online',item:'goal'}}/>

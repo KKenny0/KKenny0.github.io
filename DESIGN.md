@@ -1,143 +1,73 @@
-# Kenny Ponders: compact paper portfolio
+# Kenny Wu — one person, four lenses
 
-## Audience and intent
+## Approved direction
 
-The primary audience is potential collaborators. The intended takeaway is that
-Kenny can reliably deliver outcomes in his area of expertise. Visitors should
-understand his capabilities and know how to contact him. His professional scope
-is AI application and systems engineering, including language processing,
-information retrieval, and multimodal applications. Reliable delivery means
-taking responsibility for agreed outcomes and bringing problems to an
-acceptable result, with concrete evidence of quality and stability.
+The accepted home-as-one-space prototype is the visual and interaction baseline.
+Home introduces Online, Taste, AI and Execution as four states of one character.
+Visitors start with the characters, then move closer to explore work. The earlier
+Making / Delivery / Attention scheme is superseded.
 
-## Theme
+The default entry is English. Theme defaults to the system color scheme; visitors can explicitly choose Light or Dark.
 
-Retain the accepted typography and paper palette while strengthening the
-presentation of representative work and Kenny's engineering judgment.
+Home stays immersive. Keep Kenny Wu and Contact at the top and settings at the
+edge. Projects, Notes and About belong to the browsing experience. Do not restore
+the full horizontal navigation menu.
 
-A personal engineering portfolio with Kami's ink-on-paper typography. Give
-representative delivery work a clear focal point, followed by engineering
-judgment, open-source work, and a concrete invitation to collaborate. Retain the
-small personal illustration as a supporting identity detail.
+## Scenes and content
 
-## Agreed content direction
+- Online: a tuner. Wheel, swipe, arrow keys and the observation rail change the
+  observation. The orbit marker and character follow the selection. Expand into
+  Notes without replacing the viewing surface.
+- Taste: products first, then individual outputs in a consistent viewing area.
+  Preserve each artwork’s aspect ratio. Zoom enlarges the artwork in place;
+  close restores focus and the original frame.
+- AI: GitHub projects and professional articles are independent work types with
+  comparable weight. Use a system surface for projects and a paper surface for
+  writing. Initial selections: Script-Weaver, VideoWipe, Agent Memory Systems and
+  Claude Code Compact. Keep whitespace and the small hovering character.
+- Execution: show work in practice and qualified results, with paths into Projects
+  and the complete professional record.
+- Projects: one work surface and a browsable index. Preserve search, categories,
+  sorting, archived records, source metrics and existing project stories.
+- About: portrait, selected experience, and an expandable complete record containing
+  all experience, research, awards, photographs, personal material and contact links.
 
-- Lead with the AI comics generation system as the delivery case. Use enterprise
-  document Q&A as a supporting case to show the breadth of the professional scope.
-- Express personality through engineering judgment and trade-offs: how Kenny
-  assesses quality, handles failure, and brings work to acceptance.
-- Invite collaboration on technical planning and engineering delivery for AI
-  applications. Quality and stability improvement are capabilities within this work.
-
-## Implemented page direction
-
-The direction is approved and implemented across the homepage, Projects, Notes,
-About, project stories and Support in both languages.
-
-- Homepage: a clear professional introduction, a prominent AI comics delivery
-  case with a workflow illustration and visible outcomes, a compact enterprise
-  Q&A case, concrete engineering judgments, selected open-source work, and a
-  collaboration invitation. Break up the repeated text-row rhythm with differing
-  section proportions and a visible visual focal point.
-- Projects: distinguish featured work from the complete repository index, show
-  real previews more directly, and keep key previews available on mobile.
-  GitHub metrics support the work rather than leading its presentation. Retain
-  existing project data, filtering, sorting, archive links, and no-image states.
-- About: surface representative outcomes before expandable technical detail.
-  Keep the complete experience, research, awards, personal photos, and interests.
-  Describe collaboration in the agreed professional scope.
-
-Use existing public work descriptions for professional cases and label workflow
-illustrations as diagrams. Preserve Kenny's actual role and the conditions of
-each result: fixed-set quality measurements, internal tests, and individual task
-runs must remain distinguishable. Use real existing screenshots for open-source
-work; professional diagrams and project screenshots have different meanings.
-
-Acceptance: the main pages make the professional scope, a concrete delivery
-result, and a contact route clear. Representative evidence is visible without
-opening a disclosure. Desktop and mobile both retain meaningful work visuals.
-The established typography, paper palette, dark mode, and bilingual navigation
-remain coherent. Existing behavior checks and a final full build must pass.
-
-## Palette
-
-Light canvas #f5f4ed, ink #141413, supporting text #504e49, rules #e8e6dc, and
-ink-blue links #1B365D. Retain the small vermilion identity mark. Dark mode keeps
-the existing warm OKLCH canvas, lighter ink and blue; it is not an inverted image.
+Use the Script-Weaver schematic until Kenny supplies a current screenshot. Never
+use the obsolete local workbench screenshot. Label professional diagrams as diagrams.
+Keep fixed evaluation sets, internal tests and individual task runs distinguishable.
 
 ## Typography
 
-Chinese: locally hosted TsangerJinKai02, then Charter/Georgia and CJK serif
-fallbacks. English: Charter/Georgia with the same CJK fallbacks. Metadata:
-JetBrains Mono, then Consolas. Titles and body share the serif family.
+Follow Kami’s typography principles. Titles, body and ordinary controls share a
+serif family within each language. Chinese uses local JinKai W04 / W05, then
+Charter, Georgia and CJK serif fallbacks. English uses Charter first. Metadata
+uses JetBrains Mono, Consolas and the page serif fallback. Symbols have a separate
+system symbol stack. Do not introduce a sans-serif display or control family.
 
-- Display: 40-56px homepage, 32-38px subpages, weight 500, line-height 1.2.
-- Section and project titles: 22-24px, weight 500.
-- Reading: 16px, weight 400, line-height 1.65; Chinese prose uses 1.8 with long paragraphs capped at 38em; supporting copy 14px.
-- Metadata and captions: 11-12px; numeric columns use tabular figures.
-- No negative tracking on Chinese headings. Use the real 400/500 font files.
-- Native small controls retain clear focus outlines and at least 44px height.
+Body weight is 400; titles and emphasis use 500. Chinese has genuine separate
+weights. Charter uses the supplied Regular outlines for 400–500; disable synthetic
+bold and italic. Rebuild local font subsets after changing copy, including the
+complete professional content rather than only Home.
 
-## Components
+## Surfaces and motion
 
-Shared masthead with language and theme controls; representative delivery cases
-and four selected open-source projects on the homepage; project disclosures with
-categories, sorting, real previews and a collapsed archive group; plain text
-GitHub totals with explicit snapshot scope.
-No-image projects show an honest text notice and never reuse the last screenshot.
-About preserves its timeline, awards, research and photo viewer.
+Keep pale paper texture and a linked light field, warm ink, restrained blue and
+vermilion accents. Dark mode has its own surface tokens. Existing project stories
+and Support keep their content layouts inside the quiet shared frame.
 
-## Layout
+Home hover stays in CSS. The ring responds in roughly 110 ms, with small image
+movement and opacity changes. Do not drive hover through React state or animate
+large background dimensions or blur. Decorative light fields must not capture
+pointer events. Respect keyboard input and reduced motion.
 
-One shared stylesheet, no new styling framework. Frame maximum 1096px with
-36px desktop padding. Vary section proportions to distinguish representative
-delivery cases, engineering judgments, and repository lists. Project bodies stay
-within 65ch; lists are separated by neutral hairlines. Use 8/16/24/32/48px gaps
-instead of separate card containers.
+Scene transitions preserve spatial context. Zoom uses transforms and decodes the
+image before animating. Return restores selection, filters, scroll and focus.
+Every destination has a real URL and an HTML link before JavaScript hydrates.
 
-## Depth and motion
+## Production acceptance
 
-Flat paper and a quiet background step for the preview. No new shadows or
-parallax. Preserve the short pointer disclosure reveal and press feedback.
-Keyboard changes and reduced-motion preferences suppress motion.
-
-## Do and don't
-
-- Use repository facts and real artwork; distinguish screenshots, diagrams and historical artwork.
-- Keep homepage and both project locales on src/data/projects.ts.
-- Show the snapshot date; last push is not proof of ongoing maintenance.
-- GitHub stars/forks use all non-fork public repositories. The showcase excludes forks and profile/configuration/site repositories.
-- Keep archived projects discoverable and their old fragment links valid.
-- Do not fetch GitHub or fonts from third-party services when visitors load pages.
-- Keep every public content page on PortfolioLayout. Project stories share project-story.css; Support uses scoped styles with the same tokens.
-
-## Responsive
-
-At 850px reduce column gaps. At 640px wrap the navigation and use one column;
-stack supporting experience and work previews instead of losing meaningful
-evidence. The small homepage illustration may be hidden. Keep project names and
-dates usable at 375px and 320px without horizontal scrolling. Native disclosures
-remain usable without JavaScript; archive links open their parent group when
-scripting is on.
-
-## Prompt guide
-
-- Extend the project list with a 24px serif title at weight 500, 14px supporting text at line-height 1.55, and #e8e6dc rules on #f5f4ed.
-- Add reading copy at 16px serif weight 400 and line-height 1.55, max-width 65ch; use #504e49 for secondary copy and #1B365D for links.
-- Keep project metrics inline: 12px JetBrains Mono, tabular numbers, no shadow or colored card; controls retain 44px targets and visible focus.
-
-Reference: https://kami.tw93.fun/index-zh.html, verified 2026-09-30.
-
-## Verified continuation, 2026-10-10
-
-Weave, Tracework and Support use the same masthead, theme, locale controls and
-1096px content frame as the portfolio. Preserve the full project descriptions
-and stable heading fragments. Project stories use a 38px title, 24px section
-headings and a quiet workflow diagram; at 850px the diagram becomes vertical.
-At 640px the reading sections and support options become a single column.
-No scroll-triggered content hiding. Keep payment QR images unmodified, with
-720 × 720 intrinsic dimensions and a white quiet zone in both themes.
-
-Homepage hierarchy remains intentional: professional delivery and contact lead,
-with a small personal illustration secondary. Chinese long-form reading gets
-1.8 line-height; metadata and metrics retain their compact scale.
+Keep Astro static output, bilingual entry pages and the existing data sources.
+No browser Babel, React development build, remote font runtime or new backend.
+Verify built routes, assets, legacy fragments, keyboard operation, mobile layouts,
+themes, language switching, zoom and browser history. Public deployment follows
+review of the complete local production build.

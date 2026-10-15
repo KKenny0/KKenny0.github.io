@@ -1,0 +1,17 @@
+---
+import SpaceLayout from '../layouts/SpaceLayout.astro';
+import SpaceApp from './space/SpaceApp';
+import {projects} from '../data/projects';
+import {routePath} from '../lib/space-routes';
+const {lang,route}=Astro.props;
+---
+<SpaceLayout lang={lang} route={route}>
+  <SpaceApp client:load locale={lang} initialRoute={route}/>
+  <noscript><nav class="static-options" aria-label={lang==='zh'?'语言与更多入口':'Language and more'}>
+    <a href={routePath(route,lang==='zh'?'en':'zh')}>{lang==='zh'?'English':'中文'}</a>
+    <a href={`${lang==='zh'?'/zh':''}/projects/`}>{lang==='zh'?'全部项目':'All projects'}</a>
+    <a href={`${lang==='zh'?'/zh':''}/notes/`}>{lang==='zh'?'全部观察':'All observations'}</a>
+    <a href={`${lang==='zh'?'/zh':''}/about/`}>{lang==='zh'?'关于 Kenny':'About Kenny'}</a>
+    {route.view==='projects'&&<details><summary>{lang==='zh'?'归档项目':'Archived projects'}</summary>{projects.filter(p=>p.archived).map(p=><a id={p.slug} href={routePath({view:'projects',item:p.slug},lang)}>{p.name}</a>)}</details>}
+  </nav></noscript>
+</SpaceLayout>

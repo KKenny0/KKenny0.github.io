@@ -1,4 +1,3 @@
-const themeButton = document.querySelector('.theme');
 const english = document.documentElement.lang === 'en';
 const languageLink = document.querySelector('.language');
 const languageTarget = languageLink?.getAttribute('href');
@@ -14,23 +13,6 @@ languageLink?.addEventListener('click', () => {
 });
 document.addEventListener('keydown', () => { document.body.dataset.keyboard = ''; });
 document.addEventListener('pointerdown', () => { delete document.body.dataset.keyboard; });
-let theme = 'light';
-try { theme = localStorage.getItem('kenny-space-theme') === 'dark' ? 'dark' : 'light'; } catch {}
-function applyTheme(value) {
-  document.documentElement.dataset.theme = value;
-  themeButton.setAttribute('aria-pressed', String(value === 'dark'));
-  themeButton.textContent = value === 'dark' ? '◑' : '◐';
-  themeButton.setAttribute('aria-label', english
-    ? `Switch to ${value === 'dark' ? 'light' : 'dark'} mode`
-    : `切换到${value === 'dark' ? '浅' : '深'}色外观`);
-}
-applyTheme(theme);
-themeButton.addEventListener('click', () => {
-  theme = document.documentElement.dataset.theme === 'dark' ? 'light' : 'dark';
-  applyTheme(theme);
-  try { localStorage.setItem('kenny-space-theme', theme); } catch {}
-});
-
 const filters = [...document.querySelectorAll('.repository-index [data-filter]')];
 const sort = document.querySelector('#sort');
 const archiveGroup = document.querySelector('.archive-group');

@@ -1,0 +1,17 @@
+/* Shared quiet frame for existing project stories and Support. Scene CSS stays isolated. */
+@font-face{font-family:SpaceJinKai;src:url('/assets/space/JinKai-Regular.woff2') format('woff2');font-weight:400;font-display:swap}
+@font-face{font-family:SpaceJinKai;src:url('/assets/space/JinKai-Medium.woff2') format('woff2');font-weight:500;font-display:swap}
+@font-face{font-family:SpaceCharter;src:url('/assets/space/Charter-Regular.woff2') format('woff2');font-weight:400 500;font-display:swap}
+:root{--serif:SpaceCharter,Georgia,SpaceJinKai,'Songti SC',serif;--mono:Mono,Consolas,var(--serif)}
+html[lang='zh-CN']{--serif:SpaceJinKai,SpaceCharter,Georgia,'Songti SC',serif}
+body{font-synthesis:none}
+h1,h2,h3,h4,h5,h6,strong,b{font-weight:500}
+.masthead .identity{font-size:20px}.masthead .identity strong{font-size:inherit}
+.masthead .nav{margin-left:auto}.masthead .nav>a{font:11px var(--mono)}
+.legacy-settings{position:fixed;bottom:20px;right:28px;z-index:50;font:12px var(--mono)}
+.legacy-settings>summary{cursor:pointer;list-style:none;background:var(--paper);padding:9px}
+.legacy-settings>div{position:absolute;bottom:44px;right:0;display:flex;align-items:center;gap:20px;padding:16px;border:1px solid var(--line);background:var(--paper);min-width:130px}
+.legacy-settings .language{border:0;padding:0}.legacy-settings .theme{margin:0}
+
+.legacy-settings>div{display:block;min-width:245px}.legacy-theme-options{display:flex;gap:7px;margin-top:12px;border-top:1px solid var(--line);padding-top:12px}.legacy-theme-options button{font:inherit;color:inherit;background:transparent;border:1px solid var(--line);padding:7px;cursor:pointer}.legacy-theme-options button[aria-pressed=true]{background:var(--ink);color:var(--paper)}
+@media(prefers-color-scheme:dark){:root:not([data-theme]){--paper:#1e1d1a;--ink:#eae9e2;--muted:#bcb8af;--line:#3c3933;--blue:#a6bfdf;--soft:#282720;--panel:#252d35;--red:#e7927e;color-scheme:dark}}

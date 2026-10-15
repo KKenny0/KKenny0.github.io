@@ -1,7 +1,4 @@
 ---
-import PortfolioLayout from '../../layouts/PortfolioLayout.astro';
-import ProjectsIndex from '../../components/ProjectsIndex.astro';
+import SpacePage from '../../components/SpacePage.astro';
 ---
-<PortfolioLayout title="Projects" lang="zh" page="projects">
-  <ProjectsIndex lang="zh" />
-</PortfolioLayout>
+<SpacePage lang="zh" route={{view:'projects',arg:'home',item:'script-weaver'}}/>

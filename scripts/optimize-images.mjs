@@ -7,6 +7,7 @@ const projects = JSON.parse(projectSource.match(/export const projects: Project\
 const sources = new Set([
   '/assets/img/practices/walk.png', '/assets/img/practices/read.png',
   '/assets/img/about/self.png', '/assets/img/about/conference.jpg',
+  ...['qiwu.png','handoff-cover.png','handoff-diagram.png','kami.png','kami-reading.webp','self-profo.jpg','videowipe-before.jpg','videowipe-after.jpg','online.webp','taste.webp','ai.webp','execution.webp','ai-perch.webp'].map(name=>'/assets/space/'+name),
   ...projects.filter(p => p.focus).map(p => p.focus.src),
 ]);
 await mkdir('public/assets/optimized', { recursive: true });
@@ -19,7 +20,7 @@ for (const src of sources) {
     manifest[src] = { width, height, src, srcset: '' };
     continue;
   }
-  const requested = src.includes('/practices/') ? [160, 320, 480]
+  const requested = (src.includes('/practices/') || /\/(online|taste|ai|execution|ai-perch)\.webp$/.test(src)) ? [160, 320, 480]
     : src.includes('/about/') ? [192, 384, 768] : [480, 960, 1520];
   const widths = [...new Set(requested.map(w => Math.min(w, width)))];
   const stem = src.replace('/assets/', '').replace(/\.[^.]+$/, '').replaceAll('/', '-');

@@ -12,9 +12,14 @@
     "images:build": "node scripts/optimize-images.mjs"
   },
   "dependencies": {
-    "astro": "^7.2.8"
+    "@astrojs/react": "^7.0.1",
+    "astro": "^7.2.8",
+    "react": "^18.3.1",
+    "react-dom": "^18.3.1"
   },
   "devDependencies": {
+    "@types/react": "^18.3.31",
+    "@types/react-dom": "^18.3.7",
     "sharp": "0.35.4"
   }
 }

@@ -1,0 +1,9 @@
+<script is:inline>
+  (()=>{
+    let preference='system';
+    try{const saved=localStorage.getItem('kenny-space-theme');if(saved==='light'||saved==='dark')preference=saved;}catch{}
+    const systemDark=typeof matchMedia==='function'&&matchMedia('(prefers-color-scheme: dark)').matches;
+    document.documentElement.dataset.themeMode=preference;
+    document.documentElement.dataset.theme=preference==='system'?(systemDark?'dark':'light'):preference;
+  })();
+</script>

@@ -1,23 +1,21 @@
 # KKenny0.github.io
 <a href='http://kkenny0.github.io/'>My Homepage.</a>
 
-The accepted delivery portfolio (designs/kenny-delivery-v2) is implemented in Astro. English routes are `/`,
-`/projects/`, and `/about/`; Chinese routes use the `/zh/` prefix. Both versions
-share `src/layouts/PortfolioLayout.astro`, `src/styles/portfolio.css`, and
-`src/scripts/portfolio.js`. Keep corresponding page copy in sync when editing.
-Language and theme choices are remembered locally; project filters and sorting
-are preserved in the URL and across language changes. Notes share the portfolio layout, with English at `/notes/` and Chinese at `/zh/notes/`.
+The homepage is one shared space organized around Online, Taste, AI and Execution.
+Astro renders static content and real links; one React root manages scene transitions,
+work selection and browsing history. English is the default at `/`; Chinese routes
+use the `/zh/` prefix. The shared implementation lives in `src/components/space/`,
+`src/layouts/SpaceLayout.astro` and `src/styles/space.css`.
+Projects, Notes, Taste artwork and About have direct routes that work on refresh.
+Language switching keeps the selected work. Theme defaults to the system appearance;
+manual Light/Dark choices are remembered locally.
 Weave, Tracework and Support also use PortfolioLayout, with matching `/zh/` routes.
 Project stories share `src/styles/project-story.css`; legacy redirects retain their routes.
-Collection filtering is shared through `src/scripts/collection.js`.
-
-The portfolio prioritizes professional credibility and project conversations.
-Both layouts use Home / Projects / Notes / About from `src/data/navigation.ts`,
-with Chinese labels on Chinese pages. Notes use translated English titles and summaries from `src/data/writings.en.json`; original articles remain Chinese on Zhihu.
-Home keeps contact links at the beginning and end; intermediate links lead to
-supporting work instead of repeating contact prompts. Projects use inline
-disclosures with explicit Expand / Collapse labels and a single-column mobile
-index, preserving browsing context and direct project links.
+Notes use translated English titles and summaries from `src/data/writings.en.json`;
+original articles remain Chinese. The complete archive extends the Online tuner.
+Projects use a searchable work table with a scrolling index; Taste keeps a stable
+artwork frame and enlarges the image in place. See `docs/personal-space.md` for
+the route and content model, and `docs/home-space-release-check.md` for verification.
 
 Project metadata and account totals use a dated snapshot (2026-09-30), not a live
 GitHub request. Update src/data/projects.ts once to keep both languages, homepage
@@ -33,9 +31,9 @@ and weave uses its logo because no interface screenshot was available.
 Responsive images are checked in under `public/assets/optimized/`, with dimensions
 and candidates in `src/data/images.generated.json`. After replacing an original
 image or adding project artwork, run `npm run images:build` and commit both outputs.
-`ResponsiveImage.astro` uses these dimensions to reserve layout space. About
-loads small previews and fetches the original only when enlarged. English pages
-use system serif/CJK fallbacks; Chinese pages retain the custom font subsets.
+Image components use these dimensions to reserve layout space. English pages use
+local Charter with JinKai for CJK fallback; Chinese pages put JinKai first.
+Both languages use actual regular and medium font files.
 
 Run `npm run dev` for development. Before release, run `npm run notes:check`,
 `npm run build`, and `npm run check:site`. Use `npm run preview` to inspect the

@@ -1,0 +1,39 @@
+---
+import {site} from '../data/site';
+import ThemeHead from '../components/ThemeHead.astro';
+import '../styles/space.css';
+import {routePath,routeTitle,canonicalPath} from '../lib/space-routes';
+const {lang,route}=Astro.props;
+const title=routeTitle(route,lang);
+const path=canonicalPath(route,lang);
+const canonical=new URL(path,site.canonical).href;
+const description=lang==='zh'?'Kenny Wu，一名在深圳的 AI 工程师。持续观察，做产品与创作，理解系统，也把工作带到完成。':'Kenny Wu, an AI engineer in Shenzhen. Observations, products, technical research and work in practice.';
+---
+<!doctype html>
+<html lang={lang==='zh'?'zh-CN':'en'}>
+  <head>
+    <meta charset="UTF-8"/>
+    <meta name="viewport" content="width=device-width,initial-scale=1"/>
+    <meta name="color-scheme" content="light dark"/>
+    <title>{title}</title>
+    <meta name="description" content={description}/>
+    <link rel="canonical" href={canonical}/>
+    <link rel="alternate" hreflang="en" href={new URL(canonicalPath(route,'en'),site.canonical).href}/>
+    <link rel="alternate" hreflang="zh-CN" href={new URL(canonicalPath(route,'zh'),site.canonical).href}/>
+    <link rel="alternate" hreflang="x-default" href={new URL(canonicalPath(route,'en'),site.canonical).href}/>
+    <link rel="icon" href={site.favicon}/>
+    <link rel="preload" href={lang==='zh'?'/assets/space/JinKai-Regular.woff2':'/assets/space/Charter-Regular.woff2'} as="font" type="font/woff2" crossorigin/>
+    <meta property="og:title" content={title}/>
+    <meta property="og:description" content={description}/>
+    <meta property="og:url" content={canonical}/>
+    <meta property="og:type" content="website"/>
+    <meta property="og:image" content={new URL('/assets/space/self-profo.jpg',site.canonical).href}/>
+    <meta name="twitter:card" content="summary"/>
+    <ThemeHead/>
+  </head>
+  <body>
+    <a class="skip" href="#main">{lang==='zh'?'跳到主要内容':'Skip to content'}</a>
+    <slot/>
+    <noscript><style>.home-lens .lens-whisper{opacity:1}.environment{display:none}.screen-enter{animation:none!important;opacity:1!important}</style></noscript>
+  </body>
+</html>

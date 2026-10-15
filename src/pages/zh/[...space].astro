@@ -1,0 +1,7 @@
+---
+import SpacePage from '../../components/SpacePage.astro';
+import {spaceEntries} from '../../lib/space-routes';
+export function getStaticPaths(){return spaceEntries().map(entry=>({params:{space:entry.path},props:{route:entry.route}}));}
+const {route}=Astro.props;
+---
+<SpacePage lang="zh" route={route}/>
