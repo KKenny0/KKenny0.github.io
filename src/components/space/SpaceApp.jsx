@@ -6,6 +6,7 @@ import {lensInfo,projects,notes,observations,curated,projectVisual,aiWritingIds,
 import {parseRoute,routePath,routeTitle,canonicalPath} from '../../lib/space-routes';
 import {SceneLink} from './SceneLink';
 import {Media} from './Media';
+import {HomePlayground} from './HomePlayground';
 import {githubSnapshot} from '../../data/projects';
 import {site} from '../../data/site';
 import {createThemeController} from '../../lib/theme';
@@ -27,6 +28,7 @@ export default function SpaceApp({initialRoute,locale}){
   const lang=locale;
   const themeController=useRef(null);
   const [settings,setSettings]=useState(false);
+  const [homeMotionPaused,setHomeMotionPaused]=useState(false);
   const [projectId,setProjectId]=useState(()=>projects.some(p=>p.slug===initialRoute.item)?initialRoute.item:'script-weaver');
   const [noteId,setNoteId]=useState(()=>notes.some(n=>n.id===initialRoute.item)?initialRoute.item:'goal');
   const [showArchived,setShowArchived]=useState(()=>!!projects.find(p=>p.slug===initialRoute.item)?.archived);
@@ -45,6 +47,11 @@ export default function SpaceApp({initialRoute,locale}){
   const displayObservations=useMemo(()=>observations.map(n=>localizedNote(n,lang)),[lang]);
   const displayCurated=useMemo(()=>curated.map(n=>localizedNote(n,lang)),[lang]);
 
+  useEffect(()=>{try{setHomeMotionPaused(sessionStorage.getItem('kenny-home-motion-paused')==='true');}catch{}},[]);
+  function toggleHomeMotion(){
+    const paused=!homeMotionPaused;setHomeMotionPaused(paused);
+    try{sessionStorage.setItem('kenny-home-motion-paused',String(paused));}catch{}
+  }
   useEffect(()=>{const controller=createThemeController(setTheme);themeController.current=controller;return()=>controller.destroy();},[]);
   useEffect(()=>{
     document.title=routeTitle(route,lang);
@@ -197,16 +204,7 @@ export default function SpaceApp({initialRoute,locale}){
       <a className="header-contact mono" href={`mailto:${site.email}`}>{t.contact} ↗</a>
     </header>
 
-    {route.view==='home'&&<main id="main" className="home-scene screen-enter" data-screen-label="Home" ref={mainRef} tabIndex="-1">
-      <div className="home-orbit" aria-hidden="true"></div>
-      <div className="home-lenses">
-        <SceneLink type="button" className="home-identity"  route={{view:'about',arg:'home'}} lang={lang} aria-label={text('认识镜头背后的 Kenny Wu','Meet Kenny Wu, the person behind the lenses')}><span className="mono">KENNY WU / AI ENGINEER</span><strong>{text(<>持续观察，<br/>也把想法做出来。</>,<>Keep noticing.<br/>Put ideas into form.</>)}</strong><span className="identity-invitation">{text('镜头背后的人','The person behind the lenses')} <span aria-hidden="true">→</span></span></SceneLink>
-        {Object.entries(lensInfo).map(([id,l])=><SceneLink className={`home-lens home-lens-${id}`} key={id} route={{view:'lens',arg:id}} lang={lang} aria-label={text(`靠近 ${l.name} 镜头`,`Explore ${l.name}`)}>
-          <span className="lens-halo"></span><span className="lens-ring"><Media src={A+l.character} alt="" /></span><span className="lens-label"><small className="mono">{l.number}</small><strong>{l.name}</strong></span><span className="lens-whisper">{lang==='zh'?l.zh:l.short}</span>
-        </SceneLink>)}
-      </div>
-      <div className="home-bottom"><span className="mono">{t.explore}</span><SceneLink type="button"  route={{view:'about',arg:'home'}} lang={lang} className="identity-link">{lang==='zh'?'认识 Kenny':'Meet Kenny'} <span>→</span></SceneLink></div>
-    </main>}
+    {route.view==='home'&&<HomePlayground lang={lang} mainRef={mainRef} settingsOpen={settings} paused={homeMotionPaused} onTogglePaused={toggleHomeMotion}/>}
 
     {route.view==='lens'&&route.arg!=='online'&&<main id="main" className={`near-scene near-${route.arg} screen-enter`} data-screen-label={`${lensInfo[route.arg]?.name||''} lens`} ref={mainRef} tabIndex="-1" onClick={e=>{if(e.target===e.currentTarget)navigate('home')}}>
       <div className="near-shell" onClick={e=>e.stopPropagation()}>

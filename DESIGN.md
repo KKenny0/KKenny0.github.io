@@ -55,10 +55,15 @@ Keep pale paper texture and a linked light field, warm ink, restrained blue and
 vermilion accents. Dark mode has its own surface tokens. Existing project stories
 and Support keep their content layouts inside the quiet shared frame.
 
-Home hover stays in CSS. The ring responds in roughly 110 ms, with small image
-movement and opacity changes. Do not drive hover through React state or animate
-large background dimensions or blur. Decorative light fields must not capture
-pointer events. Respect keyboard input and reduced motion.
+Home follows the approved C playground prototype: tonal clay scenery, four
+characters roaming and hopping independently, with a reserved introduction area.
+Hover or keyboard focus holds only the current character; collisions cannot
+move that target, including its jump height and tilt. Explicit pause remains in
+effect across scene navigation and document recreation in the current tab until
+the visitor resumes it. Hover styling stays in CSS; motion updates transforms outside
+React rendering. Do not animate large background dimensions or blur. Decorative
+scenery and light fields must not capture pointer events. Provide a pause control,
+respect live reduced-motion preferences, and stop motion while settings are open.
 
 Scene transitions preserve spatial context. Zoom uses transforms and decodes the
 image before animating. Return restores selection, filters, scroll and focus.

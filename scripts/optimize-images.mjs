@@ -7,7 +7,7 @@ const projects = JSON.parse(projectSource.match(/export const projects: Project\
 const sources = new Set([
   '/assets/img/practices/walk.png', '/assets/img/practices/read.png',
   '/assets/img/about/self.png', '/assets/img/about/conference.jpg',
-  ...['qiwu.png','handoff-cover.png','handoff-diagram.png','kami.png','kami-reading.webp','self-profo.jpg','videowipe-before.jpg','videowipe-after.jpg','online.webp','taste.webp','ai.webp','execution.webp','ai-perch.webp'].map(name=>'/assets/space/'+name),
+  ...['qiwu.png','handoff-cover.png','handoff-diagram.png','kami.png','kami-reading.webp','self-profo.jpg','videowipe-before.jpg','videowipe-after.jpg','online.webp','taste.webp','ai.webp','execution.webp','ai-perch.webp','playground-scenery.png'].map(name=>'/assets/space/'+name),
   ...projects.filter(p => p.focus).map(p => p.focus.src),
 ]);
 await mkdir('public/assets/optimized', { recursive: true });

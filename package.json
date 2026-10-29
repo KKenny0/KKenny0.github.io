@@ -8,7 +8,7 @@
     "preview": "astro preview",
     "notes:check": "node scripts/merge-zhihu-notes.mjs --check",
     "notes:merge": "node scripts/merge-zhihu-notes.mjs",
-    "check:site": "node scripts/check-personal-space.cjs",
+    "check:site": "node scripts/check-personal-space.cjs && node scripts/check-home-playground.mjs",
     "images:build": "node scripts/optimize-images.mjs"
   },
   "dependencies": {

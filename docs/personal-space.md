@@ -39,6 +39,18 @@ fragments remain supported. Historical aliases preserve query and hash.
 
 ## Data and assets
 
+Home uses `HomePlayground.jsx` and `home-playground.js`, based on the approved
+`designs/kenny-character-playground/playground-garden.html` C prototype. Scenery
+is a static decorative layer; the four characters retain real lens links. Hover
+and keyboard focus hold individual characters, including during collisions.
+Holding freezes jump height, tilt and velocity as well as ground position.
+The footer's explicit pause belongs to SpaceApp and is preserved in this tab's
+sessionStorage across scene changes and document recreation; blocked storage
+still permits in-memory pause through SPA navigation. Only Resume clears it.
+Settings, background tabs and live reduced
+motion preferences suspend movement. Unmounting cancels animation and observers.
+CSS provides a usable static arrangement before hydration or without JavaScript.
+
 - src/data/projects.ts remains authoritative: 23 projects including two archived
   records. The default collection shows 21 active projects. Reviewed copy changes
   preserve stars, forks, update dates and other source fields.
@@ -76,6 +88,10 @@ local assets and fragments, retained content, bilingual SSR and existing case
 interaction checks. It does not check remote websites or replace browser review.
 Review zoom, wheel/keyboard switching, history, empty search, archived projects,
 language/theme changes and representative phone/wide layouts.
+For the Home pause regression, import `scripts/check-home-playground-browser.mjs`
+in a connected browser session and pass its tab to `checkHomePauseRoundTrip`.
+It exercises Back, Return Home, document reload and explicit Resume against
+the rendered production preview, in addition to the motion checks in check:site.
 
 The GitHub Pages workflow deploys pushes to master. Review the complete local
 change before publishing. Roll back the migration independently of later content updates.
