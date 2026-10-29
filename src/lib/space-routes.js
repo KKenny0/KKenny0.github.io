@@ -12,7 +12,7 @@ export function routePath(route,locale='en'){
     case 'lens': path=`/lens/${route.arg}/`;break;
     case 'projects':path=route.item?`/work/${route.item}/`:'/projects/';break;
     case 'notes':path=route.item?`/notes/${route.arg==='ai'?'ai':'online'}/${route.item}/`:'/notes/';break;
-    case 'taste':path=`/taste/${route.arg}/${artworkIds[route.arg]?.[route.work||0]||'qiwu'}/`;break;
+    case 'taste':path=`/taste/${route.arg}/${artworkIds[route.arg]?.[route.work||0]||'thousand-brains'}/`;break;
     case 'about':path='/about/';break;
   }
   if(['projects','about'].includes(route.view)&&['online','taste','ai','execution'].includes(route.arg))path+=`?from=${route.arg}`;

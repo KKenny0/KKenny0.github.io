@@ -23,23 +23,23 @@
     "src": "/assets/optimized/img-about-conference-384.webp",
     "srcset": "/assets/optimized/img-about-conference-192.webp 192w, /assets/optimized/img-about-conference-384.webp 384w, /assets/optimized/img-about-conference-768.webp 768w"
   },
-  "/assets/space/qiwu.png": {
+  "/assets/space/thousand-brains.png": {
     "width": 2160,
     "height": 2880,
-    "src": "/assets/optimized/space-qiwu-960.webp",
-    "srcset": "/assets/optimized/space-qiwu-480.webp 480w, /assets/optimized/space-qiwu-960.webp 960w, /assets/optimized/space-qiwu-1520.webp 1520w"
+    "src": "/assets/optimized/space-thousand-brains-960.webp",
+    "srcset": "/assets/optimized/space-thousand-brains-480.webp 480w, /assets/optimized/space-thousand-brains-960.webp 960w, /assets/optimized/space-thousand-brains-1520.webp 1520w"
   },
-  "/assets/space/handoff-cover.png": {
+  "/assets/space/a2a-cover.png": {
     "width": 2160,
-    "height": 1216,
-    "src": "/assets/optimized/space-handoff-cover-960.webp",
-    "srcset": "/assets/optimized/space-handoff-cover-480.webp 480w, /assets/optimized/space-handoff-cover-960.webp 960w, /assets/optimized/space-handoff-cover-1520.webp 1520w"
+    "height": 920,
+    "src": "/assets/optimized/space-a2a-cover-960.webp",
+    "srcset": "/assets/optimized/space-a2a-cover-480.webp 480w, /assets/optimized/space-a2a-cover-960.webp 960w, /assets/optimized/space-a2a-cover-1520.webp 1520w"
   },
-  "/assets/space/handoff-diagram.png": {
+  "/assets/space/research-stages.png": {
     "width": 2160,
-    "height": 1080,
-    "src": "/assets/optimized/space-handoff-diagram-960.webp",
-    "srcset": "/assets/optimized/space-handoff-diagram-480.webp 480w, /assets/optimized/space-handoff-diagram-960.webp 960w, /assets/optimized/space-handoff-diagram-1520.webp 1520w"
+    "height": 1440,
+    "src": "/assets/optimized/space-research-stages-960.webp",
+    "srcset": "/assets/optimized/space-research-stages-480.webp 480w, /assets/optimized/space-research-stages-960.webp 960w, /assets/optimized/space-research-stages-1520.webp 1520w"
   },
   "/assets/space/kami.png": {
     "width": 1440,

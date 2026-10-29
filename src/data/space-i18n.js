@@ -28,9 +28,9 @@ export const localizedNote=(note,lang)=>{
   return {...note,originalTitle:note.title,title:translation?.[0]||note.title,teaser:translation?.[1]||note.teaser,label:labels[note.id]||note.label,source:note.source==='知乎'?'Zhihu':note.source==='微信合集'?'WeChat collection':note.source};
 };
 export const tasteEnglish={
-  'qiwu.png':['This and That','Two passages from Zhuangzi bring perspective and the relationship between self and other into the composition.','Read Zhuangzi ↗'],
-  'handoff-cover.png':['Pick up where we left off','A thread connects two separate sheets: a cover about handoffs for long-running Agents.','Read the technical source ↗'],
-  'handoff-diagram.png':['A cross-session handoff','An explanatory diagram of the initial environment, incremental development and handoff records.','Read the technical source ↗'],
+  'thousand-brains.png':['Three threads in A Thousand Brains','Cortical columns, reference frames, voting: a reading poster that compresses the book into three parallel threads.'],
+  'a2a-cover.png':['Collaboration stops at internal boundaries','Two paper terrains meet only at the handoff. A cover for A2A cooperation: tasks and results are exchanged, internals stay invisible.'],
+  'research-stages.png':['Three stages of a research project','A timeline links three stages in sequence, not in duration. Explanatory diagrams organize information by relation.'],
   'kami.png':['A reading workbench','An actual Obsidian workspace: warm paper and serif text keep long reading sessions focused on the content.'],
   'kami-reading.webp':['Long-form reading','The same theme in a long-form view, showing the hierarchy of text, diagrams and the sidebar.']
 };

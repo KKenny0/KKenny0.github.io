@@ -77,8 +77,26 @@ function TasteViewer({productId,index,onSelect,onProducts,onProjects,lang}){
   const text=(zh,en)=>prototypeText(lang,zh,en);
   const product=tasteProducts.find(p=>p.id===productId)||tasteProducts[0],originalWork=product.works[index]||product.works[0];
   const translation=tasteEnglish[originalWork.image],work=lang==='zh'?originalWork:{...originalWork,title:translation[0],description:translation[1],sourceLabel:translation[2]};
-  const dialog=React.useRef(null),image=React.useRef(null),trigger=React.useRef(null),motion=React.useRef(null),zoomSequence=React.useRef(0);
+  const dialog=React.useRef(null),image=React.useRef(null),trigger=React.useRef(null),frame=React.useRef(null),motion=React.useRef(null),zoomSequence=React.useRef(0);
   React.useEffect(()=>()=>{zoomSequence.current+=1;motion.current?.cancel();},[]);
+  // Keep the artwork inside the circular viewfinder: scale it to the largest rect of its own aspect inscribed in the ring ellipse.
+  React.useLayoutEffect(()=>{
+    const button=trigger.current,ring=frame.current?.querySelector('.taste-frame-ring'),img=button?.querySelector('img');
+    if(!button||!ring||!img)return;
+    const fit=()=>{
+      const nw=img.naturalWidth,nh=img.naturalHeight;if(!nw||!nh)return;
+      const rb=ring.getBoundingClientRect(),aspect=nw/nh;
+      let height=1/Math.sqrt((aspect/rb.width)**2+(1/rb.height)**2),width=aspect*height;
+      const box=button.getBoundingClientRect(),cs=getComputedStyle(button);
+      const scale=Math.min(1,(box.width-parseFloat(cs.paddingLeft)-parseFloat(cs.paddingRight))/width,(box.height-parseFloat(cs.paddingTop)-parseFloat(cs.paddingBottom))/height);
+      img.style.width=width*scale+'px';img.style.height=height*scale+'px';
+    };
+    fit();
+    const observer=new ResizeObserver(fit);
+    observer.observe(frame.current);
+    img.addEventListener('load',fit);
+    return()=>{observer.disconnect();img.removeEventListener('load',fit);img.style.width='';img.style.height='';};
+  },[work.image]);
   async function zoom(e){
     const node=dialog.current,isOpen=node.open,reduced=matchMedia('(prefers-reduced-motion: reduce)').matches||document.documentElement.dataset.input==='keyboard'||e?.detail===0||e?.type==='cancel';
     const sequence=++zoomSequence.current;
@@ -95,7 +113,7 @@ function TasteViewer({productId,index,onSelect,onProducts,onProjects,lang}){
   }
   return <section className="taste-viewer">
     <div className="taste-viewer-top"><SceneLink route={{view:'lens',arg:'taste'}} lang={lang} onActivate={onProducts}>← {lang==='zh'?'产品':'Products'}</SceneLink><span className="mono">TASTE / {product.name} / {String(index+1).padStart(2,'0')}</span><SceneLink route={{view:'projects',arg:'taste',item:productId==='kami-reader'?'obsidian-kami':'card-skill'}} lang={lang} onActivate={onProjects}>{lang==='zh'?'全部项目 →':'All projects →'}</SceneLink></div>
-    <div className="taste-frame"><span className="taste-frame-ring" aria-hidden="true"></span><button type="button" className="taste-art" ref={trigger} onClick={zoom} aria-label={`${text('查看大图：','Zoom in: ')}${work.title}`}><Media src={'/assets/space/'+work.image} alt={work.title}/><span className="art-zoom-label">＋ {text('查看大图','Zoom in')}</span></button></div>
+    <div className="taste-frame" ref={frame}><span className="taste-frame-ring" aria-hidden="true"></span><button type="button" className="taste-art" ref={trigger} onClick={zoom} aria-label={`${text('查看大图：','Zoom in: ')}${work.title}`}><Media src={'/assets/space/'+work.image} alt={work.title}/><span className="art-zoom-label">＋ {text('查看大图','Zoom in')}</span></button></div>
     <div className="taste-caption"><div><span className="mono">{product.name} / {index+1} OF {product.works.length}{lang==='en'?` · IMAGE LANGUAGE: ${work.imageLanguage||'CHINESE'}`:''}</span><h1>{work.title}</h1></div><div><p>{work.description}</p><div className="taste-sources"><a href={'/assets/space/'+work.image} target="_blank" rel="noopener noreferrer">{text('打开原图 ↗','Open original image ↗')}</a>{work.source&&<a href={work.source} target="_blank" rel="noopener noreferrer">{work.sourceLabel}</a>}<a href={product.url} target="_blank" rel="noopener noreferrer">GitHub ↗</a></div></div></div>
     <nav className="taste-switch" aria-label={text('切换作品','Switch artwork')}><SceneLink route={{view:'taste',arg:productId,work:Math.max(0,index-1)}} lang={lang} aria-disabled={index===0} onActivate={()=>onSelect(Math.max(0,index-1))}>← {text('上一幅','Previous')}</SceneLink><div>{product.works.map((w,i)=><SceneLink route={{view:'taste',arg:productId,work:i}} lang={lang} key={w.title} aria-label={`${text('查看作品：','View artwork: ')}${lang==='zh'?w.title:tasteEnglish[w.image][0]}`} aria-current={i===index} onActivate={()=>onSelect(i)}><span></span></SceneLink>)}</div><SceneLink route={{view:'taste',arg:productId,work:Math.min(product.works.length-1,index+1)}} lang={lang} aria-disabled={index===product.works.length-1} onActivate={()=>onSelect(Math.min(product.works.length-1,index+1))}>{text('下一幅','Next')} →</SceneLink></nav>
     <dialog ref={dialog} className="art-dialog" aria-label={`${work.title} · ${text('大图','Enlarged artwork')}`} onKeyDown={e=>{if(e.key!=='Tab')return;const buttons=[...dialog.current.querySelectorAll('button')],first=buttons[0],last=buttons[buttons.length-1];if(e.shiftKey&&document.activeElement===first){e.preventDefault();last.focus();}else if(!e.shiftKey&&document.activeElement===last){e.preventDefault();first.focus();}}} onCancel={e=>{e.preventDefault();zoom(e);}} onClick={e=>{if(e.target===e.currentTarget)zoom(e);}}><button type="button" className="art-dialog-close" onClick={zoom} aria-label={text('关闭大图','Close')}>− <span>{text('关闭大图','Close')}</span></button><button type="button" className="expanded-art" onClick={zoom} aria-label={text('关闭大图并返回','Close and return')}><Media ref={image} sizes="100vw" loading="eager" src={'/assets/space/'+work.image} alt={work.title}/></button></dialog>

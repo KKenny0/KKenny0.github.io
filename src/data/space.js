@@ -28,7 +28,7 @@ export const observations=notes.map(n=>{
 export const curated=onlineStops.slice().reverse().map(s=>observations.find(n=>n.url===s.url)).filter(Boolean);
 export const projectVisual={
 
-  'card-skill':{src:'qiwu.png',kind:'poster'},
+  'card-skill':{src:'thousand-brains.png',kind:'poster'},
   'obsidian-kami':{src:'kami.png',kind:'screen'},
   'kami-reader-companion':{src:'kami.png',kind:'screen'}
 };
