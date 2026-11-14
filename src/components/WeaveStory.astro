@@ -11,116 +11,124 @@ const t = (en: string, zh: string) => lang === 'en' ? en : zh;
     <section class="story-hero" aria-labelledby="weave-title">
       <div class="story-hero-copy">
         <a class="story-back" href={`${base}/projects/`}>{t("← Projects", "← 项目")}</a>
-        <div class="story-hero-meta"><span>{t("02 / Think", "02 / 思考")}</span><span>{t("Research skill", "研究技能")}</span><span>{t("Claude Code + Codex", "Claude Code + Codex")}</span></div>
+        <div class="story-hero-meta"><span>{t("02 / Think", "02 / 思考")}</span><span>{t("Research & writing skill", "研究与写作技能")}</span><span>{t("Claude Code + Codex", "Claude Code + Codex")}</span></div>
         <h1 id="weave-title">{t("weave", "weave")}</h1>
-        <p class="story-hero-subtitle">{t("Find the frame that makes a question clear.", "找到能把问题讲清楚的取景框。")}</p>
+        <p class="story-hero-subtitle">{t("Research the question. Write it clearly.", "围绕你的问题，研究并写清楚。")}</p>
       </div>
 
       <div class="story-hero-aside">
-        <p>{t("When a smooth summary hides where the ground is weak, weave keeps the evidence visible and lets the material choose its shape.", "流畅的总结可能掩盖证据的薄弱处。weave 保留证据，让材料决定文章的结构。")}</p>
+        <p>{t("Start with a question, a few sources, or code. weave researches the gaps around your goal, develops a provisional explanation, and turns it into a focused first draft suited to your readers.", "给一个问题、几份材料或代码，weave 会围绕目标补足证据，形成可修正的解释方向，写成重点清楚、适合读者的初稿。")}</p>
         <div class="story-hero-actions">
           <a class="story-link" href="https://github.com/KKenny0/weave" target="_blank" rel="noopener">{t("Read the repository ↗", "查看代码仓库 ↗")}</a>
-          <span class="story-hero-note">{t("Evidence first. Then the frame.", "证据先行，取景框决定文章")}</span>
+          <span class="story-hero-note">{t("Your goal guides the research.", "让目标引导研究")}</span>
         </div>
       </div>
 
       <div class="story-board">
-        <div class="story-board-heading"><span>{t("Frame Decision", "取景框选择")}</span><span>{t("the article is the last step", "文章是最后一步")}</span></div>
+        <div class="story-board-heading"><span>{t("Research & writing", "研究与写作")}</span><span>{t("one flow, with room to return", "一条可以往返的主线")}</span></div>
         <div class="story-board-flow">
-          <div class="story-board-node"><strong>{t("x", "x")}</strong><span>{t("material", "材料")}</span></div>
+          <div class="story-board-node"><strong>{t("Question & reader goals", "问题与读者目标")}</strong><span>{t("What to explain, and for whom", "要讲清什么，写给谁")}</span></div>
           <span class="story-board-arrow" aria-hidden="true">→</span>
-          <div class="story-board-node"><strong>{t("E", "E")}</strong><span>{t("evidence", "证据")}</span></div>
+          <div class="story-board-node"><strong>{t("Research the gaps", "围绕缺口研究")}</strong><span>{t("Find the evidence the answer needs", "补足回答所需的证据")}</span></div>
           <span class="story-board-arrow" aria-hidden="true">→</span>
-          <div class="story-board-node story-board-node--candidate"><strong>{t("f₁ · f₂ · f₃", "f₁ · f₂ · f₃")}</strong><span>{t("candidate frames", "候选取景框")}</span></div>
+          <div class="story-board-node"><strong>{t("Provisional explanation", "暂定解释方向")}</strong><span>{t("Connect and challenge the evidence", "组织证据，检验解释")}</span></div>
           <span class="story-board-arrow" aria-hidden="true">→</span>
-          <div class="story-board-node story-board-node--winner"><strong>{t("f*", "f*")}</strong><span>{t("selected frame", "选定取景框")}</span></div>
+          <div class="story-board-node"><strong>{t("Write", "写作")}</strong><span>{t("Develop mechanisms and examples", "展开机制与例子")}</span></div>
           <span class="story-board-arrow" aria-hidden="true">→</span>
-          <div class="story-board-node"><strong>{t("f*(x)", "f*(x)")}</strong><span>{t("article", "文章")}</span></div>
+          <div class="story-board-node"><strong>{t("Review against brief & evidence", "对照委托与证据复查")}</strong><span>{t("Check the actual draft", "回读实际成稿")}</span></div>
         </div>
-        <p class="story-board-caption">{t("A frame earns its place when it changes what the article keeps, how it moves, and where it stops.", "一个取景框只有真正改变文章保留什么、如何展开、在哪里停下，才值得使用。")}</p>
+        <p class="story-board-caption">{t("When a problem appears, return to the step it affects. The frame is provisional: evidence can revise it, while the original goal stays in view.", "发现问题时，回到受影响的步骤。取景框是暂定的解释方向，可以被证据修正，但始终要对照原始目标。")}</p>
       </div>
     </section>
 
     <section class="story-question" aria-labelledby="weave-question-title">
       <span class="story-section-label">{t("01 / The question", "01 / 问题")}</span>
       <div>
-        <h2 id="weave-question-title">{t("A readable answer can still hide its ground.", "读得顺的回答，也可能藏住依据。")}</h2>
-        <p>{t("Research agents are good at making scattered material sound coherent. The dangerous part is what disappears in the smoothing: disagreement, weak evidence, and the boundary where a claim stops working.", "研究智能体善于把分散材料组织成连贯的文字。危险在于，分歧、薄弱证据和结论失效的边界可能在这个过程中消失。")}</p>
-        <p>{t("weave treats the article as a view over evidence, not as a summary of everything the model can say.", "weave 把文章视为对证据的一种组织方式，而非模型所能说的一切的汇总。")}</p>
+        <h2 id="weave-question-title">{t("A readable answer still needs to explain what matters.", "读得顺，还要讲清你关心的事。")}</h2>
+        <p>{t("A fluent summary can leave the hard mechanism unexplained, assume knowledge the reader lacks, or smooth over disagreement. Research needs to follow the question far enough to support the explanation.", "流畅的总结可能跳过最难理解的机制，默认读者知道必要背景，或抹平来源之间的分歧。研究需要沿着问题深入，直到证据足以支撑解释。")}</p>
+        <p>{t("weave keeps the assignment in view: spend depth on your priorities, supply the reader's missing prerequisites, and make the sources and limits traceable.", "weave 始终对照这次委托：在你关心的地方展开，补上读者需要的前提，并让来源和结论边界可以回查。")}</p>
       </div>
     </section>
 
-    <section class="story-routes" aria-labelledby="weave-routes-title">
+    <section class="story-routes" aria-labelledby="weave-examples-title">
       <div class="story-section-intro">
-        <span class="story-section-label">{t("02 / Three routes", "02 / 三条路径")}</span>
+        <span class="story-section-label">{t("02 / In practice", "02 / 实际用途")}</span>
         <div>
-          <h2 id="weave-routes-title">{t("The material changes the lens.", "材料不同，观察角度也不同。")}</h2>
-          <p>{t("One pipeline, three ways into a question. The route decides what counts as evidence before any frame is allowed to lead.", "同一套流程，从三个入口研究问题。先确定哪些材料算证据，再选择文章的取景框。")}</p>
+          <h2 id="weave-examples-title">{t("Start with what you want to understand.", "从你想弄懂的问题开始。")}</h2>
+          <p>{t("These are examples of the same research-and-writing flow. State your question, readers, and materials; the evidence gaps determine the next action.", "这些例子共用同一条研究写作主线。说明问题、读者和材料，接下来的研究动作由证据缺口决定。")}</p>
         </div>
       </div>
       <div class="story-route-list">
-        <div class="story-route story-route-heading" aria-hidden="true"><span>{t("No.", "序号")}</span><span>{t("Route", "路径")}</span><span>{t("Input", "输入材料")}</span><span>{t("Leaves you with", "产出")}</span></div>
-        <div class="story-route"><strong>{t("01", "01")}</strong><h3>{t("deep-read", "deep-read")}</h3><p>{t("Papers, articles, interviews, reports", "论文、文章、访谈、报告")}</p><p>{t("Evidence-grounded Chinese longform", "以证据为基础的中文长文")}</p></div>
-        <div class="story-route"><strong>{t("02", "02")}</strong><h3>{t("source-dive", "source-dive")}</h3><p>{t("Repositories, frameworks, technical projects", "代码仓库、框架、技术项目")}</p><p>{t("Behavior paths, state owners, failure boundaries", "行为路径、状态归属、失败边界")}</p></div>
-        <div class="story-route"><strong>{t("03", "03")}</strong><h3>{t("survey", "survey")}</h3><p>{t("Domains and research directions", "领域与研究方向")}</p><p>{t("A map whose structure follows the source set", "结构随材料而定的领域地图")}</p></div>
+        <div class="story-route story-route-heading" aria-hidden="true"><span>{t("No.", "序号")}</span><span>{t("Use", "用途")}</span><span>{t("Starting point", "从哪里开始")}</span><span>{t("What to explain", "要讲清什么")}</span></div>
+        <div class="story-route"><strong>{t("01", "01")}</strong><h3>{t("Explain a technology from scratch", "从零讲懂技术")}</h3><p>{t("Research browser use for readers with no prior knowledge.", "为完全不了解这个领域的读者研究 browser use，让人理解 AI 如何操作浏览器。")}</p><p>{t("Explain its principles, evolution, and current approaches through a concrete browser task.", "用具体浏览器任务串起实现原理、技术演进和当前方案。")}</p></div>
+        <div class="story-route"><strong>{t("02", "02")}</strong><h3>{t("Study one question across mixed sources", "用混合材料研究同一个问题")}</h3><p>{t("Bring papers, design documents, and a repository to the same question.", "带着同一个问题，结合论文、设计文档与代码仓库。")}</p><p>{t("Connect claims to implementation, retain disagreements, and explain what the combined evidence supports.", "把主张与实现对应起来，保留分歧，说明综合证据能支持什么。")}</p></div>
+        <div class="story-route"><strong>{t("03", "03")}</strong><h3>{t("Revisit a draft with new evidence", "判断新材料如何影响已有稿件")}</h3><p>{t("Provide an existing draft and newly available material.", "提供已有稿件和新出现的材料。")}</p><p>{t("Decide whether to add facts, revise the explanation, or develop a separate article.", "判断应当补事实、改解释，还是另写一篇。")}</p></div>
       </div>
     </section>
 
     <section class="story-gates" aria-labelledby="weave-gates-title">
       <div class="story-section-intro">
-        <span class="story-section-label">{t("03 / Frame gates", "03 / 取景框检查")}</span>
+        <span class="story-section-label">{t("03 / How it works", "03 / 如何做到")}</span>
         <div>
-          <h2 id="weave-gates-title">{t("A frame is useful only when it earns the crop.", "取舍有依据，取景框才有用。")}</h2>
-          <p>{t("Candidate count is not the goal. A frame survives only when it is faithful, specific, selective, honest about its limits, and meaningfully different from the alternatives.", "目标不在于凑够候选数量。只有忠于证据、具体、有取舍、坦诚说明边界，并且与其他选项有实质区别的取景框，才能留下。")}</p>
+          <h2 id="weave-gates-title">{t("A frame gives the explanation direction.", "用可修正的取景框组织解释。")}</h2>
+          <p>{t("A frame is a provisional explanation that serves your goal. It guides evidence selection, mechanism depth, and boundaries. Evidence can change it; there is no fixed candidate count or required frame-selection step before research begins.", "取景框是服务于用户目标的暂定解释方向，决定证据取舍、机制如何展开，以及结论的边界。证据可以修正它，不必凑够固定数量的候选，也不要求用户在研究前先选框。")}</p>
         </div>
       </div>
       <ol class="story-gate-list">
-        <li><span>{t("01", "01")}</span><strong>{t("Evidence fidelity", "忠于证据")}</strong><p>{t("Every load-bearing part can be traced back to the evidence model.", "支撑结论的每个关键部分，都能追溯到证据模型。")}</p></li>
-        <li><span>{t("02", "02")}</span><strong>{t("Specificity", "具体性")}</strong><p>{t("It cannot be moved unchanged onto the next source or neighboring topic.", "不能原封不动地套用到下一份材料或相邻话题。")}</p></li>
-        <li><span>{t("03", "03")}</span><strong>{t("Selection effect", "取舍效果")}</strong><p>{t("It changes the evidence, chapter order, causal story, or predicted boundary.", "确实改变证据选择、章节顺序、因果解释或预期边界。")}</p></li>
-        <li><span>{t("04", "04")}</span><strong>{t("Boundary honesty", "边界诚实")}</strong><p>{t("It names the condition, counterexample, or evidence gap that limits it.", "说明限制结论的条件、反例或证据缺口。")}</p></li>
-        <li><span>{t("05", "05")}</span><strong>{t("Distinctness", "实质区别")}</strong><p>{t("It is not a synonym wearing a different title.", "不能只换一个近义标题。")}</p></li>
+        <li><span>{t("01", "01")}</span><strong>{t("Keep the goal", "对照目标")}</strong><p>{t("The explanation must address the original priorities at the depth the readers need.", "解释要回应原始重点，并达到目标读者需要的深度。")}</p></li>
+        <li><span>{t("02", "02")}</span><strong>{t("Select evidence", "选择证据")}</strong><p>{t("Keep the sources that support or challenge the answer, including contradictions and version limits.", "选择能支撑或挑战回答的材料，保留反证、分歧与版本限制。")}</p></li>
+        <li><span>{t("03", "03")}</span><strong>{t("Develop the mechanism", "展开机制")}</strong><p>{t("Connect necessary concepts and concrete examples so the reader can follow the reasoning.", "接通必要概念，用具体例子展开机制，让读者能跟上推理。")}</p></li>
+        <li><span>{t("04", "04")}</span><strong>{t("Test the boundary", "检验边界")}</strong><p>{t("Look for conditions or counterexamples that narrow the claim or require a different explanation.", "寻找会缩小结论、推翻解释的条件或反例。")}</p></li>
+        <li><span>{t("05", "05")}</span><strong>{t("Revise the frame", "修正取景框")}</strong><p>{t("Return to research when evidence fails, and replace the explanation when needed without silently dropping the user's priorities.", "证据不足就补研究，解释不成立就更换方向，同时保留用户明确关心的问题。")}</p></li>
       </ol>
     </section>
 
     <section class="story-boundary" aria-labelledby="weave-boundary-title">
       <div class="story-section-intro">
-        <span class="story-section-label">{t("04 / Boundary", "04 / 边界")}</span>
+        <span class="story-section-label">{t("04 / Delivery checks", "04 / 交付检查")}</span>
         <div>
-          <h2 id="weave-boundary-title">{t("The honest part is part of the product.", "诚实呈现边界，也是产品的一部分。")}</h2>
-          <p>{t("weave does not promise a perfect view. It makes the crop inspectable, then leaves the edge visible.", "weave 不承诺完美的视角。它让取舍可以检查，也让未覆盖的部分保持可见。")}</p>
+          <h2 id="weave-boundary-title">{t("Review the draft against the assignment.", "把成稿放回委托里检查。")}</h2>
+          <p>{t("A complete process does not establish draft quality. Review the actual written file against the brief, the reader's prerequisites, and the evidence.", "流程走完不等于初稿达标。交付前回读实际文件，对照委托、读者前提与证据检查。")}</p>
         </div>
       </div>
       <div class="story-boundary-grid">
         <div>
-          <span class="story-boundary-mark">{t("It does", "会做什么")}</span>
+          <span class="story-boundary-mark">{t("What gets checked", "检查什么")}</span>
           <ul>
-            <li>{t("Collect sources before composing.", "先收集材料，再组织文章。")}</li>
-            <li>{t("Reserve evidence and test the selected frame against it.", "留出部分证据，用来检验选定的取景框。")}</li>
-            <li>{t("Separate verified behavior from static inference.", "区分已验证的行为与静态推断。")}</li>
+            <li>{t("Goal fit: priorities, depth, audience, and requested form.", "目标匹配：重点、深度、读者适配与交付形式。")}</li>
+            <li>{t("Self-contained explanation: the final article supplies the concepts, mechanisms, and examples its stated readers need.", "解释自足：仅凭成稿及其声明的读者前提，就能跟上核心概念、机制与例子。")}</li>
+            <li>{t("Evidence and the delivered file: verify key sources, separate facts from inference, retain counterevidence and version limits, and read back the written file to check its content, format, and links.", "证据与实际产物：复核关键来源，区分事实与推断，保留反证和版本限制；写入后回读实际文件，检查内容、格式与链接。")}</li>
           </ul>
         </div>
         <div>
-          <span class="story-boundary-mark">{t("It does not", "不会做什么")}</span>
+          <span class="story-boundary-mark">{t("What the checks can establish", "检查能说明什么")}</span>
           <ul>
-            <li>{t("Turn one thin source into a field-wide claim.", "凭一份薄弱材料推导整个领域的结论。")}</li>
-            <li>{t("Keep a frame alive just to manufacture a choice.", "为了凑出选择而保留无用的取景框。")}</li>
-            <li>{t("Replace the archived Loom thinking and vault utilities.", "替代已归档的 Loom 思考与知识库工具。")}</li>
+            <li>{t("Hold-out tests and access-order audits run only when explicitly needed, with the evidence required to support their claims.", "只有明确需要时才启用预留证据（hold-out）检验与访问顺序审计，并提供相应依据。")}</li>
+            <li>{t("Model self-review, independent-context reading, and human feedback provide different kinds of evidence; they are reported separately.", "模型自检、独立上下文阅读与真人反馈是不同证据，分别如实报告。")}</li>
+            <li>{t("Mechanical checks verify file requirements. They do not establish explanation quality or prove that a human reader understood it.", "机械检查只能核对文件要求，不能证明解释质量，也不能冒充真人理解效果。")}</li>
           </ul>
         </div>
       </div>
     </section>
 
     <section class="story-cta" aria-labelledby="weave-cta-title">
-      <span class="story-section-label">{t("05 / Continue", "05 / 继续探索")}</span>
+      <span class="story-section-label">{t("05 / Get started", "05 / 开始使用")}</span>
       <div>
-        <h2 id="weave-cta-title">{t("Bring a question with a little weight.", "带来一个值得认真研究的问题。")}</h2>
-        <p>{t("Install the skill, give it your material, and see which frame the evidence can actually carry.", "安装技能，提供材料，看看证据究竟能支撑怎样的取景框。")}</p>
+        <h2 id="weave-cta-title">{t("Bring a question you want to understand.", "带来一个你想弄懂的问题。")}</h2>
+        <p>{t("Install with Node.js and npm, then tell weave what to research, who it is for, and what you want to receive.", "通过 Node.js 和 npm 安装，再告诉 weave 要研究什么、写给谁，以及希望得到怎样的产物。")}</p>
+        <pre class="weave-install" aria-label={t("Install weave", "安装 weave")}><code>npx skills add KKenny0/weave --skill weave -g -y</code></pre>
         <div class="story-cta-links">
           <a class="story-link" href="https://github.com/KKenny0/weave" target="_blank" rel="noopener">{t("Open weave on GitHub ↗", "在 GitHub 查看 weave ↗")}</a>
+          <a class="story-link" href="https://github.com/KKenny0/weave/releases/tag/v2.0.0" target="_blank" rel="noopener">{t("v2.0.0 release ↗", "v2.0.0 版本说明 ↗")}</a>
+          <a class="story-link" href="https://github.com/KKenny0/weave/blob/main/MIGRATION.md" target="_blank" rel="noopener">{t("Migration guide ↗", "迁移说明 ↗")}</a>
           <a class="story-link story-link--quiet" href={`${base}/projects/`}>{t("Back to the project index ↗", "返回项目列表 ↗")}</a>
         </div>
       </div>
     </section>
   </main>
 </PortfolioLayout>
+
+<style>
+  .weave-install { min-width: 0; max-width: 100%; margin-top: 20px; padding: 16px; background: var(--soft); color: var(--ink); white-space: pre-wrap; overflow-wrap: anywhere; overflow-x: auto; }
+  .weave-install code { font: 14px/1.6 var(--mono); }
+</style>
