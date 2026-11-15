@@ -1,0 +1,27 @@
+---
+// 中文版工作室墙面原型入口，与 /workbench/、/onepage/ 并列，便于对比。
+import {site} from '../../data/site';
+import ThemeHead from '../../components/ThemeHead.astro';
+import '../../styles/space.css';
+import '../../styles/home-workbench.css';
+import '../../styles/home-studio.css';
+import HomeStudio from '../../components/space/HomeStudio';
+---
+<!doctype html>
+<html lang="zh-CN">
+  <head>
+    <meta charset="UTF-8"/>
+    <meta name="viewport" content="width=device-width,initial-scale=1"/>
+    <meta name="robots" content="noindex"/>
+    <title>工作室原型 · Kenny Wu</title>
+    <meta name="description" content="原型：一面工作室墙——索引轨上的四个方向，画架上的焦点对象就地切换，真实作品与文章直达原文。"/>
+    <link rel="icon" href={site.favicon}/>
+    <link rel="preload" href="/assets/space/JetBrainsMono.woff2" as="font" type="font/woff2" crossorigin/>
+    <ThemeHead/>
+    <noscript><style>.st-easel-body[hidden]{display:block}.st-rail{display:none}.st-flip{display:none}</style></noscript>
+  </head>
+  <body>
+    <a class="skip" href="#main">跳到主要内容</a>
+    <HomeStudio client:load lang="zh"/>
+  </body>
+</html>

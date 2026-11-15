@@ -1,0 +1,25 @@
+---
+// 中文版拼贴墙原型入口，与 /collage/ 互为语言镜像。
+import {site} from '../../data/site';
+import ThemeHead from '../../components/ThemeHead.astro';
+import '../../styles/space.css';
+import '../../styles/home-collage.css';
+import HomeCollage from '../../components/space/HomeCollage';
+---
+<!doctype html>
+<html lang="zh-CN">
+  <head>
+    <meta charset="UTF-8"/>
+    <meta name="viewport" content="width=device-width,initial-scale=1"/>
+    <meta name="robots" content="noindex"/>
+    <title>拼贴墙 · Kenny Wu</title>
+    <meta name="description" content="作品、观察和项目，汇集在一面个人拼贴墙上。"/>
+    <link rel="icon" href={site.favicon}/>
+    <link rel="preload" href="/assets/space/JetBrainsMono.woff2" as="font" type="font/woff2" crossorigin/>
+    <ThemeHead/>
+  </head>
+  <body>
+    <a class="skip" href="#main">跳到内容</a>
+    <HomeCollage client:load lang="zh"/>
+  </body>
+</html>

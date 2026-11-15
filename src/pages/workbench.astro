@@ -1,0 +1,26 @@
+---
+// Independent prototype entry for the steadier home workbench. Lives beside the
+// real home at `/` so the two can be compared; not linked from site navigation.
+import {site} from '../data/site';
+import ThemeHead from '../components/ThemeHead.astro';
+import '../styles/space.css';
+import '../styles/home-workbench.css';
+import HomeWorkbench from '../components/space/HomeWorkbench';
+---
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8"/>
+    <meta name="viewport" content="width=device-width,initial-scale=1"/>
+    <meta name="robots" content="noindex"/>
+    <title>Home workbench prototype · Kenny Wu</title>
+    <meta name="description" content="Prototype: a personal introduction up front, four characters at their work stations, with real artwork and article links."/>
+    <link rel="icon" href={site.favicon}/>
+    <link rel="preload" href="/assets/space/JetBrainsMono.woff2" as="font" type="font/woff2" crossorigin/>
+    <ThemeHead/>
+  </head>
+  <body>
+    <a class="skip" href="#main">Skip to content</a>
+    <HomeWorkbench client:load lang="en"/>
+  </body>
+</html>

@@ -14,6 +14,8 @@ export function routePath(route,locale='en'){
     case 'notes':path=route.item?`/notes/${route.arg==='ai'?'ai':'online'}/${route.item}/`:'/notes/';break;
     case 'taste':path=`/taste/${route.arg}/${artworkIds[route.arg]?.[route.work||0]||'thousand-brains'}/`;break;
     case 'about':path='/about/';break;
+    case 'support':path='/support/';break;
+    case 'story':path=`/projects/${route.arg}/`;break;
   }
   if(['projects','about'].includes(route.view)&&['online','taste','ai','execution'].includes(route.arg))path+=`?from=${route.arg}`;
   if(route.view==='notes'&&['memory','context','agents','ai'].includes(route.topic))path+=`?topic=${route.topic}`;
@@ -55,6 +57,6 @@ export function spaceEntries(){
 
 export function routeTitle(route,locale){
   const note=notes.find(n=>n.id===route.item);
-  const name=route.view==='home'?'Kenny Wu':route.view==='lens'?lensInfo[route.arg]?.name:route.view==='projects'?projects.find(p=>p.slug===route.item)?.name||(locale==='zh'?'作品台':'Projects'):route.view==='notes'?(note?localizedNote(note,locale).title:locale==='zh'?'观察档案':'Notes'):route.view==='taste'?'Taste':locale==='zh'?'关于 Kenny':'About Kenny';
+  const name=route.view==='home'?'Kenny Wu':route.view==='lens'?lensInfo[route.arg]?.name:route.view==='projects'?projects.find(p=>p.slug===route.item)?.name||(locale==='zh'?'作品台':'Projects'):route.view==='notes'?(note?localizedNote(note,locale).title:locale==='zh'?'观察档案':'Notes'):route.view==='taste'?'Taste':route.view==='support'?(locale==='zh'?'支持':'Support'):route.view==='story'?(route.arg==='tracework'?'Tracework':'weave'):locale==='zh'?'关于 Kenny':'About Kenny';
   return route.view==='home'?name:`${name} · Kenny Wu`;
 }

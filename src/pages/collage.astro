@@ -1,0 +1,27 @@
+---
+// Independent prototype entry for the collage wall home. Lives beside the real
+// home at `/` and the other prototypes so nothing existing changes; not linked
+// from site navigation.
+import {site} from '../data/site';
+import ThemeHead from '../components/ThemeHead.astro';
+import '../styles/space.css';
+import '../styles/home-collage.css';
+import HomeCollage from '../components/space/HomeCollage';
+---
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8"/>
+    <meta name="viewport" content="width=device-width,initial-scale=1"/>
+    <meta name="robots" content="noindex"/>
+    <title>Collage wall · Kenny Wu</title>
+    <meta name="description" content="A personal collage wall of artwork, observations and projects."/>
+    <link rel="icon" href={site.favicon}/>
+    <link rel="preload" href="/assets/space/JetBrainsMono.woff2" as="font" type="font/woff2" crossorigin/>
+    <ThemeHead/>
+  </head>
+  <body>
+    <a class="skip" href="#main">Skip to content</a>
+    <HomeCollage client:load lang="en"/>
+  </body>
+</html>

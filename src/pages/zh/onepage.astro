@@ -1,0 +1,26 @@
+---
+// 中文版单页原型入口，与 `/zh/workbench/` 及现有首页并行，便于对比。
+import {site} from '../../data/site';
+import ThemeHead from '../../components/ThemeHead.astro';
+import '../../styles/space.css';
+import '../../styles/home-workbench.css';
+import '../../styles/home-onepage.css';
+import HomeOnePage from '../../components/space/HomeOnePage';
+---
+<!doctype html>
+<html lang="zh-CN">
+  <head>
+    <meta charset="UTF-8"/>
+    <meta name="viewport" content="width=device-width,initial-scale=1"/>
+    <meta name="robots" content="noindex"/>
+    <title>单页首页原型 · Kenny Wu</title>
+    <meta name="description" content="原型：一页浏览——肖像介绍、就地展开的精选作品、直达原文的最近文章、工作经历与联系，顶部锚点导航。"/>
+    <link rel="icon" href={site.favicon}/>
+    <link rel="preload" href="/assets/space/JetBrainsMono.woff2" as="font" type="font/woff2" crossorigin/>
+    <ThemeHead/>
+  </head>
+  <body>
+    <a class="skip" href="#main">跳到主要内容</a>
+    <HomeOnePage client:load lang="zh"/>
+  </body>
+</html>

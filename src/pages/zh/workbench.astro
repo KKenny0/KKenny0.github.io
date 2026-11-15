@@ -1,0 +1,25 @@
+---
+// 中文版工作台原型入口，与 `/zh/` 的现有首页并行，便于对比。
+import {site} from '../../data/site';
+import ThemeHead from '../../components/ThemeHead.astro';
+import '../../styles/space.css';
+import '../../styles/home-workbench.css';
+import HomeWorkbench from '../../components/space/HomeWorkbench';
+---
+<!doctype html>
+<html lang="zh-CN">
+  <head>
+    <meta charset="UTF-8"/>
+    <meta name="viewport" content="width=device-width,initial-scale=1"/>
+    <meta name="robots" content="noindex"/>
+    <title>首页工作台原型 · Kenny Wu</title>
+    <meta name="description" content="原型：个人介绍为主视觉，四个角色停在各自的工作位，附真实作品画面与文章线索。"/>
+    <link rel="icon" href={site.favicon}/>
+    <link rel="preload" href="/assets/space/JetBrainsMono.woff2" as="font" type="font/woff2" crossorigin/>
+    <ThemeHead/>
+  </head>
+  <body>
+    <a class="skip" href="#main">跳到主要内容</a>
+    <HomeWorkbench client:load lang="zh"/>
+  </body>
+</html>

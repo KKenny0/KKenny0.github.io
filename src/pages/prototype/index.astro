@@ -1,0 +1,19 @@
+---
+// Deep-link root for the prototype: lands on the approved workbench home.
+// Kept as a redirect so the prototype home stays a single static page.
+const home='/workbench/';
+---
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8"/>
+    <meta name="viewport" content="width=device-width,initial-scale=1"/>
+    <meta name="robots" content="noindex"/>
+    <meta http-equiv="refresh" content={`0; url=${home}`}/>
+    <link rel="canonical" href={home}/>
+    <title>Home workbench prototype · Kenny Wu</title>
+  </head>
+  <body>
+    <a href={home}>Open the workbench prototype</a>
+  </body>
+</html>

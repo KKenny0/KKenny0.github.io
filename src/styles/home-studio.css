@@ -1,0 +1,174 @@
+/* Studio wall prototype — one composed wall instead of a scroll list. Shares
+   the paper tokens and the quiet controls (.wb-*) with the approved workbench
+   tone. The wall is a vertical index rail (four practices as real tabs, the
+   characters perched on their rows) beside one large easel whose focus object
+   swaps in place: the observation route, a light table of real artworks, the
+   project bench, or the delivery ledger. Everything is server-rendered; JS
+   only unhides one panel at a time, and the noscript style stacks them. */
+
+.studio .wb-controls{margin-bottom:4px}
+
+/* Masthead: one compact editorial line, the taped portrait beside it. */
+.st-masthead{display:flex;align-items:flex-end;justify-content:space-between;gap:clamp(18px,3vw,46px);padding:clamp(6px,1vw,14px) 0 clamp(14px,1.8vw,24px)}
+.st-id{min-width:0}
+.st-kicker{margin:0;color:var(--red)}
+.st-masthead h1{margin:8px 0 0;font:600 clamp(30px,3.4vw,46px)/1.05 var(--wb-display);letter-spacing:-.02em}
+.st-line{display:flex;flex-wrap:wrap;column-gap:16px;row-gap:4px;align-items:baseline;margin:10px 0 0;color:var(--ink);font-size:clamp(14px,1.3vw,16.5px)}
+.st-epigraph{color:var(--sub)}
+.st-touch{margin-top:14px}
+.st-touch a{min-height:40px;padding:0 14px;font-size:13.5px}
+.st-badge{width:clamp(118px,11vw,158px);margin:0;transform:rotate(2.5deg)}
+
+/* Role colors: one accent per practice, mirroring the workbench palette. */
+.st-online{--role:#2e6f78;--role-wash:rgba(46,111,120,.10);--role-line:rgba(46,111,120,.38)}
+.st-taste{--role:#a85a32;--role-wash:rgba(168,90,50,.10);--role-line:rgba(168,90,50,.38)}
+.st-ai{--role:#575d9c;--role-wash:rgba(87,93,156,.10);--role-line:rgba(87,93,156,.40)}
+.st-execution{--role:#5c7a45;--role-wash:rgba(92,122,69,.10);--role-line:rgba(92,122,69,.38)}
+:root[data-theme=dark] .st-online{--role:#7fc3cc;--role-wash:rgba(127,195,204,.10);--role-line:rgba(127,195,204,.34)}
+:root[data-theme=dark] .st-taste{--role:#df9d76;--role-wash:rgba(223,157,118,.10);--role-line:rgba(223,157,118,.34)}
+:root[data-theme=dark] .st-ai{--role:#a3aae2;--role-wash:rgba(163,170,226,.10);--role-line:rgba(163,170,226,.34)}
+:root[data-theme=dark] .st-execution{--role:#a9c78e;--role-wash:rgba(169,199,142,.10);--role-line:rgba(169,199,142,.34)}
+@media(prefers-color-scheme:dark){:root:not([data-theme]) .st-online{--role:#7fc3cc;--role-wash:rgba(127,195,204,.10);--role-line:rgba(127,195,204,.34)}
+:root:not([data-theme]) .st-taste{--role:#df9d76;--role-wash:rgba(223,157,118,.10);--role-line:rgba(223,157,118,.34)}
+:root:not([data-theme]) .st-ai{--role:#a3aae2;--role-wash:rgba(163,170,226,.10);--role-line:rgba(163,170,226,.34)}
+:root:not([data-theme]) .st-execution{--role:#a9c78e;--role-wash:rgba(169,199,142,.10);--role-line:rgba(169,199,142,.34)}}
+
+/* The wall: index rail + easel. */
+.st-wall{display:grid;grid-template-columns:minmax(232px,300px) minmax(0,1fr);gap:clamp(18px,2.4vw,38px);align-items:start;padding-bottom:clamp(16px,2vw,28px)}
+
+.st-tabs{display:flex;flex-direction:column;border-top:1px solid var(--line)}
+.st-tab{position:relative;display:grid;grid-template-columns:auto minmax(0,1fr) auto;column-gap:12px;align-items:center;min-height:78px;padding:12px 12px 12px 14px;border:0;border-bottom:1px solid var(--line);background:none;text-align:left;color:var(--sub);cursor:pointer;transition:background-color .2s ease}
+.st-tab-num{font-size:11px}
+.st-tab-name{font:500 clamp(17px,1.5vw,20px)/1.2 var(--wb-display);color:var(--ink)}
+.st-tab-pet{position:relative;z-index:1;width:clamp(44px,4.4vw,60px);margin:-30px 0 -14px}
+.st-tab-pet img{display:block;width:100%;height:auto;user-select:none;filter:grayscale(.4);opacity:.6;transition:filter .25s ease,opacity .25s ease,transform .25s var(--out);transform-origin:bottom center}
+.st-tab:hover,.st-tab:focus-visible{background:var(--panel)}
+.st-tab:hover .st-tab-pet img,.st-tab:focus-visible .st-tab-pet img{filter:none;opacity:1;transform:translateY(-3px)}
+.st-tab.is-active{background:linear-gradient(90deg,var(--role-wash),transparent 74%);box-shadow:inset 3px 0 0 var(--role)}
+.st-tab.is-active .st-tab-num,.st-tab.is-active .st-tab-name{color:var(--role)}
+.st-tab.is-active .st-tab-pet img{filter:none;opacity:1;transform:scale(1.1)}
+.st-tab.is-active:hover .st-tab-pet img,.st-tab.is-active:focus-visible .st-tab-pet img{transform:scale(1.1) translateY(-3px)}
+/* Auto-pause: pointer over the rail, keyboard focus anywhere, manual switch. */
+.st-tabs:hover img.wb-alive,.studio:focus-within img.wb-alive,.studio[data-motion="paused"] img.wb-alive{animation-play-state:paused}
+.st-tab:nth-child(2) img.wb-alive{animation-delay:-1.3s}
+.st-tab:nth-child(3) img.wb-alive{animation-delay:-2.6s}
+.st-tab:nth-child(4) img.wb-alive{animation-delay:-3.4s}
+.st-rail-hint{margin:12px 2px 0;color:var(--sub);font-size:12px;line-height:1.5}
+
+/* The easel: one framed focus object with print crop marks. */
+.st-easel{position:relative;min-height:clamp(400px,52vh,560px);padding:clamp(16px,1.8vw,26px);border:1.5px solid var(--line);border-radius:14px;background:var(--panel);box-shadow:0 10px 26px rgba(42,36,30,.07)}
+.st-easel::before,.st-easel::after{content:"";position:absolute;width:24px;height:24px;opacity:.55;pointer-events:none}
+.st-easel::before{top:9px;right:11px;border-top:2px solid var(--red);border-right:2px solid var(--red)}
+.st-easel::after{bottom:9px;left:11px;border-bottom:2px solid var(--red);border-left:2px solid var(--red)}
+.st-easel-head{display:flex;flex-wrap:wrap;column-gap:18px;row-gap:2px;align-items:baseline;padding-bottom:12px;border-bottom:1px dashed var(--line)}
+.st-easel-kicker{margin:0;color:var(--role)}
+.st-whisper{margin:0;color:var(--sub);font-size:13.5px}
+.st-easel-body{padding-top:14px}
+.st-easel-body:not([hidden]){animation:st-in .32s var(--out)}
+@keyframes st-in{from{opacity:0;transform:translateY(10px)}to{opacity:1;transform:none}}
+.studio[data-motion="paused"] .st-easel-body:not([hidden]),.studio:focus-within .st-easel-body:not([hidden]){animation:none}
+@media(prefers-reduced-motion:reduce){.st-easel-body:not([hidden]){animation:none}.st-tab-pet img{transition:none}}
+
+.st-go{color:var(--role)}
+.st-more{display:inline-flex;align-items:center;gap:7px;min-height:44px;margin-top:12px;padding-top:2px;color:var(--role);font-size:13.5px;text-decoration:none}
+.st-more:hover{text-decoration:underline;text-underline-offset:5px}
+
+/* Online: the five-stop route, ruled lines, straight to the originals. */
+.st-stop{display:grid;grid-template-columns:auto auto minmax(0,1fr) auto;column-gap:14px;align-items:baseline;padding:13px 6px;border-bottom:1px dashed var(--role-line);color:var(--ink);text-decoration:none;font-size:15px;line-height:1.5}
+.st-stop time{color:var(--sub);white-space:nowrap}
+.st-stop-label{color:var(--role)}
+.st-stop:hover,.st-stop:focus-visible{background:var(--role-wash)}
+.st-stop:hover .st-stop-title{text-decoration:underline;text-decoration-color:var(--role);text-underline-offset:4px}
+
+/* Taste: the light table — one big artwork, its gallery label, flip controls. */
+.st-table{display:grid;grid-template-columns:minmax(0,1.25fr) minmax(240px,1fr);gap:clamp(16px,2vw,30px);align-items:start}
+.st-art{display:grid;place-items:center;min-height:clamp(240px,32vh,360px);margin:0;border:1px solid var(--line);border-radius:8px;background:radial-gradient(circle at center,var(--role-wash),transparent 70%)}
+.st-art a{display:block;max-width:100%;padding:clamp(12px,1.6vw,22px)}
+.st-art img{display:block;width:auto;height:auto;max-width:100%;max-height:clamp(210px,30vh,320px);border-radius:4px;box-shadow:var(--shadow)}
+.st-art a:focus-visible{outline-offset:8px}
+.st-art-no{margin:0;color:var(--role)}
+.st-art-title{margin:8px 0 0;font:600 clamp(20px,2vw,27px)/1.25 var(--wb-display);letter-spacing:-.015em}
+.st-art-teaser{margin:10px 0 0;color:var(--sub);font-size:14.5px;line-height:1.65}
+.st-art-links{display:flex;flex-wrap:wrap;gap:8px 16px;margin:14px 0 0}
+.st-art-links a{padding-bottom:2px;border-bottom:1px solid var(--role-line);color:var(--role);font-size:13.5px;text-decoration:none}
+.st-art-links a:hover{color:var(--ink);border-color:var(--ink)}
+.st-flip{display:flex;align-items:center;gap:8px;margin-top:16px}
+.st-flip-btn{flex:none;width:40px;height:40px;border:1px solid var(--line);border-radius:999px;background:var(--panel);color:var(--role);font-size:15px;line-height:1}
+.st-flip-btn:hover{border-color:var(--role);color:var(--ink)}
+.st-thumb{flex:none;width:54px;height:54px;padding:4px;border:1px solid var(--line);border-radius:6px;background:var(--panel)}
+.st-thumb img{width:100%;height:100%;object-fit:cover;border-radius:3px}
+.st-thumb:hover{border-color:var(--role)}
+.st-thumb.is-active{border-color:var(--role);box-shadow:0 0 0 1px var(--role)}
+.st-table-products{margin:16px 0 0;color:var(--sub)}
+.st-table-products a{color:var(--blue)}
+
+/* AI: the project on the left, the folded note as evidence on the right. */
+.st-bench{display:grid;grid-template-columns:minmax(0,1fr) minmax(220px,.9fr);gap:clamp(16px,2vw,30px);align-items:start}
+.st-visual{margin:16px 0 0}
+.st-visual a{display:block}
+.st-visual img{width:100%;height:auto;border-radius:4px;box-shadow:var(--shadow)}
+.st-note{position:relative;display:block;padding:14px 14px 13px;border-radius:3px;background:#eee9e1;color:#29231d;box-shadow:0 8px 20px rgba(42,36,30,.10);text-decoration:none}
+.st-note::after{content:"";position:absolute;top:0;right:0;border-style:solid;border-width:0 20px 20px 0;border-color:transparent var(--panel) transparent transparent;filter:drop-shadow(-1px 1px 0 rgba(50,40,30,.1))}
+.st-note time{color:#a85a32}
+.st-note strong{display:block;margin-top:8px;font:600 16px/1.45 var(--wb-text)}
+.st-note small{display:block;margin-top:8px;color:#62625d;font-size:12px;line-height:1.5}
+.st-note:hover strong{text-decoration:underline;text-decoration-color:rgba(168,90,50,.5);text-underline-offset:4px}
+
+/* Execution: the delivery ledger, one dashed rule per record. */
+.st-record{display:grid;grid-template-columns:88px minmax(0,1fr);column-gap:16px;padding:13px 6px;border-bottom:1px dashed var(--role-line);color:inherit;text-decoration:none}
+.st-record time{padding-top:5px;color:var(--sub);white-space:nowrap}
+.st-record h3{margin:0;font:500 16.5px/1.4 var(--wb-display)}
+.st-record-role{margin-left:10px;color:var(--role);font-size:12.5px;font-weight:400}
+.st-record-detail{margin:6px 0 0;color:var(--sub);font-size:13.5px;line-height:1.6}
+.st-record-figure{display:block;margin:8px 0 0;font:500 clamp(20px,2vw,29px)/1.1 var(--mono);letter-spacing:-.02em;color:var(--ink);white-space:nowrap}
+.st-record-figure small{margin-left:10px;color:var(--sub);font:400 12.5px/1.5 var(--wb-text);letter-spacing:0;white-space:normal}
+.st-record:hover,.st-record:focus-visible{background:var(--role-wash)}
+.st-record:hover .st-record-figure strong{color:var(--role)}
+.st-snapshot{display:flex;flex-wrap:wrap;gap:6px 16px;align-items:baseline;margin:14px 6px 0;color:var(--sub)}
+.st-snapshot a{color:var(--blue)}
+
+/* Desk strip: latest writing straight to the originals, colophon beside. */
+.st-strip{display:grid;grid-template-columns:minmax(0,1fr) minmax(260px,330px);gap:clamp(18px,2.6vw,46px);border-top:1px solid var(--line);padding:clamp(14px,1.8vw,24px) 0 clamp(16px,2vw,26px)}
+.st-strip-head{margin:0 0 8px;color:var(--red)}
+.st-note-row{display:grid;grid-template-columns:auto minmax(0,1fr) auto auto;column-gap:14px;align-items:baseline;padding:11px 6px;border-bottom:1px dashed var(--line);color:var(--ink);text-decoration:none;font-size:14.5px;line-height:1.5}
+.st-note-row time{color:var(--sub);white-space:nowrap}
+.st-note-src{color:var(--sub)}
+.st-note-row:hover,.st-note-row:focus-visible{background:var(--panel)}
+.st-note-row:hover .st-note-title{text-decoration:underline;text-underline-offset:4px}
+.st-colophon p{margin:0;color:var(--sub);font-size:13.5px;line-height:1.7}
+.st-colophon-links{margin-top:12px}
+.st-colophon .wb-links{gap:8px}
+.st-colophon .wb-links a{min-height:38px;padding:0 12px;font-size:12.5px}
+
+/* Focus rings follow the active role color inside the easel and rail. */
+.studio :is(a,button):focus-visible{outline:2px solid var(--red);outline-offset:4px;border-radius:4px}
+.st-tab:focus-visible,.st-easel-body :is(a,button):focus-visible{outline-color:var(--role)}
+.studio .bench-compare+.bench-compare{margin-left:0}
+
+@media(max-width:1099px){
+  .st-wall{grid-template-columns:minmax(210px,252px) minmax(0,1fr)}
+}
+@media(max-width:899px){
+  .st-masthead{align-items:flex-start}
+  .st-badge{width:min(28vw,148px)}
+  .st-wall{grid-template-columns:1fr}
+  .st-rail{min-width:0}
+  .st-tabs{flex-direction:row;overflow-x:auto;border-top:0;border-bottom:1px solid var(--line);scrollbar-width:none}
+  .st-tabs::-webkit-scrollbar{display:none}
+  .st-tab{grid-template-columns:auto auto auto;min-height:64px;min-width:max-content;column-gap:8px;padding:10px 14px;border-bottom:0;border-right:1px solid var(--line)}
+  .st-tab.is-active{box-shadow:inset 0 -3px 0 var(--role)}
+  .st-tab-pet{width:36px;margin:-18px 0 -10px}
+  .st-rail-hint{display:none}
+  .st-easel{min-height:0}
+  .st-table,.st-bench{grid-template-columns:1fr}
+  .st-stop{grid-template-columns:auto minmax(0,1fr) auto}
+  .st-stop-label{display:none}
+  .st-record{grid-template-columns:64px minmax(0,1fr)}
+  .st-record-figure{white-space:normal}
+  .st-strip{grid-template-columns:1fr}
+}
+@media(max-width:699px){
+  .st-masthead h1{font-size:clamp(26px,8vw,32px)}
+  .st-note-row{grid-template-columns:auto minmax(0,1fr) auto}
+  .st-note-src{display:none}
+}

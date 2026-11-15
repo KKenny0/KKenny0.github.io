@@ -1,4 +1,8 @@
 ---
-import SpacePage from '../../components/SpacePage.astro';
+import SpaceLayout from '../../layouts/SpaceLayout.astro';
+import HomeCollage from '../../components/space/HomeCollage';
+import '../../styles/home-collage.css';
 ---
-<SpacePage lang="zh" route={{view:'home',arg:''}}/>
+<SpaceLayout lang="zh" route={{view:'home',arg:''}}>
+  <HomeCollage client:load lang="zh" mode="formal"/>
+</SpaceLayout>

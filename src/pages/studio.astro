@@ -1,0 +1,29 @@
+---
+// Independent studio-wall prototype entry: one composed wall — index rail,
+// easel with switchable focus objects, desk strip — beside /workbench/ and
+// /onepage/ so all three can be compared; not linked from site navigation.
+import {site} from '../data/site';
+import ThemeHead from '../components/ThemeHead.astro';
+import '../styles/space.css';
+import '../styles/home-workbench.css';
+import '../styles/home-studio.css';
+import HomeStudio from '../components/space/HomeStudio';
+---
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8"/>
+    <meta name="viewport" content="width=device-width,initial-scale=1"/>
+    <meta name="robots" content="noindex"/>
+    <title>Studio wall prototype · Kenny Wu</title>
+    <meta name="description" content="Prototype: one composed studio wall — four practices on an index rail, one easel whose focus object swaps in place, real artworks and articles straight to the originals."/>
+    <link rel="icon" href={site.favicon}/>
+    <link rel="preload" href="/assets/space/JetBrainsMono.woff2" as="font" type="font/woff2" crossorigin/>
+    <ThemeHead/>
+    <noscript><style>.st-easel-body[hidden]{display:block}.st-rail{display:none}.st-flip{display:none}</style></noscript>
+  </head>
+  <body>
+    <a class="skip" href="#main">Skip to content</a>
+    <HomeStudio client:load lang="en"/>
+  </body>
+</html>

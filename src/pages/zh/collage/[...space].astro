@@ -1,0 +1,7 @@
+---
+import ProtoPage from '../../../components/ProtoPage.astro';
+import {protoEntries} from '../../../lib/proto-routes';
+export function getStaticPaths(){return protoEntries().map(entry=>({params:{space:entry.path},props:{route:entry.route}}));}
+const {route}=Astro.props;
+---
+<ProtoPage lang="zh" route={route} space="collage"/>

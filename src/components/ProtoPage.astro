@@ -1,0 +1,8 @@
+---
+import ProtoLayout from '../layouts/ProtoLayout.astro';
+import ProtoApp from './space/ProtoApp';
+const {lang,route,space='prototype'}=Astro.props;
+---
+<ProtoLayout lang={lang} route={route} space={space}>
+  <ProtoApp client:load locale={lang} initialRoute={route} space={space}/>
+</ProtoLayout>

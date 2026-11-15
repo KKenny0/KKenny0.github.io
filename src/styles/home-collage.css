@@ -1,0 +1,279 @@
+/* Collage wall prototype: paper objects on a bounded, rearrangeable board. */
+
+.collage{--cg-display:Charter,Georgia,JinKai,"Songti SC",serif;position:relative;z-index:0;isolation:isolate;display:flex;flex-direction:column;min-height:100vh;max-width:1460px;margin:0 auto;padding:clamp(16px,2.6vw,30px) clamp(18px,3.5vw,58px) 0;background:var(--paper);font-family:var(--serif)}
+.collage::before{content:"";position:fixed;z-index:-1;inset:0;background:url('/assets/space/paper-grain.svg') repeat;opacity:.39;pointer-events:none}
+.collage:focus{outline:none}
+
+/* Masthead: person first, direct entries to the real site sections. */
+.cg-masthead{padding:clamp(14px,2vw,26px) 0 clamp(14px,1.6vw,22px)}
+.cg-kicker{margin:0;color:var(--red);font-size:11px;letter-spacing:.14em}
+.cg-masthead h1{margin:10px 0 0;font:500 clamp(42px,5.6vw,74px)/1.05 var(--cg-display);letter-spacing:-.02em}
+.cg-line{margin:12px 0 0;color:var(--sub);font-size:clamp(15px,1.3vw,17px);line-height:1.8}
+.cg-entries{display:flex;flex-wrap:wrap;gap:10px;margin:18px 0 0}
+.cg-entries a{display:inline-flex;align-items:center;min-height:42px;padding:0 16px;border:1.5px solid var(--ink);border-radius:999px;background:var(--panel);color:var(--ink);font-size:14px;text-decoration:none;transition:background-color .18s ease,color .18s ease}
+.cg-entries a:hover{background:var(--ink);color:var(--paper)}
+
+.cg-hint{margin:0 0 14px;color:var(--sub);font-size:11.5px;letter-spacing:.04em}
+
+/* The board: a bounded cork surface so the collage reads as one edited wall. */
+.cg-wall{position:relative;display:grid;grid-template-columns:repeat(12,1fr);gap:clamp(20px,2.4vw,30px);padding:clamp(28px,4vw,58px) clamp(20px,3vw,48px) clamp(30px,3.4vw,52px);border:1px solid var(--line);border-radius:18px;background:linear-gradient(155deg,rgba(168,90,50,.05),transparent 46%),var(--panel)}
+
+/* Pins: the shared paper object. Slight tilts, never uniform. */
+.cg-pin{position:relative;display:flex;flex-direction:column;margin:0;min-width:0}
+.cg-pin::before{content:"";position:absolute;z-index:2;top:-7px;left:50%;width:15px;height:15px;transform:translateX(-50%);border-radius:50%;background:radial-gradient(circle at 35% 30%,#c96a48,#8a3d24 68%);box-shadow:0 3px 5px rgba(30,20,14,.35)}
+.cg-pin-face{display:flex;flex-direction:column;align-items:stretch;gap:9px;padding:clamp(14px,1.4vw,20px);border:1px solid var(--line);border-radius:8px;background:var(--paper);box-shadow:0 12px 26px rgba(42,36,30,.09);color:var(--ink);font:inherit;text-align:left;cursor:zoom-in}
+@media(hover:hover) and (pointer:fine){.cg-pin-face{transition:transform .28s var(--out),box-shadow .28s var(--out)}.cg-pin:hover .cg-pin-face{transform:translateY(-4px) rotate(0deg);box-shadow:0 18px 34px rgba(42,36,30,.13)}}
+.cg-pin-face:focus-visible{outline:2.5px solid var(--red);outline-offset:4px}
+.cg-pin-face img{display:block;width:100%;height:auto;border-radius:4px;user-select:none}
+.cg-pin-tag{color:var(--sub);font-size:10px;letter-spacing:.12em}
+.cg-pin-title{font:500 clamp(16px,1.4vw,19px)/1.35 var(--cg-display);letter-spacing:.01em}
+.cg-pin-teaser{color:var(--sub);font-size:13.5px;line-height:1.65}
+.cg-pin-open{margin-top:auto;padding-top:4px;color:var(--blue);font-size:10.5px;letter-spacing:.1em}
+@media(hover:hover){.cg-pin-face:hover .cg-pin-open{color:var(--red)}}
+.cg-pin-link{align-self:flex-start;margin-top:10px;color:var(--sub);font-size:11px;letter-spacing:.08em;text-decoration:none;border-bottom:1px dashed var(--line);padding:4px 2px}
+.cg-pin-link:hover,.cg-pin-link:focus-visible{color:var(--red);border-bottom-color:var(--red)}
+.cg-mini-demo{display:inline-block;padding:1px 6px;border:1px solid var(--red);border-radius:999px;color:var(--red);font-size:9px;letter-spacing:.1em;vertical-align:1px}
+
+/* Artwork prints keep a paper mat so photographs read as pinned objects in dark mode too. */
+.cg-art .cg-pin-face img{padding:7px;background:#fbfaf6;border:1px solid rgba(48,42,37,.14)}
+
+/* Composition, desktop: one big poster, medium prints, small cards, deliberate gaps.
+   The portrait is its own safe layer: it renders as a pinned polaroid at frame size
+   (never overflowing behind other objects) and paints above every object and
+   sticker, so the face stays visible at any viewport width. */
+.cg-portrait{grid-column:1/span 3;grid-row:1;margin-top:14px;transform:rotate(-2.2deg);z-index:4}
+.cg-portrait::before{display:none}
+.cg-portrait img{display:block;width:100%;height:auto;padding:8px 8px 30px;background:#fbfaf6;border:1px solid rgba(48,42,37,.14)}
+.cg-portrait figcaption{display:flex;flex-direction:column;gap:2px;padding:10px 4px 0;font-size:13px}
+.cg-portrait figcaption strong{font-weight:600}
+.cg-portrait figcaption span{color:var(--sub)}
+.cg-epigraph{margin-top:4px;font-size:12.5px}
+.cg-art-poster{grid-column:4/span 5;grid-row:1/span 2;transform:rotate(.7deg)}
+.cg-note-goal{grid-column:10/span 3;grid-row:1;margin-top:38px;transform:rotate(1.7deg)}
+.cg-art-kami{grid-column:1/span 4;grid-row:2;margin-top:44px;transform:rotate(-1.1deg)}
+.cg-compare{grid-column:5/span 5;grid-row:2;margin-top:64px;transform:rotate(-.4deg)}
+.cg-replay{grid-column:10/span 3;grid-row:2;margin-top:96px;transform:rotate(2.1deg)}
+.cg-note-compact{grid-column:3/span 4;grid-row:3;margin-top:54px;transform:rotate(-1.4deg)}
+/* Sparse on purpose: row 3 keeps columns 7–12 empty. */
+
+/* Hand-drawn stickers sit on the board, overlapping the prints' corners. */
+.cg-sticker{position:absolute;z-index:3;width:clamp(64px,6.4vw,92px)}
+.cg-sticker-face{display:block;padding:0;border:0;background:none;cursor:pointer}
+.cg-sticker-face img{display:block;width:100%;height:auto;filter:drop-shadow(0 9px 9px rgba(21,28,34,.16));user-select:none}
+.cg-sticker-face:focus-visible{outline:2.5px solid var(--red);outline-offset:5px;border-radius:12px}
+@media(hover:hover) and (pointer:fine){.cg-sticker-face:hover img{transform:scale(1.06) translateY(-3px)}}
+.cg-sticker-taste{top:-24px;right:34%;transform:rotate(6deg)}
+.cg-sticker-ai{top:52%;right:8.6%;transform:rotate(-5deg)}
+.cg-sticker-taste .cg-sticker-face img,.cg-sticker-ai .cg-sticker-face img{transition:transform .25s var(--out)}
+/* Speech bubble: appears above the sticker, gone on the second tap. */
+.cg-bubble{position:absolute;bottom:calc(100% + 12px);left:50%;transform:translateX(-58%);width:max-content;max-width:min(250px,64vw);margin:0;padding:10px 13px;border:1px solid var(--line);border-radius:12px;background:var(--paper);color:var(--ink);font-size:13px;line-height:1.6;box-shadow:var(--shadow)}
+.cg-bubble::after{content:"";position:absolute;bottom:-7px;left:58%;width:12px;height:12px;transform:rotate(45deg);border-right:1px solid var(--line);border-bottom:1px solid var(--line);background:var(--paper)}
+
+/* The “pointed at” pulse from a sticker's remark. */
+@keyframes cg-point{0%,100%{box-shadow:0 12px 26px rgba(42,36,30,.09)}50%{box-shadow:0 0 0 4px rgba(168,77,51,.45),0 12px 26px rgba(42,36,30,.09)}}
+.cg-pin.is-pointed .cg-pin-face{animation:cg-point 1.3s ease-in-out 2}
+
+@media(prefers-reduced-motion:reduce){.cg-pin.is-pointed .cg-pin-face{animation:none}.cg-pin-face,.cg-sticker-face img{transition:none}}
+
+/* Expansion inside the current space: wall dimmed behind, panel centered. */
+.cg-focus{position:fixed;z-index:60;inset:0;display:grid;place-items:center;padding:clamp(14px,3vw,36px);background:rgba(23,23,20,.42)}
+.cg-focus-panel{position:relative;width:min(760px,100%);max-height:88vh;overflow:auto;padding:clamp(24px,3vw,40px);border:1px solid var(--line);border-radius:12px;background:var(--paper);box-shadow:var(--shadow)}
+@keyframes cg-rise{from{transform:translateY(14px);opacity:0}to{transform:none;opacity:1}}
+.cg-focus-panel{animation:cg-rise .3s var(--out)}
+.cg-close{position:sticky;top:0;z-index:2;display:inline-flex;align-items:center;gap:8px;align-self:flex-start;margin:0 0 12px -4px;padding:8px 12px;border:1px solid var(--line);border-radius:999px;background:var(--panel);color:var(--ink);font-size:13px;cursor:pointer}
+.cg-close:hover{border-color:var(--red);color:var(--red)}
+.cg-close span{font-size:15px;line-height:1}
+.cg-close:focus-visible{outline:2.5px solid var(--red);outline-offset:3px}
+.cg-focus-body{display:flex;flex-direction:column;gap:14px;align-items:flex-start}
+.cg-focus-kicker{margin:0;color:var(--red);font-size:11px;letter-spacing:.14em}
+.cg-focus-body h2{margin:0;font:500 clamp(24px,2.6vw,32px)/1.25 var(--cg-display)}
+.cg-focus-art{margin:0;width:100%}
+.cg-focus-art img{display:block;width:100%;height:auto;border:1px solid var(--line);border-radius:8px;padding:10px;background:#fbfaf6}
+.cg-focus-text{max-width:60ch;margin:0;color:var(--sub);font-size:15px;line-height:1.8}
+.cg-focus-meta{margin:0;color:var(--sub);font-size:11px;letter-spacing:.1em}
+.cg-focus-links{display:flex;flex-wrap:wrap;gap:10px;margin:0}
+.cg-focus-links a{display:inline-flex;align-items:center;min-height:42px;padding:0 16px;border:1.5px solid var(--ink);border-radius:999px;color:var(--ink);font-size:14px;text-decoration:none}
+.cg-focus-links a:hover{background:var(--ink);color:var(--paper)}
+.cg-focus-links a:focus-visible{outline:2.5px solid var(--red);outline-offset:3px}
+
+/* Before/after slider: pointer drag on the stage, or the range below it. */
+.cg-slider{display:flex;flex-direction:column;gap:10px;width:100%;margin:0}
+.cg-slider-stage{position:relative;touch-action:none;cursor:ew-resize;border:1px solid var(--line);border-radius:8px;overflow:hidden;background:#fbfaf6}
+.cg-slider-stage img{display:block;width:100%;height:auto}
+.cg-slider-after{position:absolute;inset:0;height:100%!important;object-fit:cover}
+.cg-slider-divider{position:absolute;top:0;bottom:0;width:2.5px;transform:translateX(-50%);background:var(--paper);box-shadow:0 0 0 1px rgba(23,23,20,.35)}
+.cg-slider-handle{position:absolute;top:50%;left:50%;transform:translate(-50%,-50%);width:30px;height:30px;border-radius:50%;background:var(--paper);border:2px solid var(--ink);box-shadow:0 3px 8px rgba(0,0,0,.3)}
+.cg-slider-handle::before,.cg-slider-handle::after{content:"";position:absolute;top:50%;transform:translateY(-50%);border:5px solid transparent}
+.cg-slider-handle::before{left:4px;border-left-color:var(--ink);transform:translateY(-50%) scale(.8)}
+.cg-slider-handle::after{right:4px;border-right-color:var(--ink);transform:translateY(-50%) scale(.8)}
+.cg-slider-label{position:absolute;top:10px;padding:3px 9px;border-radius:999px;background:rgba(23,23,20,.62);color:#f5f4ed;font-size:10px;letter-spacing:.12em}
+.cg-slider-label-before{left:10px}
+.cg-slider-label-after{right:10px}
+.cg-slider-range{width:100%;height:32px;accent-color:var(--red)}
+.cg-slider figcaption{color:var(--sub);font-size:10px;letter-spacing:.08em}
+
+/* Tracework replay: five real loop stages plus a demo ticket. */
+.cg-steps{display:flex;flex-direction:column;gap:6px;width:100%;margin:0;padding:0;list-style:none}
+.cg-steps button{display:flex;flex-direction:column;gap:4px;width:100%;padding:10px 14px;border:1px dashed var(--line);border-radius:8px;background:none;color:var(--ink);font:inherit;text-align:left;cursor:pointer}
+.cg-steps button:hover{border-color:var(--red)}
+.cg-steps button:focus-visible{outline:2.5px solid var(--red);outline-offset:2px}
+.cg-steps .is-current button{border-style:solid;border-color:var(--ink);background:var(--panel)}
+.cg-steps strong{font-weight:500;font-size:15px}
+.cg-step-no{color:var(--red);font-size:10px;letter-spacing:.14em}
+.cg-step-detail{color:var(--sub);font-size:13.5px;line-height:1.7}
+.cg-step-nav{display:flex;align-items:center;gap:14px;width:100%}
+.cg-step-nav button{padding:9px 16px;border:1.5px solid var(--ink);border-radius:999px;background:var(--panel);color:var(--ink);font-size:13.5px;cursor:pointer}
+.cg-step-nav button:hover:not(:disabled){background:var(--ink);color:var(--paper)}
+.cg-step-nav button:disabled{opacity:.35;cursor:default}
+.cg-step-nav button:focus-visible{outline:2.5px solid var(--red);outline-offset:3px}
+.cg-step-nav span{color:var(--sub);font-size:12px}
+.cg-ticket{width:100%;padding:16px 18px;border:1px dashed var(--line);border-radius:8px;background:var(--panel)}
+.cg-ticket-head{margin:0 0 10px;color:var(--red);font-size:10.5px;letter-spacing:.1em}
+.cg-ticket dl{display:flex;flex-direction:column;gap:8px;margin:0}
+.cg-ticket-row{display:grid;grid-template-columns:7.5em 1fr;gap:10px;align-items:baseline}
+.cg-ticket-row dt{color:var(--sub);font-size:10.5px;letter-spacing:.08em}
+.cg-ticket-row dd{margin:0;font-size:13.5px;line-height:1.65}
+
+/* Colophon strip. */
+.cg-bottom{display:flex;flex-direction:column;gap:12px;align-items:flex-start;padding:clamp(26px,3vw,40px) 0 clamp(30px,3.4vw,44px)}
+.cg-bottom .mono{margin:0;color:var(--sub);font-size:11px;letter-spacing:.1em}
+/* Tablet: six columns, same objects, tighter overlaps. */
+@media(max-width:899px){
+  .cg-portrait{grid-column:1/span 2;grid-row:1}
+  .cg-art-poster{grid-column:3/span 4;grid-row:1/span 2}
+  .cg-note-goal{grid-column:1/span 3;grid-row:2;margin-top:30px}
+  .cg-art-kami{grid-column:4/span 3;grid-row:3;margin-top:34px}
+  .cg-compare{grid-column:1/span 4;grid-row:4;margin-top:44px}
+  .cg-replay{grid-column:5/span 2;grid-row:4;margin-top:70px}
+  .cg-note-compact{grid-column:2/span 4;grid-row:5;margin-top:44px}
+  .cg-sticker-taste{right:6%;top:auto;bottom:31%}
+  .cg-sticker-ai{right:3%;top:47%}
+}
+
+/* Phone: one column that keeps the collage feel — varied widths and tilts,
+   stickers flow between objects; speech bubbles stay on screen. */
+@media(max-width:599px){
+  .cg-wall{display:flex;flex-direction:column;gap:26px;padding:34px 18px 30px}
+  .cg-portrait{order:0;width:56%;align-self:flex-start;margin:0}
+  .cg-art-poster{order:1;width:100%;margin:12px 0 0}
+  .cg-note-goal{order:3;width:94%;align-self:flex-end;margin:0;transform:rotate(1.2deg)}
+  .cg-art-kami{order:4;width:88%;align-self:flex-start;margin:0}
+  .cg-compare{order:5;width:100%;margin:6px 0 0}
+  .cg-replay{order:7;width:90%;align-self:flex-end;margin:0}
+  .cg-note-compact{order:8;width:96%;margin:0;transform:rotate(-1deg)}
+  .cg-sticker{position:relative;top:auto;right:auto;bottom:auto;width:68px;order:2;align-self:center;margin:-8px 0 -10px;transform:none}
+  .cg-sticker-ai{order:6}
+  .cg-bubble{position:fixed;left:50%;bottom:16vh;transform:translateX(-50%);z-index:40}
+  .cg-bubble::after{left:50%}
+  .cg-ticket-row{grid-template-columns:1fr;gap:2px}
+  .cg-focus{padding:10px;place-items:end center}
+  .cg-focus-panel{max-height:94vh;padding:20px 16px}
+  .cg-slider-handle{width:24px;height:24px}
+}
+
+/* Editorial objects: flat print, excerpt, comparison and record. */
+.cg-wall{border-radius:0;background:var(--panel)}
+.cg-pin::before{width:9px;height:9px;box-shadow:none}
+.cg-pin-face{border-radius:0;box-shadow:none;text-decoration:none}
+.cg-pin-face img,.cg-art .cg-pin-face img{border-radius:0}
+@media(hover:hover) and (pointer:fine){.cg-pin:hover .cg-pin-face{box-shadow:none}}
+.cg-note .cg-pin-face{border:0;border-top:2px solid var(--ink);background:transparent;padding:20px 0;cursor:pointer}
+.cg-note .cg-pin-title{font-size:clamp(20px,2vw,28px)}
+.cg-art-poster .cg-pin-face{padding:8px;background:var(--paper)}
+.cg-replay .cg-pin-face{border:0;border-top:2px solid var(--ink);border-bottom:1px solid var(--line);background:transparent;box-shadow:none}
+.cg-compare{transform:none}
+.cg-compare-content{padding:18px;background:var(--paper);border-top:2px solid var(--ink)}
+.cg-compare-content h2,.cg-compare-content p{margin:0 0 12px}
+.cg-slider-stage{border-radius:0}
+.cg-range-label{display:block;margin-top:10px;color:var(--sub);font-size:13px}
+.cg-slider-range{min-height:44px;margin:0}
+.cg-slider-range:focus-visible{outline:2px solid var(--blue);outline-offset:3px}
+.cg-focus-panel{position:fixed;inset:0;margin:auto;border-radius:0;max-height:88vh;color:var(--ink)}
+.cg-focus-panel::backdrop{background:rgba(23,23,20,.58)}
+.cg-steps button,.cg-ticket,.cg-focus-art img{border-radius:0}
+@media(prefers-reduced-motion:reduce){.cg-focus-panel{animation:none}}
+@media(max-width:599px){
+ .cg-portrait{order:0;width:48%}
+ .cg-compare{order:1;width:100%}
+ .cg-art-poster{order:2;margin:0}
+ .cg-sticker-taste{order:3}
+ .cg-note-goal{order:4}
+ .cg-replay{order:5;width:100%}
+ .cg-art-kami{order:6}
+ .cg-sticker-ai{order:7}
+ .cg-note-compact{order:8}
+ .cg-focus-panel{max-height:94vh}
+}
+.cg-art-poster{grid-row:1}
+.collage .wb-controls{display:flex;align-items:center;justify-content:space-between;gap:12px;flex-wrap:wrap}
+.collage .wb-theme{display:flex;gap:4px;flex-wrap:wrap}
+.collage .wb-theme button,.collage .wb-language{display:inline-flex;align-items:center;justify-content:center;min-height:40px;padding:0 10px;border:1px solid var(--line);background:transparent;color:var(--ink);font:inherit;font-size:13px;text-decoration:none;cursor:pointer}
+.collage .wb-theme button[aria-pressed="true"]{border-color:var(--ink)}
+@media(min-width:600px) and (max-width:899px){
+ .cg-wall{grid-template-columns:repeat(6,minmax(0,1fr))}
+ .cg-portrait{grid-column:1/span 2;grid-row:1}
+ .cg-art-poster{grid-column:3/span 4;grid-row:1}
+ .cg-note-goal{grid-column:1/span 3;grid-row:2;margin:0}
+ .cg-art-kami{grid-column:4/span 3;grid-row:2;margin:0}
+ .cg-compare{grid-column:1/span 4;grid-row:3;margin:0}
+ .cg-replay{grid-column:5/span 2;grid-row:3;margin:0}
+ .cg-note-compact{grid-column:2/span 4;grid-row:4;margin:0}
+}
+
+/* The handle is the only drag target, so links, comparison and touch scrolling stay independent. */
+.cg-wall-tools{display:flex;align-items:center;justify-content:space-between;gap:12px;flex-wrap:wrap;color:var(--sub);font-size:13px}
+.cg-wall-tools button{min-height:40px;padding:5px 10px;border:1px solid var(--line);background:var(--paper);color:var(--ink);font:inherit;cursor:pointer}
+.cg-wall-tools :focus-visible,.cg-drag:focus-visible{outline:2px solid var(--red);outline-offset:3px}
+.cg-drag{display:grid;place-items:center;align-self:flex-start;position:relative;z-index:5;width:44px;height:44px;padding:0;border:0;background:transparent;color:var(--red);touch-action:none;cursor:grab;user-select:none}
+.cg-drag-pin{width:18px;height:18px;filter:drop-shadow(0 2px 1px rgba(30,20,14,.22));transition:transform .16s ease,color .16s ease}
+@media(hover:hover) and (pointer:fine){.cg-drag:hover .cg-drag-pin{transform:translateY(-2px) rotate(-12deg);color:var(--ink)}}
+.cg-drag:focus-visible .cg-drag-pin{color:var(--ink)}
+.cg-drag:active{cursor:grabbing}
+.cg-drag:active .cg-drag-pin{transform:rotate(-18deg) scale(.92)}
+@media(prefers-reduced-motion:reduce){.cg-drag-pin{transition:none}}
+.cg-wall{grid-template-columns:repeat(3,minmax(0,1fr));align-items:start;gap:32px}
+.cg-wall>[data-object]{position:relative;inset:auto;grid-column:auto;grid-row:auto;width:100%;margin:0;transform:none;min-width:0}
+.cg-wall .cg-portrait{z-index:4}
+.cg-wall .cg-sticker{z-index:3;display:flex;flex-direction:column;align-items:flex-start;gap:10px;padding:12px;border:1px solid var(--line);background:var(--paper)}
+.cg-sticker-face{width:100%}
+.cg-sticker-face img{width:min(100%,180px);margin:auto}
+.cg-pin::before{display:none}
+.cg-pin-face,.cg-note .cg-pin-face,.cg-replay .cg-pin-face,.cg-compare-content{padding:16px;border:1px solid var(--line);background:var(--paper)}
+.cg-portrait img{max-height:320px;object-fit:contain;object-position:top;background:#fbfaf6}
+@media(max-width:899px){.cg-wall{grid-template-columns:repeat(2,minmax(0,1fr))}}
+@media(max-width:599px){.cg-wall{display:grid;grid-template-columns:minmax(0,1fr);gap:24px}.cg-wall>[data-object]{order:initial;align-self:auto}.cg-portrait img{max-height:300px}}
+
+.cg-project-card h2,.cg-project-card p{margin:0 0 12px}
+.cg-contributions{margin:0;padding-left:1.2em;color:var(--sub);font-size:13px;line-height:1.55}
+.cg-contributions li+li{margin-top:8px}
+.cg-contributions a{color:inherit;text-underline-offset:3px}
+.cg-contributions a:focus-visible{outline:2px solid var(--red);outline-offset:3px}
+.cg-metric,.cg-compare-content .cg-metric,.cg-project-card .cg-metric{display:flex;flex-wrap:wrap;gap:4px 12px;margin:10px 0;color:var(--sub);font-size:12px;line-height:1.5;letter-spacing:0}
+.cg-metric a{color:var(--ink);text-decoration:underline;text-underline-offset:3px}
+.cg-metric a:focus-visible{outline:2px solid var(--red);outline-offset:3px}
+.cg-kami-paper{padding:16px;border:1px solid var(--line);background:var(--paper)}
+.cg-art-kami .cg-pin-face{width:100%;padding:0;border:0;background:transparent;box-shadow:none}
+@media(hover:hover) and (pointer:fine){.cg-art-kami:hover .cg-pin-face{transform:none}}
+.cg-kami-metrics{margin-top:14px;color:var(--sub)}
+.cg-kami-metric-list{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:8px}
+.cg-kami-metric{min-width:0}
+.cg-kami-metric a{display:flex;flex-direction:column;align-items:flex-start;gap:2px;min-height:44px;color:var(--ink);text-decoration:none}
+.cg-kami-metric strong{font-size:18px;line-height:1.2;font-variant-numeric:tabular-nums}
+.cg-kami-metric a span{color:var(--sub);font-size:11px;line-height:1.35;text-decoration:underline;text-underline-offset:3px}
+.cg-kami-metric a:focus-visible{outline:2px solid var(--red);outline-offset:3px}
+@media(hover:hover){.cg-kami-metric a:hover span{color:var(--red)}}
+.cg-kami-date{display:block;margin-top:8px;color:var(--sub);font-size:10px;line-height:1.4}
+.cg-kami-metric .cg-kami-date{overflow-wrap:anywhere}
+
+/* The title link covers each card; independent controls sit above its hit area. */
+.cg-project-card,.cg-compare-content,.cg-kami-paper{position:relative}
+.cg-project-card{cursor:default}
+.cg-repo-link{color:inherit;text-decoration:underline;text-decoration-thickness:1px;text-underline-offset:4px;cursor:pointer}
+.cg-repo-link::before{content:" ↗";display:inline-block;font-size:.7em;text-decoration:none}
+.cg-repo-link::after{content:"";position:absolute;inset:0;z-index:1;cursor:pointer}
+.cg-repo-link:hover,.cg-repo-link:focus-visible{color:var(--red);text-decoration-thickness:2px}
+.cg-repo-link:focus-visible{outline:2px solid var(--red);outline-offset:4px}
+.cg-project-card .cg-metric a,.cg-contributions a,.cg-compare-content .cg-metric a,.cg-slider-stage,.cg-range-label,.cg-slider-range,.cg-kami-paper button,.cg-kami-metric a{position:relative;z-index:2}
+.cg-art-kami .cg-pin-face{margin-bottom:9px}
+.cg-kami-paper>.cg-pin-title,.cg-kami-paper>.cg-pin-open{display:block}
+.cg-kami-paper>.cg-pin-open{padding-top:9px}

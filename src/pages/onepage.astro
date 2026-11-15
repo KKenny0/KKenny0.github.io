@@ -1,0 +1,28 @@
+---
+// Independent one-page prototype entry: the whole visit on a single page with
+// anchor navigation. Lives beside `/workbench/` and the real home so all three
+// can be compared; not linked from site navigation.
+import {site} from '../data/site';
+import ThemeHead from '../components/ThemeHead.astro';
+import '../styles/space.css';
+import '../styles/home-workbench.css';
+import '../styles/home-onepage.css';
+import HomeOnePage from '../components/space/HomeOnePage';
+---
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8"/>
+    <meta name="viewport" content="width=device-width,initial-scale=1"/>
+    <meta name="robots" content="noindex"/>
+    <title>One-page home prototype · Kenny Wu</title>
+    <meta name="description" content="Prototype: one browsable page — portrait intro, selected works that expand in place, recent writing straight to the originals, work record and contact."/>
+    <link rel="icon" href={site.favicon}/>
+    <link rel="preload" href="/assets/space/JetBrainsMono.woff2" as="font" type="font/woff2" crossorigin/>
+    <ThemeHead/>
+  </head>
+  <body>
+    <a class="skip" href="#main">Skip to content</a>
+    <HomeOnePage client:load lang="en"/>
+  </body>
+</html>

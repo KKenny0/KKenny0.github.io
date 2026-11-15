@@ -1,0 +1,28 @@
+{
+  "Cinnamon/kotaemon": {
+    "stars": 25909,
+    "fetchedAt": "2026-11-15T09:21:13.122Z"
+  },
+  "KKenny0/obsidian-kami": {
+    "stars": 7,
+    "fetchedAt": "2026-11-15T09:21:13.640Z"
+  },
+  "KKenny0/videowipe": {
+    "stars": 73,
+    "fetchedAt": "2026-11-15T09:21:14.788Z"
+  },
+  "KKenny0/script-weaver": {
+    "stars": 11,
+    "fetchedAt": "2026-11-15T09:21:15.362Z"
+  },
+  "kami-reader-theme-downloads": {
+    "downloads": 806,
+    "fetchedAt": "2026-11-15T09:21:16.097Z",
+    "source": "https://community.obsidian.md/themes/kami-reader"
+  },
+  "kami-reader-companion-downloads": {
+    "downloads": 161,
+    "fetchedAt": "2026-11-15T09:21:17.804Z",
+    "source": "https://raw.githubusercontent.com/obsidianmd/obsidian-releases/master/community-plugin-stats.json"
+  }
+}

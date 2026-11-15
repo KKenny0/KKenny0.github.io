@@ -4,8 +4,10 @@ import {prototypeText,localizedNote,tasteEnglish} from '../../data/space-i18n';
 import aboutContent from '../../data/space-about.json';
 import {SceneLink} from './SceneLink';
 import {Media} from './Media';
-/* Persistent viewing surfaces. App owns the selection and route. */
-function LensTuner({expanded,entries,curated,selected,onSelect,onExpand,onCollapse,collapseLabel,lang,query,setQuery,filter,setFilter}){
+/* Persistent viewing surfaces. App owns the selection and route.
+   wheelScope narrows wheel-stepping to one element inside the tuner; the
+   official space app omits it and keeps hijacking the whole main surface. */
+function LensTuner({expanded,entries,curated,selected,onSelect,onExpand,onCollapse,collapseLabel,lang,query,setQuery,filter,setFilter,wheelScope}){
   const text=(zh,en)=>prototypeText(lang,zh,en);
   const root=React.useRef(null),rail=React.useRef(null),gesture=React.useRef({sum:0,last:-Infinity,stamp:0});
   const beforeSearch=React.useRef(null);
@@ -25,7 +27,7 @@ function LensTuner({expanded,entries,curated,selected,onSelect,onExpand,onCollap
     onSelect(next.id);return true;
   },[list,active,selected.id,onSelect]);
   React.useEffect(()=>{
-    const node=root.current.closest('main')||root.current;
+    const node=wheelScope?root.current.querySelector(wheelScope):(root.current.closest('main')||root.current);
     const wheel=e=>{
       if(e.ctrlKey||e.target.closest('[data-native-scroll],input,summary'))return;
       if(Math.abs(e.deltaY)<Math.abs(e.deltaX))return;
@@ -132,5 +134,10 @@ function ResearchViewer({note,entries,onSelect,lang}){
     <details className="research-archive"><summary>{text('更多专业文章','More technical writing')} <span><span className="archive-count">{entries.length}</span> <span className="disclosure-sign" aria-hidden="true"></span></span></summary><label className="research-search"><span>{text('查找专业文章','Find an article')}</span><input value={query} onChange={e=>setQuery(e.target.value)} placeholder={text('标题 / 关键词','Title / keyword')}/></label><div>{matches.map(n=><SceneLink id={`note-${n.id}`} route={{view:'notes',arg:'ai',item:n.id}} lang={lang} key={n.id} aria-current={note.id===n.id} onActivate={()=>{onSelect(n.id);paper.current.scrollIntoView({behavior:'instant',block:'start'});paper.current.focus({preventScroll:true});}}><time>{n.date}</time><span>{n.title}</span><span aria-hidden="true">→</span></SceneLink>)}{!matches.length&&<p>{text('没有找到文章，请换个关键词。','No matching articles. Try another keyword.')}</p>}</div></details>
   </section>;
 }
-function AboutMore({lang}){return <details className="about-more"><summary>{prototypeText(lang,'更多经历、研究与日常','More experience, research and everyday life')} <span className="disclosure-sign" aria-hidden="true"/></summary><div className="about-full" dangerouslySetInnerHTML={{__html:aboutContent[lang]}}/></details>}
+/* rewriteHref lets the prototype keep legacy internal links in-prototype; the
+   official space app omits it and renders the trusted HTML unchanged. */
+function AboutMore({lang,rewriteHref}){
+  const html=rewriteHref?aboutContent[lang].replace(/href="(\/[^"]*)"/g,(match,href)=>`href="${rewriteHref(href)}"`):aboutContent[lang];
+  return <details className="about-more"><summary>{prototypeText(lang,'更多经历、研究与日常','More experience, research and everyday life')} <span className="disclosure-sign" aria-hidden="true"/></summary><div className="about-full" dangerouslySetInnerHTML={{__html:html}}/></details>;
+}
 export {LensTuner,TasteViewer,tasteProducts,ResearchViewer,AboutMore};
