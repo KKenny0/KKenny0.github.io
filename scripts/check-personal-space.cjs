@@ -201,11 +201,12 @@ for(const prefix of ['', 'zh/']){
   const about=readFileSync(path.join(output,prefix,'about/index.html'),'utf8');
   for(const section of ['experience','research','awards','questions','outside','enterprise'])assert.ok(about.includes(`id="${section}"`));
   assert.equal((about.match(/class="timeline(?: cail-entry)?"/g)||[]).length,8);
-  for(const fact of ['9.53%','1285','Qwen2.5-7B','90%','conference.jpg','q9Z8cmIAAAAJ']){
+  for(const fact of ['9.53%','Qwen2.5-7B','90%','conference.jpg','q9Z8cmIAAAAJ']){
     // Scholar remains available in the professional links; numerical claims stay qualified in content.
     if(fact==='q9Z8cmIAAAAJ')continue;
     assert.ok(about.includes(fact),fact);
   }
+  assert.match(about,/1,?285/);
   assert.ok(about.includes('self-profo'));
 }
 
@@ -231,11 +232,11 @@ console.log(`PASS: ${pages.length} static routes, bilingual SSR, ${projectRecord
 
 // Test the actual route implementation with the authoritative data, independently of browser state.
 const routeSource=readFileSync(path.resolve(__dirname,'../src/lib/space-routes.js'),'utf8').replace(/^import .*;\r?\n/gm,'').replaceAll('export ','');
-const routeContext={URL,projects:projectRecords,notes:[...writings.articles,{id:'goal',primary:'online'},{id:'context-sep',primary:'online'}],lensInfo:{online:{},taste:{},ai:{},execution:{}},aiWritingIds:['2060032007506334292','2031687123431051328'],localizedNote:n=>n};
+const routeContext={URL,URLSearchParams,projects:projectRecords,notes:[...writings.articles,{id:'goal',primary:'online'},{id:'context-sep',primary:'online'}],lensInfo:{online:{},taste:{},ai:{},execution:{}},aiWritingIds:['2060032007506334292','2031687123431051328'],localizedNote:n=>n};
 routeContext.notes=routeContext.notes.map(n=>({...n,primary:routeContext.aiWritingIds.includes(n.id)?'ai':'online'}));
 runInNewContext(readFileSync(path.resolve(__dirname,'../src/data/taste.js'),'utf8').replace('export const tasteProducts=','this.tasteProducts='),routeContext);
-runInNewContext(routeSource+'\nthis.routes={routePath,parseRoute,spaceEntries};',routeContext);
-const {routePath,parseRoute,spaceEntries}=routeContext.routes;
+runInNewContext(routeSource+'\nthis.routes={routePath,parseRoute,spaceEntries,canonicalPath,storyReturnPath};',routeContext);
+const {routePath,parseRoute,spaceEntries,canonicalPath,storyReturnPath}=routeContext.routes;
 for(const locale of ['en','zh'])for(const {route} of spaceEntries()){
   const parsed=parseRoute(new URL(routePath(route,locale),'https://example.test'));
   assert.equal(parsed.view,route.view);assert.equal(parsed.arg,route.arg);
@@ -247,8 +248,37 @@ assert.equal(parseRoute(new URL('https://local.test/notes/#note-2060032007506334
 assert.equal(parseRoute(new URL('https://local.test/zh/notes/?topic=memory')).topic,'memory');
 assert.equal(parseRoute(new URL('https://local.test/lens/unknown/')).view,'home');
 assert.equal(parseRoute(new URL('https://local.test/taste/card-skill/999/')).view,'home');
-assert.equal(parseRoute(new URL('https://local.test/work/videowipe/?from=ai')).arg,'ai');
+assert.equal(parseRoute(new URL('https://local.test/work/videowipe/?from=ai')).source,'ai');
 assert.equal(routePath({view:'notes',arg:'online',item:'goal',topic:'memory'},'zh'),'/zh/notes/online/goal/?topic=memory');
+for(const locale of ['en','zh']){
+  const prefix=locale==='zh'?'/zh':'';
+  const parse=path=>parseRoute(new URL(prefix+path,'https://local.test'));
+  assert.equal(parse('/projects/').item,undefined);
+  assert.equal(parse('/notes/').item,undefined);
+  assert.equal(parse('/notes/?from=ai&topic=ai').source,'ai');
+  assert.equal(parse('/notes/?from=ai&topic=ai').topic,'ai');
+  const legacyNote=parse('/notes/online/2060032007506334292/?from=notes&via=ai&topic=ai');
+  assert.equal(legacyNote.via,'ai');
+  assert.equal(canonicalPath(legacyNote,locale),`${prefix}/notes/ai/2060032007506334292/`);
+  for(const slug of ['tracework','weave']){
+    assert.equal(parse(`/work/${slug}/`).item,slug);
+    assert.equal(storyReturnPath(parse(`/projects/${slug}/`),locale),`${prefix}/work/${slug}/`);
+    assert.equal(storyReturnPath(parse(`/projects/${slug}/?from=work&via=projects`),locale),`${prefix}/work/${slug}/?from=projects`);
+  }
+  const read=route=>readFileSync(path.join(output,prefix.replace(/^\//,''),route,'index.html'),'utf8');
+  assert.match(read('projects'),/<input\b[^>]*id="project-search"/);
+  assert.doesNotMatch(read('projects'),/class="space-work"/);
+  assert.match(read('notes'),/<input\b[^>]*id="writing-search"/);
+  assert.doesNotMatch(read('notes'),/class="tuner-stage"/);
+  assert.match(read('work/tracework'),/\/projects\/tracework\/\?from=work/);
+  assert.match(read('work/weave'),/\/projects\/weave\/\?from=work/);
+  assert.match(read('lens/ai'),/\/notes\/\?from=ai&amp;topic=ai/);
+  assert.match(read('lens/online'),/\/notes\/\?from=online"/);
+  for(const anchor of ['storyboard-evaluation','storyboard-recovery']){
+    assert.match(read('lens/execution'),new RegExp(`\#${anchor}`));
+    assert.ok(read('about').includes(`id="${anchor}"`));
+  }
+}
 console.log('PASS: all route/locale round trips, stable artwork IDs, legacy fragments, archived project links and topic queries.');
 
 // Both rendering frames use the same pre-paint system default and controller.

@@ -26,7 +26,7 @@ const inDist=target=>{
 
 // Both locales must mirror each other page for page, including workbench homes.
 for(const page of pages){
-  const relativePage=page.slice(dist.length).replace(/\/index\.html$/,'/');
+  const relativePage=page.slice(dist.length).replaceAll('\\','/').replace(/\/index\.html$/,'/');
   const [en,other]=relativePage.startsWith('/zh/')?['/zh'+relativePage.slice(3),relativePage.slice(3)]:[relativePage,'/zh'+relativePage];
   assert.ok(pages.includes(join(dist,other,'index.html')),`Language mirror missing: ${other}`);
   assert.ok(pages.includes(join(dist,en,'index.html')),`Unexpected mirror bookkeeping for ${relativePage}`);
@@ -37,7 +37,7 @@ for(const page of pages){
 const escapeRe=/^(\/(zh\/)?(prototype|workbench)(\/|$)|\/assets\/|\/_astro\/|\/favicon|\/sitemap\.xml)/;
 for(const page of pages){
   const html=decode(readFileSync(page,'utf8'));
-  const relativePage=page.slice(dist.length).replace(/\/index\.html$/,'/');
+  const relativePage=page.slice(dist.length).replaceAll('\\','/').replace(/\/index\.html$/,'/');
   const zh=relativePage.startsWith('/zh/');
   for(const href of [...html.matchAll(/href="([^"]+)"/g)].map(match=>match[1])){
     if(href.startsWith('#'))continue;

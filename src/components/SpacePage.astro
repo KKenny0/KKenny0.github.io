@@ -1,14 +1,16 @@
 ---
 import SpaceLayout from '../layouts/SpaceLayout.astro';
-import ProtoApp from './space/ProtoApp';
+import SpaceApp from './space/SpaceApp';
 import '../styles/proto-workbench.css';
 import '../styles/collage-inner.css';
 import {projects} from '../data/projects';
 import {routePath} from '../lib/space-routes';
-const {lang,route}=Astro.props;
+const {lang,route:entry}=Astro.props;
+const isIndex=['projects','notes'].some(view=>Astro.url.pathname.replace(/\/$/,'')===`${lang==='zh'?'/zh':''}/${view}`);
+const route=isIndex?{view:entry.view}:entry;
 ---
 <SpaceLayout lang={lang} route={route}>
-  <ProtoApp client:load locale={lang} initialRoute={route} space="formal"/>
+  <SpaceApp client:load locale={lang} initialRoute={route}/>
   <noscript><nav class="static-options" aria-label={lang==='zh'?'语言与更多入口':'Language and more'}>
     <a href={routePath(route,lang==='zh'?'en':'zh')}>{lang==='zh'?'English':'中文'}</a>
     <a href={`${lang==='zh'?'/zh':''}/projects/`}>{lang==='zh'?'全部项目':'All projects'}</a>

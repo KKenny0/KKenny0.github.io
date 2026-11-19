@@ -25,7 +25,7 @@ export const localizedNote=(note,lang)=>{
   if(lang==='zh')return note;
   const translation=reviewedEnglish[note.id] || (sourceEnglish[note.id] && [sourceEnglish[note.id].title,sourceEnglish[note.id].teaser]);
   const labels={goal:'Codex Goal','context-sep':'Context architecture','2072291792742098269':'Agent Skills','2060715503174341318':'Knowledge work','2026240034802528822':'Platform differences'};
-  return {...note,originalTitle:note.title,title:translation?.[0]||note.title,teaser:translation?.[1]||note.teaser,label:labels[note.id]||note.label,source:note.source==='知乎'?'Zhihu':note.source==='微信合集'?'WeChat collection':note.source};
+  return {...note,hasEnglishSummary:Boolean(translation),originalTitle:note.title,title:translation?.[0]||note.title,teaser:translation?.[1]||note.teaser,label:labels[note.id]||note.label,source:note.source==='知乎'?'Zhihu':note.source==='微信合集'?'WeChat collection':note.source};
 };
 export const tasteEnglish={
   'thousand-brains.png':['Three threads in A Thousand Brains','Cortical columns, reference frames, voting: a reading poster that compresses the book into three parallel threads.'],

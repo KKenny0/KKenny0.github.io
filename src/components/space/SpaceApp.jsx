@@ -1,278 +1,301 @@
 import React,{useEffect,useLayoutEffect,useMemo,useRef,useState} from 'react';
-import {flushSync} from 'react-dom';
-import {LensTuner,TasteViewer,tasteProducts,ResearchViewer,AboutMore} from './Scenes';
-import {prototypeText,localizedNote,tasteEnglish} from '../../data/space-i18n';
-import {lensInfo,projects,notes,observations,curated,projectVisual,aiWritingIds,zh,en} from '../../data/space';
-import {parseRoute,routePath,routeTitle,canonicalPath} from '../../lib/space-routes';
-import {SceneLink} from './SceneLink';
-import {Media} from './Media';
-import {HomePlayground} from './HomePlayground';
+import {AboutMore,LensTuner,TasteViewer,tasteProducts} from './Scenes';
+import {localizedNote,prototypeText,tasteEnglish} from '../../data/space-i18n';
+import {aiWritingIds,curated,isTechnicalWriting,lensInfo,notes,projects,projectVisual} from '../../data/space';
 import {githubSnapshot} from '../../data/projects';
+import {canonicalPath,parseRoute,routePath,routeTitle,storyReturnPath} from '../../lib/space-routes';
 import {site} from '../../data/site';
 import {createThemeController} from '../../lib/theme';
-const A='/assets/space/';
-const focusKey=n=>n?.id||n?.getAttribute('href')||n?.getAttribute('aria-label')||n?.textContent?.trim();
-function ProjectVisual({project,large=false,anchor=false,lang='zh'}){
-  if(project.slug==='videowipe')return <div style={anchor?{viewTransitionName:'selected-work'}:undefined} className={`project-visual visual-wipe ${large?'is-large':''}`} role="img" aria-label={prototypeText(lang,'VideoWipe 同一画面处理前后：字幕被清除','VideoWipe comparison of the same frame before and after subtitle removal')}><Media src={A+'videowipe-before.jpg'} alt=""/><Media src={A+'videowipe-after.jpg'} alt="" className="wipe-after"/><span className="wipe-divider"></span><span className="wipe-label before">{prototypeText(lang,'处理前','Before')}</span><span className="wipe-label after">{prototypeText(lang,'处理后','After')}</span></div>;
-  const media=projectVisual[project.slug];
-  if(media)return <div style={anchor?{viewTransitionName:'selected-work'}:undefined} className={`project-visual image-${media.kind} ${large?'is-large':''}`}><Media src={A+media.src} alt={project.name+prototypeText(lang,' 项目图像',' project image')} /><span className="visual-stamp mono">{media.kind==='poster'?'ACTUAL OUTPUT':'ACTUAL INTERFACE'} / {project.name.toUpperCase()}</span></div>;
-  if(project.slug==='script-weaver')return <div style={anchor?{viewTransitionName:'selected-work'}:undefined} className={`project-visual visual-script ${large?'is-large':''}`}><span className="script-top mono">AGENT / PRODUCTION SYSTEM</span><div className="script-diagram"><span>STORY<br/>IDEA</span><i>→</i><span>SCREEN<br/>PLAY</span><i>→</i><span>STORY<br/>BOARD</span></div><strong>Script-Weaver</strong><span className="visual-stamp mono">PROCESS SCHEMATIC · NOT A PRODUCT SCREENSHOT</span></div>;
-  return <div style={anchor?{viewTransitionName:'selected-work'}:undefined} className={`project-visual visual-type ${large?'is-large':''}`}><span className="mono">{project.tagline}</span><strong>{project.name}</strong><p>{lang==='zh'?project.thesisZh:project.thesis}</p><span className="visual-stamp mono">PROJECT / {project.language||'RESEARCH'}</span></div>;
+import {SceneLink,RoutePathContext} from './SceneLink';
+import {Media} from './Media';
+import CollageNav from './CollageNav';
+
+const assets='/assets/space/';
+const storagePrefix='kenny-space-return:v1:';
+const initialControls={query:'',practice:'all',sort:'selected',archived:false,options:false,selected:curated[0].id};
+const address=url=>url.pathname+url.search;
+const viewKey=url=>{
+  const topic=new URLSearchParams(url.search).get('topic');
+  return url.pathname+(topic?`?topic=${topic}`:'');
+};
+const localized=(lang,zh,en)=>prototypeText(lang,zh,en);
+
+function returnRoute(route){
+  const {view,item,source,topic,via}=route;
+  if(view==='taste')return {view:'lens',arg:'taste'};
+  if(source==='notes')return {view:'notes',topic,source:via};
+  if(source==='projects')return {view:'projects',source:via};
+  if(source==='about')return {view:'about'};
+  if(Object.hasOwn(lensInfo,source))return {view:'lens',arg:source};
+  if(item&&view==='projects')return {view:'projects'};
+  if(item&&view==='notes')return {view:'notes',topic};
+  return {view:'home'};
 }
 
-export default function SpaceApp({initialRoute,locale}){
-  const routeFromHash=()=>typeof window==='undefined'?initialRoute:parseRoute(new URL(location.href));
-  const routeHash=r=>routePath(r,locale);
-  const [route,setRoute]=useState(initialRoute);
-  const [theme,setTheme]=useState('system');
-  const lang=locale;
-  const themeController=useRef(null);
-  const [settings,setSettings]=useState(false);
-  const [homeMotionPaused,setHomeMotionPaused]=useState(false);
-  const [projectId,setProjectId]=useState(()=>projects.some(p=>p.slug===initialRoute.item)?initialRoute.item:'script-weaver');
-  const [noteId,setNoteId]=useState(()=>notes.some(n=>n.id===initialRoute.item)?initialRoute.item:'goal');
-  const [showArchived,setShowArchived]=useState(()=>!!projects.find(p=>p.slug===initialRoute.item)?.archived);
-  const [noteQuery,setNoteQuery]=useState('');
-  const [noteFilter,setNoteFilter]=useState(initialRoute.topic||'all');
-  const [projectSort,setProjectSort]=useState('selected');
-  const [projectFilter,setProjectFilter]=useState('all');
-  const [projectQuery,setProjectQuery]=useState('');
-  const pendingRestore=useRef(null);
-  const historyReady=useRef(false);
-  const [restoreSequence,setRestoreSequence]=useState(0);
-  const routeMotion=useRef(null);
-  const mainRef=useRef(null);
-  const t=lang==='zh'?zh:en;
-  const text=(zh,en)=>prototypeText(lang,zh,en);
-  const displayObservations=useMemo(()=>observations.map(n=>localizedNote(n,lang)),[lang]);
-  const displayCurated=useMemo(()=>curated.map(n=>localizedNote(n,lang)),[lang]);
+function ProjectMedia({project,lang}){
+  const text=(zh,en)=>localized(lang,zh,en);
+  const media=projectVisual[project.slug];
+  const image=project.focus||project.image;
+  if(project.slug==='videowipe')return <figure className="space-work-media space-comparison">
+    {[['videowipe-before.jpg',text('处理前','Before')],['videowipe-after.jpg',text('处理后','After')]].map(([src,label])=><figure key={src}><Media src={assets+src} alt={text(`${label}的视频帧`,`${label} frame`)} loading="eager"/><figcaption>{label}</figcaption></figure>)}
+    <figcaption>{text('同一帧视频的字幕清除对照。','Subtitle removal on the same video frame.')}</figcaption>
+  </figure>;
+  if(media)return <figure className="space-work-media"><Media src={assets+media.src} alt={text(`${project.name} 的${media.kind==='poster'?'海报作品':'实际界面'}`,`${project.name} ${media.kind==='poster'?'poster output':'interface'}`)} loading="eager"/></figure>;
+  if(image)return <figure className="space-work-media"><Media src={image.src} width={image.width} height={image.height} alt={text(image.altZh,image.alt)} loading="eager"/>{image.caption&&<figcaption>{text(image.captionZh,image.caption)}</figcaption>}</figure>;
+  if(project.slug==='script-weaver')return <figure className="space-work-media space-work-flow"><ol>{(lang==='zh'?['故事构想','可编辑剧本','分镜','视频提示词']:['Story premise','Editable script','Storyboards','Video prompts']).map(step=><li key={step}>{step}</li>)}</ol><figcaption>{text('根据公开仓库说明整理的产物流程。','Workflow based on the public repository description.')}</figcaption></figure>;
+  return null;
+}
 
-  useEffect(()=>{try{setHomeMotionPaused(sessionStorage.getItem('kenny-home-motion-paused')==='true');}catch{}},[]);
-  function toggleHomeMotion(){
-    const paused=!homeMotionPaused;setHomeMotionPaused(paused);
-    try{sessionStorage.setItem('kenny-home-motion-paused',String(paused));}catch{}
+function ProjectDetail({project,route,lang}){
+  const text=(zh,en)=>localized(lang,zh,en);
+  const story=project.detailUrl&&{view:'story',arg:project.slug,source:'work',via:route.source};
+  return <article className="space-work">
+    <header className="space-heading"><h1>{project.name}</h1><p>{text(project.thesisZh,project.thesis)}</p></header>
+    <ProjectMedia project={project} lang={lang}/>
+    <div className="space-work-facts"><p>{text(project.descriptionZh,project.description)}</p><div className="space-links">
+      <a href={project.url}>GitHub ↗</a>
+      {project.homepage&&<a href={project.homepage}>{text('访问产品 ↗','Visit product ↗')}</a>}
+      {story&&<SceneLink route={story}>{text('阅读长案例 →','Read the case study →')}</SceneLink>}
+      {project.slug==='card-skill'&&<SceneLink route={{view:'taste',arg:'card-skill'}}>{text('查看作品 →','View the artwork →')}</SceneLink>}
+      {['obsidian-kami','kami-reader-companion'].includes(project.slug)&&<SceneLink route={{view:'taste',arg:'kami-reader'}}>{text('查看阅读界面 →','View the reading layouts →')}</SceneLink>}
+    </div></div>
+    <p className="pb-index-note">{project.language&&`${project.language} · `}{project.archived&&text('已归档 · ','Archived · ')}{project.stars} stars · {project.forks} forks · {text('快照','Snapshot')} <time dateTime={githubSnapshot.date}>{githubSnapshot.date}</time></p>
+  </article>;
+}
+
+function ProjectIndex({controls,update,route,lang}){
+  const text=(zh,en)=>localized(lang,zh,en);
+  const {query,practice,sort,archived,options}=controls;
+  const practices={all:text('全部','All'),make:text('制作','Making'),think:text('思考','Thinking'),research:text('研究','Research'),capture:text('记录','Capture')};
+  const matches=projects.filter(p=>(archived||!p.archived)&&(practice==='all'||p.practice===practice)&&[p.name,p.tagline,p.thesis,p.thesisZh,p.description,p.descriptionZh].join(' ').toLowerCase().includes(query.trim().toLowerCase())).sort((a,b)=>sort==='updated'?b.pushedAt.localeCompare(a.pushedAt):sort==='stars'?b.stars-a.stars:Number(b.featured)-Number(a.featured)||b.stars-a.stars);
+  return <section className="space-index">
+    <header className="space-heading"><h1>{text('项目台','Projects')}</h1></header>
+    <div className="space-find">
+      <label>{text('搜索项目','Search projects')}<input id="project-search" type="search" value={query} onChange={e=>update({query:e.target.value})} placeholder={text('名称或关键词','Name or keyword')}/></label>
+      <div className="pb-filter-group" role="group" aria-label={text('按方向筛选','Filter by practice')}>{Object.entries(practices).map(([id,label])=><button type="button" key={id} aria-pressed={practice===id} className={practice===id?'active':''} onClick={()=>update({practice:id})}>{label}</button>)}</div>
+    </div>
+    <details className="pb-options space-project-options" open={options} onToggle={e=>update({options:e.currentTarget.open})}><summary>{text('排序与归档','Sorting and archive')}</summary><div className="pb-options-body">
+      <label><input type="checkbox" checked={archived} onChange={e=>update({archived:e.target.checked})}/>{text('包含归档项目','Include archived projects')}</label>
+      <label>{text('排序','Sort')} <select value={sort} onChange={e=>update({sort:e.target.value})}><option value="selected">{text('精选','Selected')}</option><option value="stars">{text('标星数','Stars')}</option><option value="updated">{text('最近更新','Recently updated')}</option></select></label>
+    </div></details>
+    <p className="space-count mono" aria-live="polite">{text(`${matches.length} 个项目`,`${matches.length} projects`)}</p>
+    <ul className="space-rows project-rows">{matches.map(project=><li key={project.slug}><SceneLink id={project.slug} route={{view:'projects',item:project.slug,source:'projects',via:route.source}}><span className="space-row-label">{practices[project.practice]}{project.archived&&text(' · 已归档',' · Archived')}</span><span><strong>{project.name}</strong><span>{text(project.thesisZh,project.thesis)}</span></span><span aria-hidden="true">→</span></SceneLink></li>)}</ul>
+    {!matches.length&&<p>{text('没有匹配的项目。','No matching projects.')}</p>}
+  </section>;
+}
+
+function Writing({route,entries,query,setQuery,setTopic,lang}){
+  const text=(zh,en)=>localized(lang,zh,en);
+  const topics={all:text('全部','All'),ai:text('技术写作','Technical writing'),memory:text('记忆','Memory'),context:text('上下文','Context'),agents:text('智能体','Agents')};
+  const note=entries.find(n=>n.id===route.item);
+  if(note)return <article className="space-writing-detail">
+    <header className="space-heading"><p>{isTechnicalWriting(note)?topics.ai:text('观察','Observation')} · <time dateTime={note.date}>{note.date}</time></p><h1>{note.title}</h1></header>
+    <p className="space-summary-label">{lang==='zh'?'摘要':note.hasEnglishSummary?'English summary':'Chinese summary'}</p><p className="space-summary" lang={lang==='en'&&!note.hasEnglishSummary?'zh-CN':undefined}>{note.teaser}</p>
+    <div className="space-links"><a href={note.url} hrefLang="zh-CN" target="_blank" rel="noopener noreferrer">{note.provisional?text('在微信阅读中文合集 ↗','Open the Chinese WeChat collection ↗'):text('在知乎阅读中文原文 ↗','Read the Chinese original on Zhihu ↗')}</a>
+      <SceneLink route={{view:'notes',topic:route.topic}}>{text('浏览文章索引 →','Browse the writing index →')}</SceneLink></div>
+  </article>;
+  const topic=route.topic||'all';
+  const matches=entries.filter(n=>(topic==='all'||(topic==='ai'?isTechnicalWriting(n):n.topic===topic))&&[n.title,n.originalTitle,n.teaser,n.source,topics[n.topic]].join(' ').toLowerCase().includes(query.trim().toLowerCase()));
+  return <section className="space-index">
+    <header className="space-heading"><h1>{text('文章','Writing')}</h1></header>
+    <div className="space-find">
+      <label>{text('搜索文章','Search writing')}<input id="writing-search" type="search" value={query} onChange={e=>setQuery(e.target.value)} placeholder={text('标题或关键词','Title or keyword')}/></label>
+      <div className="pb-filter-group" role="group" aria-label={text('按主题筛选','Filter by topic')}>{Object.entries(topics).map(([id,label])=><button type="button" key={id} aria-pressed={topic===id} className={topic===id?'active':''} onClick={()=>setTopic(id)}>{label}</button>)}</div>
+    </div>
+    <p className="space-count mono" aria-live="polite">{text(`${matches.length} 条记录`,`${matches.length} entries`)}</p>
+    <ul className="space-rows writing-rows">{matches.map(n=><li key={n.id}><SceneLink id={`note-${n.id}`} route={{view:'notes',item:n.id,source:'notes',topic:route.topic,via:route.source}}><time dateTime={n.date} className="space-row-label">{n.date}</time><span><strong>{n.title}</strong><span>{n.teaser}</span><small>{n.source} · {n.provisional?text('中文合集','Chinese collection'):text('中文原文','Chinese original')}</small></span><span aria-hidden="true">→</span></SceneLink></li>)}</ul>
+    {!matches.length&&<p>{text('没有匹配的文章。','No matching writing.')}</p>}
+  </section>;
+}
+
+function Taste({lang}){
+  const text=(zh,en)=>localized(lang,zh,en);
+  const descriptions={
+    'kami-reader':text('长文优先。用暖纸色与衬线字拉开正文、图示和侧栏的层次，让侧栏退到读者需要它的时候。','Long-form reading comes first. Warm paper and serif text establish a hierarchy between prose, diagrams and a sidebar that stays in the background until needed.'),
+    'card-skill':text('先决定读者该看见什么。读书海报保留三条主线，A2A 封面只画交接边界，研究解释图突出阶段顺序。不同信息关系用不同版式。','Decide what the reader should see first. The reading poster keeps three threads, the A2A cover shows only the handoff, and the research diagram stresses the sequence of stages. Each layout follows the relationship it needs to show.')
+  };
+  return <section>
+    <header className="space-heading"><h1>{lensInfo.taste.navigation[lang]}</h1><p>{text('一套版式照顾持续阅读，一套工具帮助选出值得放大的内容。','One set of layouts supports sustained reading. The other helps decide what to put in focus.')}</p></header>
+    {[...tasteProducts].reverse().map(product=><section key={product.id} className="space-editorial-section"><h2>{product.name}</h2><p>{descriptions[product.id]}</p><div className="space-print-grid">{product.works.map((work,index)=>{
+      const [title,description]=lang==='zh'?[work.title,work.description]:tasteEnglish[work.image];
+      return <figure key={work.id}><SceneLink route={{view:'taste',arg:product.id,work:index}}><Media src={assets+work.image} alt="" loading={product.id==='kami-reader'?'eager':'lazy'}/><strong>{title} <span aria-hidden="true">→</span></strong></SceneLink><figcaption>{description}</figcaption></figure>;
+    })}</div></section>)}
+    <SceneLink className="space-index-link" route={{view:'projects',source:'taste'}}>{text('浏览全部项目 →','Browse all projects →')}</SceneLink>
+  </section>;
+}
+
+function Ai({entries,lang}){
+  const text=(zh,en)=>localized(lang,zh,en);
+  return <section>
+    <header className="space-heading"><h1>{lensInfo.ai.navigation[lang]}</h1></header>
+    <div className="space-ai-groups">
+      <section aria-labelledby="ai-projects"><h2 id="ai-projects">{text('GitHub 项目','GitHub projects')}</h2><ul className="space-rows">{['script-weaver','videowipe'].map(id=>{
+        const project=projects.find(p=>p.slug===id);
+        return <li key={id}><SceneLink route={{view:'projects',item:id,source:'ai'}}><span><strong>{project.name}</strong><span>{text(project.thesisZh,project.thesis)}</span></span><span aria-hidden="true">→</span></SceneLink></li>;
+      })}</ul><SceneLink className="space-index-link" route={{view:'projects',source:'ai'}}>{text('全部项目 →','All projects →')}</SceneLink></section>
+      <section aria-labelledby="ai-writing"><h2 id="ai-writing">{text('技术写作','Technical writing')}</h2><ul className="space-rows">{aiWritingIds.map(id=>{
+        const note=entries.find(n=>n.id===id);
+        return <li key={id}><SceneLink route={{view:'notes',item:id,source:'ai'}}><span><strong>{note.title}</strong><span>{note.teaser}</span></span><span aria-hidden="true">→</span></SceneLink></li>;
+      })}</ul><SceneLink className="space-index-link" route={{view:'notes',source:'ai',topic:'ai'}}>{text('全部技术写作 →','All technical writing →')}</SceneLink></section>
+    </div>
+  </section>;
+}
+
+function Execution({lang}){
+  const text=(zh,en)=>localized(lang,zh,en);
+  const evidence=(anchor)=>({view:'about',source:'execution',anchor});
+  return <article className="space-execution">
+    <header className="space-heading"><h1>{lensInfo.execution.navigation[lang]}</h1><h2>{text('一次长任务，怎么恢复并确认完成？','How does a long run recover and reach completion?')}</h2><p>{text('2026 年，我负责 AI 漫剧生成系统的技术方案、质量评估和验收标准。中间报错需要有界恢复，生成结果也需要独立检查。','In 2026 I led the technical design, quality evaluation and acceptance criteria for an AI comics generation system. Mid-run failures needed bounded recovery. The output needed independent checks.')}</p></header>
+    <section className="pb-path space-workflow" aria-labelledby="workflow"><h2 id="workflow">{text('工作流程','Workflow')}</h2><ol>{(lang==='zh'?['理解剧本','提取角色资产','生成结构化多镜头分镜','独立质检与有界纠错']:['Understand the script','Extract character assets','Generate structured multi-shot storyboards','Grade quality and bound corrections']).map(step=><li key={step}><strong>{step}</strong></li>)}</ol></section>
+    <section className="space-editorial-section"><h2>{text('恢复与验收','Recovery and acceptance')}</h2><p>{text('质量侧把分镜质检打分独立出来，并为自动纠错设定成本上限。运行侧通过熔断、动态并发和断点恢复处理长任务中的偶发故障。固定集评估检查了分镜问题率，长任务实测记录了报错后能否把这一轮跑完。','For output quality, we graded storyboards independently and capped the cost of automatic correction. For runtime failures, we used circuit breaking, dynamic concurrency and bounded checkpoint recovery. The fixed set measured storyboard quality. The long run recorded whether that particular batch finished after errors.')}</p>
+      <div className="pb-results space-evidence"><div><h3>{text('固定评测集','Fixed evaluation set')}</h3><strong>≈18% → 9.53%</strong><p>{text('同一固定集合上的动作过载与景别失当问题率。','Rate of overloaded action and unsuitable shot scale on the same fixed set.')}</p><SceneLink route={evidence('storyboard-evaluation')}>{text('查看公开履历中的评测记录 →','See the evaluation entry in the public work record →')}</SceneLink></div><div><h3>{text('单次长任务实测','One long-run test')}</h3><strong>{text('20 集','20 episodes')}</strong><p>{text('一次实际运行，中途报错后自动恢复并跑完全部 20 集。','One observed run recovered from intermediate failures and completed all 20 episodes.')}</p><SceneLink route={evidence('storyboard-recovery')}>{text('查看公开履历中的恢复记录 →','See the recovery entry in the public work record →')}</SceneLink></div></div>
+      <p className="space-evidence-limit">{text('公开材料是个人履历。评测样本量、原始打分、运行日志和故障明细未公开。两条记录可核对网页引用和各自口径。单次运行不足以估算长期成功率。','The public source is my work record. It provides no sample count, raw scores, run logs or incident details. The linked entries let readers check the wording and scope. One run cannot establish a long-run success rate.')}</p>
+    </section>
+    <div className="space-links"><SceneLink route={evidence('storyboard-generation')}>{text('查看技术职责 →','See the technical responsibilities →')}</SceneLink><SceneLink route={{view:'projects',source:'execution'}}>{text('浏览项目台 →','Browse projects →')}</SceneLink></div>
+  </article>;
+}
+
+function About({lang}){
+  const text=(zh,en)=>localized(lang,zh,en);
+  function rewriteHref(href){
+    if(href.endsWith('/projects/#tracework'))return routePath({view:'projects',item:'tracework',source:'about'},lang);
+    if(href.endsWith('/projects/#card-skill'))return routePath({view:'projects',item:'card-skill',source:'about'},lang);
+    if(href==='/notes/?topic=memory')return routePath({view:'notes',topic:'memory',source:'about'},lang);
+    return href;
   }
-  useEffect(()=>{const controller=createThemeController(setTheme);themeController.current=controller;return()=>controller.destroy();},[]);
+  return <section className="space-about">
+    <div className="pb-about-hero"><header className="space-heading"><h1>{text('关于 Kenny 吴嘉业','About Kenny Wu')}</h1><p>{text('我在深圳做 AI 工程。早期做智能搜索和会话分析，后来负责企业问答与交互质量，再到短剧剪辑和 AI 漫剧生成。工作从理解一次查询，延伸到让跨集的任务可以核验、可以恢复。','I’m an AI engineer in Shenzhen. I started in intelligent search and conversation analysis, worked on enterprise Q&A and interaction quality, and moved into short-drama editing and AI comics generation. The work grew from understanding a single query to making multi-episode jobs verifiable and recoverable.')}</p><a href={`mailto:${site.email}`}>{text('联系我 ↗','Contact me ↗')}</a></header><figure className="pb-portrait"><Media src={assets+'self-profo.jpg'} alt={text('吴嘉业的肖像','Portrait of Kenny Wu')}/></figure></div>
+    <section className="space-editorial-section"><h2>{text('我负责的判断','Decisions I’m responsible for')}</h2><p>{text('企业问答里，我用文档层级和多路召回来处理检索；短剧剪辑里，我负责跨集角色对齐；漫剧生成里，我负责决定怎么验收分镜，以及失败后允许花多少成本纠错。这些工作把“模型输出是否可用”落到可以检查的环节。','In enterprise Q&A, I used document hierarchy and multiple retrieval paths. In short-drama editing, I led cross-episode character alignment. In AI comics generation, I owned storyboard acceptance criteria and the bounds on corrective work. Each role gave me a concrete place to check whether the model’s output was usable.')}</p><div className="space-links"><SceneLink route={{view:'lens',arg:'execution',source:'about'}}>{text('看漫剧生成案例 →','Read the comics generation case →')}</SceneLink><SceneLink route={{view:'projects',source:'about'}}>{text('浏览公开项目 →','Explore public projects →')}</SceneLink></div></section>
+    <AboutMore lang={lang} visible rewriteHref={rewriteHref}/>
+  </section>;
+}
+
+export default function SpaceApp({initialRoute,locale:lang}){
+  const text=(zh,en)=>localized(lang,zh,en);
+  const [route,setRoute]=useState(initialRoute);
+  const [controls,setControls]=useState(initialControls);
+  const [ready,setReady]=useState(false);
+  const [theme,setTheme]=useState('system');
+  const themeController=useRef(null);
+  const pending=useRef(null);
+  const main=useRef(null);
+  const latest=useRef(controls);
+  const entries=useMemo(()=>notes.map(note=>localizedNote(note,lang)),[lang]);
+  const selectedEntries=useMemo(()=>curated.map(note=>localizedNote(note,lang)),[lang]);
+  function update(patch){setControls(current=>({...current,...patch}));}
+  useLayoutEffect(()=>{latest.current=controls;},[controls]);
   useEffect(()=>{
-    document.title=routeTitle(route,lang);
-    const canonical=new URL(canonicalPath(route,lang),site.canonical).href;
-    document.querySelector('link[rel="canonical"]')?.setAttribute('href',canonical);
-    document.querySelector('meta[property="og:url"]')?.setAttribute('content',canonical);
-    document.querySelector('meta[property="og:title"]')?.setAttribute('content',document.title);
-    for(const link of document.querySelectorAll('link[hreflang]'))link.setAttribute('href',new URL(canonicalPath(route,link.hreflang==='zh-CN'?'zh':'en'),site.canonical).href);
-  },[route,lang]);
-  function snapshot(){return {projectId,noteId,projectFilter,projectQuery,showArchived,projectSort,noteQuery,noteFilter,scroll:window.scrollY,focusKey:focusKey(document.activeElement)};}
-  // Browser Back can leave without calling our navigation functions. Keep the current
-  // entry up to date so Forward also restores searches, filters, scroll and focus.
+    const controller=createThemeController(setTheme);
+    themeController.current=controller;
+    return ()=>controller.destroy();
+  },[]);
   useEffect(()=>{
-    let timer;
-    const save=()=>{if(historyReady.current&&history.state?.proto&&routeHash(history.state.route)===routeHash(route)){
-      if(route.view==='projects'&&filteredProjects.length&&!filteredProjects.some(p=>p.slug===projectId))return;
-      const current=snapshot();history.replaceState({...history.state,snapshot:current},'',location.href);
-      try{sessionStorage.setItem('kenny-view:v1:'+routeHash(route),JSON.stringify(current));}catch{}
-    }};
-    const onScroll=()=>{clearTimeout(timer);timer=setTimeout(save,120);};
-    save();addEventListener('scroll',onScroll,{passive:true});document.addEventListener('focusin',save);
-    return()=>{clearTimeout(timer);removeEventListener('scroll',onScroll);document.removeEventListener('focusin',save);};
-  },[route,projectId,noteId,projectFilter,projectQuery,showArchived,projectSort,noteQuery,noteFilter]);
-  useEffect(()=>{
-    const resolved=routeFromHash();if(resolved.topic)setNoteFilter(resolved.topic); if(JSON.stringify(resolved)!==JSON.stringify(initialRoute)){setRoute(resolved);if(resolved.view==='projects'&&resolved.item){setProjectId(resolved.item);if(projects.find(p=>p.slug===resolved.item)?.archived)setShowArchived(true);}if(resolved.view==='notes'&&resolved.item)setNoteId(resolved.item);}
-    let saved=history.state?.proto&&routeHash(history.state.route)===routeHash(resolved)?history.state.snapshot:null;
-    // Some embedded browsers recreate documents when using their Back/Forward controls.
-    if(!saved)try{saved=JSON.parse(sessionStorage.getItem('kenny-view:v1:'+routeHash(resolved))||'null');}catch{}
-    if(saved){setProjectId(saved.projectId);setNoteId(saved.noteId);setProjectFilter(saved.projectFilter);setProjectQuery(saved.projectQuery);setShowArchived(saved.showArchived||false);setProjectSort(saved.projectSort||'selected');setNoteQuery(saved.noteQuery||'');setNoteFilter(saved.noteFilter||'all');pendingRestore.current=saved;setRestoreSequence(n=>n+1);}
-    if(!history.state?.proto)history.replaceState({proto:true,depth:0,route:resolved},'',location.href);
-    historyReady.current=true;
-    const onPop=e=>{
-      const saved=e.state?.snapshot;
-      if(saved){setProjectId(saved.projectId);setNoteId(saved.noteId);setProjectFilter(saved.projectFilter);setProjectQuery(saved.projectQuery);setNoteQuery(saved.noteQuery||'');setNoteFilter(saved.noteFilter||'all');setShowArchived(saved.showArchived||false);setProjectSort(saved.projectSort||'selected');pendingRestore.current=saved;}
-      const next=e.state?.route||routeFromHash();
-      if(!saved&&next.item){if(next.view==='projects')setProjectId(next.item);if(next.view==='notes')setNoteId(next.item);}
-      setRoute(next);setSettings(false);setRestoreSequence(n=>n+1);
+    const readLocation=()=>setRoute(parseRoute(new URL(location.href)));
+    const openAnchor=()=>{
+      const target=document.getElementById(location.hash.slice(1));
+      if(!target)return;
+      const disclosure=target.closest('details');
+      if(disclosure)disclosure.open=true;
+      target.scrollIntoView({block:'start'});
     };
-    const onPointer=()=>document.documentElement.dataset.input='pointer';
-    const onKey=()=>document.documentElement.dataset.input='keyboard';
-    const onHashChange=()=>{
-      if(routeFromHash().view==='about'){
-        const target=document.getElementById(location.hash.slice(1));
-        target?.closest('details')?.setAttribute('open','');target?.scrollIntoView({behavior:'instant'});
-      }else onPop({state:null});
-    };
-    const oldAnchor=document.getElementById(location.hash.slice(1));
-    if(oldAnchor&&resolved.view==='about'){
-      oldAnchor.closest('details')?.setAttribute('open','');
-      requestAnimationFrame(()=>oldAnchor.scrollIntoView({behavior:'instant'}));
+    function save(focus=document.activeElement){
+      const state={controls:latest.current,scroll:window.scrollY,focus:focus?.id||focus?.getAttribute('href')};
+      history.replaceState({...history.state,space:state},'');
+      try{sessionStorage.setItem(storagePrefix+viewKey(location),JSON.stringify(state));}catch{}
     }
-    addEventListener('popstate',onPop);addEventListener('hashchange',onHashChange);addEventListener('pointerdown',onPointer);addEventListener('wheel',onPointer,{passive:true});addEventListener('keydown',onKey);
-    return()=>{removeEventListener('popstate',onPop);removeEventListener('hashchange',onHashChange);removeEventListener('pointerdown',onPointer);removeEventListener('wheel',onPointer);removeEventListener('keydown',onKey);};
+    function onLink(event){
+      const link=event.target.closest('a[href]');
+      if(!link||event.defaultPrevented||event.button!==0||event.metaKey||event.ctrlKey||event.shiftKey||event.altKey||link.target||link.origin!==location.origin||address(link)===address(location))return;
+      save(link);
+      if(!link.hasAttribute('data-space-return'))return;
+      const navigation=window.navigation;
+      const previous=navigation?.entries().find(entry=>entry.index===navigation.currentEntry.index-1);
+      if(previous?.url===link.href){
+        event.preventDefault();
+        history.back();
+        return;
+      }
+      try{sessionStorage.setItem(storagePrefix+'destination',address(link));}catch{}
+    }
+    const pagehide=()=>save();
+    const hashchange=()=>{readLocation();openAnchor();};
+    const navigation=performance.getEntriesByType('navigation')[0]?.type;
+    let saved=history.state?.space;
+    try{
+      const destination=sessionStorage.getItem(storagePrefix+'destination');
+      if(destination===address(location)){
+        saved ||= JSON.parse(sessionStorage.getItem(storagePrefix+viewKey(location))||'null');
+        sessionStorage.removeItem(storagePrefix+'destination');
+      }else if(!saved&&document.referrer){
+        const previous=new URL(document.referrer);
+        const detail=parseRoute(previous);
+        if(previous.origin===location.origin&&detail.view==='story'&&new URL(storyReturnPath(detail,lang),location.origin).pathname===location.pathname){
+          saved=JSON.parse(sessionStorage.getItem(storagePrefix+viewKey(location))||'null');
+        }
+      }
+    }catch{}
+    if(saved){setControls(saved.controls);pending.current=saved;}
+    readLocation();setReady(true);
+    if(location.hash&&!saved)requestAnimationFrame(openAnchor);
+    if(navigation==='back_forward'&&saved)history.scrollRestoration='manual';
+    window.addEventListener('pagehide',pagehide);
+    window.addEventListener('hashchange',hashchange);
+    window.addEventListener('popstate',readLocation);
+    document.addEventListener('click',onLink);
+    return ()=>{
+      window.removeEventListener('pagehide',pagehide);
+      window.removeEventListener('hashchange',hashchange);
+      window.removeEventListener('popstate',readLocation);
+      document.removeEventListener('click',onLink);
+    };
   },[]);
   useLayoutEffect(()=>{
-    const saved=pendingRestore.current;pendingRestore.current=null;
-    window.scrollTo({top:saved?.scroll||0,behavior:'instant'});
-    const target=saved?[...document.querySelectorAll('button,a,input,summary')].find(n=>focusKey(n)===saved.focusKey):(mainRef.current?.querySelector('.tuner-stage,.research-paper')||mainRef.current);
-    (target||mainRef.current?.querySelector('.tuner-stage,.research-paper')||mainRef.current)?.focus({preventScroll:true});
-  },[route.view,route.arg,restoreSequence]);
-  function commitRoute(next){
-    const update=()=>flushSync(()=>{setRoute(next);setSettings(false);});
-    if(document.startViewTransition&&document.documentElement.dataset.input!=='keyboard'&&!matchMedia('(prefers-reduced-motion: reduce)').matches&&!(next.view==='notes'&&route.view==='lens'&&route.arg==='online')&&!(route.view==='notes'&&next.view==='lens'&&next.arg==='online')){
-      routeMotion.current?.skipTransition();routeMotion.current=document.startViewTransition(update);
-    }else update();
-  }
-  function navigate(view,arg='',work=0,item=''){
-    const next={view,arg,work,item};
-    if(next.view===route.view&&next.arg===route.arg&&next.work===(route.work||0)&&item===(route.item||''))return;
-    history.replaceState({...history.state,snapshot:snapshot()},'',location.href);
-    history.pushState({proto:true,depth:(history.state?.depth||0)+1,route:next},'',routeHash(next));
-    if(route.view==='lens'&&route.arg==='online'&&view==='notes')pendingRestore.current={scroll:window.scrollY,focusIndex:-1};
-    if(view==='lens'&&arg==='online'&&!curated.some(n=>n.id===noteId))setNoteId(curated[0].id);
-    commitRoute(next);
-  }
-  function back(){
-    if((history.state?.depth||0)>0){history.replaceState({...history.state,snapshot:snapshot()},'',location.href);history.back();return;}
-    if(route.view==='taste')navigate('lens','taste');
-    else if(['projects','notes'].includes(route.view)&&lensInfo[route.arg])navigate('lens',route.arg);
-    else if(route.view==='about'&&route.arg==='execution')navigate('lens','execution');
-    else navigate('home');
-  }
+    if(!ready||!pending.current)return;
+    const {scroll,focus}=pending.current;
+    pending.current=null;
+    const target=focus&&(document.getElementById(focus)||[...document.links].find(link=>link.getAttribute('href')===focus));
+    (target||main.current)?.focus({preventScroll:true});
+    window.scrollTo({top:scroll,behavior:'instant'});
+  },[ready]);
   useEffect(()=>{
-    const onKey=e=>{
-      if(e.key!=='Escape'||document.querySelector('dialog[open]'))return;
-      if(settings){setSettings(false);document.querySelector('.environment-trigger')?.focus({preventScroll:true});return;}
-      if(route.view!=='home')back();
-    };
-    addEventListener('keydown',onKey);return()=>removeEventListener('keydown',onKey);
-  },[route,settings,projectId,noteId,projectFilter,projectQuery]);
-  function openProjects(from,slug,e){
-    if(slug)setProjectId(slug);setProjectQuery('');setProjectFilter('all');
-    const media=e?.currentTarget.querySelector('.project-visual');
-    if(media)media.style.viewTransitionName='selected-work';
-    navigate('projects',from,0,slug||projectId);
-    routeMotion.current?.finished.finally(()=>{if(media)media.style.viewTransitionName='';});
+    document.title=routeTitle(route,lang);
+    const absolute=locale=>new URL(canonicalPath(route,locale),site.canonical).href;
+    document.querySelector('link[rel="canonical"]')?.setAttribute('href',absolute(lang));
+    document.querySelector('meta[property="og:url"]')?.setAttribute('content',absolute(lang));
+    document.querySelector('meta[property="og:title"]')?.setAttribute('content',document.title);
+    for(const link of document.querySelectorAll('link[hreflang][rel="alternate"]'))link.href=absolute(link.hreflang==='zh-CN'?'zh':'en');
+  },[route,lang]);
+  function setTopic(topic){
+    const next={...route,topic:topic==='all'?undefined:topic};
+    history.replaceState(history.state,'',routePath(next,lang));
+    setRoute(next);
   }
-  function openNotes(from,id,e){
-    if(id)setNoteId(id);
-    const paper=e?.currentTarget.querySelector('.note-paper');if(paper)paper.style.viewTransitionName='selected-writing';
-    navigate('notes',from,0,id||noteId);
-    routeMotion.current?.finished.finally(()=>{if(paper)paper.style.viewTransitionName='';});
-  }
-  function replaceSelection(view,id){
-    if(view==='projects')setProjectId(id);else setNoteId(id);
-    if(route.view!==view)return;
-    const next={...route,item:id};history.replaceState({...history.state,route:next},'',routeHash(next));setRoute(next);
-  }
-  function selectProject(id){replaceSelection('projects',id);}
-  function selectNote(id){replaceSelection('notes',id);}
-  useEffect(()=>{
-    if(!settings)return;
-    const dismiss=e=>{if(!e.target.closest('.environment'))setSettings(false);};
-    document.addEventListener('pointerdown',dismiss);return()=>document.removeEventListener('pointerdown',dismiss);
-  },[settings]);
-  function selectTaste(index){
-    const next={...route,work:index};history.replaceState({...history.state,route:next},'',routeHash(next));setRoute(next);
-  }
-  function handleSceneClick(e){
-    const anchor=e.target.closest('a[data-scene]');
-    if(!anchor||e.defaultPrevented||e.button!==0||e.metaKey||e.ctrlKey||e.shiftKey||e.altKey)return;
-    const url=new URL(anchor.href);
-    if(url.origin!==location.origin)return;
-    e.preventDefault();
-    const next=parseRoute(url);
-    if(next.view==='projects'){
-      if(route.view==='projects'){selectProject(next.item);return;}
-      setProjectId(next.item||'script-weaver');setProjectFilter('all');setProjectQuery('');
-      setShowArchived(!!projects.find(p=>p.slug===next.item)?.archived);
-    }
-    if(next.view==='notes')setNoteId(next.item||'goal');
-    const media=anchor.querySelector('.project-visual,.note-paper');
-    if(media)media.style.viewTransitionName=media.classList.contains('note-paper')?'selected-writing':'selected-work';
-    navigate(next.view,next.arg,next.work,next.item);
-    const clear=()=>{if(media)media.style.viewTransitionName='';};
-    if(routeMotion.current)routeMotion.current.finished.then(clear,clear);else clear();
-  }
-  const activeProject=projects.find(p=>p.slug===projectId)||projects[0];
-  const activeNote=displayObservations.find(n=>n.id===noteId)||displayObservations[0];
-  const filteredProjects=useMemo(()=>projects.filter(p=>(showArchived||!p.archived)&&(projectFilter==='all'||p.practice===projectFilter)&&(!projectQuery||`${p.name} ${p.thesisZh} ${p.descriptionZh} ${p.thesis} ${p.description}`.toLowerCase().includes(projectQuery.toLowerCase()))).sort((a,b)=>projectSort==='updated'?b.pushedAt.localeCompare(a.pushedAt):projectSort==='stars'?b.stars-a.stars:Number(b.featured)-Number(a.featured)||b.stars-a.stars),[projectFilter,projectQuery,showArchived,projectSort]);
-  useEffect(()=>{if(route.view==='projects'&&filteredProjects.length&&!filteredProjects.some(p=>p.slug===projectId))selectProject(filteredProjects[0].slug)},[route.view,filteredProjects,projectId]);
+  const back=returnRoute(route);
+  const backLabel=back.view==='lens'?lensInfo[back.arg].navigation[lang]:({projects:text('项目台','Projects'),notes:text('文章','Writing'),about:text('关于','About'),home:text('首页','Home')})[back.view];
+  const project=route.view==='projects'&&projects.find(p=>p.slug===route.item);
+  const selected=selectedEntries.find(note=>note.id===controls.selected)||selectedEntries[0];
+  const linkFor=(target,locale=lang)=>routePath(target,locale);
+  const languageHref=linkFor({...route,anchor:ready?location.hash.slice(1):undefined},lang==='zh'?'en':'zh');
+  const artwork=tasteProducts.find(product=>product.id===route.arg);
 
-
-  const screenName=route.view==='taste'?'Taste':route.view==='home'?'Home':route.view==='lens'?lensInfo[route.arg]?.name:route.view==='projects'?'Projects':route.view==='notes'?'Notes':'About';
-  return <div className={`site site-${route.view}`} onClick={handleSceneClick}>
-    <div className="light-field" aria-hidden="true"></div>
-    <header className="site-header">
-      {route.view==='home'?<span className="brand brand-signature">Kenny Wu</span>:<SceneLink className="brand" type="button"  route={{view:'home',arg:''}} lang={lang} aria-label={text('回到首页','Return Home')}>Kenny Wu <span aria-hidden="true">→</span></SceneLink>}
-      <span className="header-context mono">{route.view==='home'?'FOUR STATES / ONE PERSON':`KENNY WU / ${screenName?.toUpperCase()}`}</span>
-      <a className="header-contact mono" href={`mailto:${site.email}`}>{t.contact} ↗</a>
+  return <RoutePathContext.Provider value={linkFor}><div className="proto-site collage-inner formal-space" data-view={route.view}>
+    <header className="pb-header">
+      <SceneLink className="pb-brand" route={{view:'home'}} data-space-return="">Kenny Wu</SceneLink>
+      <CollageNav lang={lang} view={route.view} topic={route.view==='lens'?route.arg:route.view==='taste'?'taste':undefined} mode="formal"/>
+      <div className="pb-tools"><div className="pb-theme" role="group" aria-label={text('明暗主题','Theme')}>
+        {Object.entries({system:text('系统','Auto'),light:text('亮色','Light'),dark:text('暗色','Dark')}).map(([id,label])=><button key={id} type="button" aria-pressed={theme===id} onClick={()=>themeController.current?.set(id)}>{label}</button>)}
+      </div><a className="pb-language" href={languageHref} hrefLang={lang==='zh'?'en':'zh-CN'}>{text('EN','中文')}</a></div>
     </header>
-
-    {route.view==='home'&&<HomePlayground lang={lang} mainRef={mainRef} settingsOpen={settings} paused={homeMotionPaused} onTogglePaused={toggleHomeMotion}/>}
-
-    {route.view==='lens'&&route.arg!=='online'&&<main id="main" className={`near-scene near-${route.arg} screen-enter`} data-screen-label={`${lensInfo[route.arg]?.name||''} lens`} ref={mainRef} tabIndex="-1" onClick={e=>{if(e.target===e.currentTarget)navigate('home')}}>
-      <div className="near-shell" onClick={e=>e.stopPropagation()}>
-        <div className="view-line"><SceneLink type="button"  route={{view:'home',arg:''}} lang={lang}>← {t.home}</SceneLink><span className="mono">{lensInfo[route.arg]?.number} / {lensInfo[route.arg]?.name.toUpperCase()} · {t.selected.toUpperCase()}</span></div>
-        {route.arg==='taste'&&<section className="taste-layout">
-          <div className="lens-intro taste-intro"><span className="mono">CREATION / SELECTED WORK</span><h1>{lang==='zh'?<>让想法，<br/>有自己的形状。</>:<>Give ideas<br/>a form.</>}</h1><p>{lang==='zh'?'把文本和阅读，做成具体的作品。':'Turn text and reading into tangible craft.'}</p></div>
-          <div className="taste-pair">
-            <SceneLink className="taste-object taste-paper" type="button"  route={{view:'taste',arg:'card-skill'}} lang={lang}><span className="taste-number mono">01 / VISUAL TOOL</span><div className="taste-visual"><Media src={A+'thousand-brains.png'} alt={text('《千脑智能》读书海报','A Thousand Brains reading poster')}/><Media src={A+'a2a-cover.png'} alt={text('A2A 协作封面','A2A collaboration cover')}/></div><span className="taste-title"><strong>card-skill</strong><small>{text('把文本变成可阅读的视觉作品。','Turn text into visual work.')}</small><i>→</i></span></SceneLink>
-            <SceneLink className="taste-object taste-window" type="button"  route={{view:'taste',arg:'kami-reader'}} lang={lang}><span className="taste-number mono">02 / READING SYSTEM</span><div className="taste-visual"><Media src={A+'kami.png'} alt={text('Kami Reader 真实界面','Actual Kami Reader interface')}/></div><span className="taste-title"><strong>Kami Reader</strong><small>{text('让长时间阅读停留在内容本身。','Keep sustained reading focused on the text itself.')}</small><i>→</i></span></SceneLink>
-          </div>
-          <SceneLink className="passage" type="button"  route={{view:'projects',arg:'taste',item:'card-skill'}} lang={lang}><span className="mono">CONTINUE / PROJECTS</span><strong>{lang==='zh'?'在这两款产品之外，浏览更多项目':'Explore more projects beyond these products'}</strong><em>→</em></SceneLink>
-        </section>}
-        {route.arg==='ai'&&<section className="ai-layout ai-exhibition">
-          <div className="lens-intro ai-intro"><h1>{lang==='zh'?'做出来，也拆开看。':'Build it. Study it.'}</h1></div>
-          <div className="ai-pair">
-            <h2 className="ai-type-heading">{text('GitHub 项目','GitHub projects')}</h2><h2 className="ai-type-heading">{text('专业文章','Technical writing')}</h2>
-            {['script-weaver',aiWritingIds[0],'videowipe',aiWritingIds[1]].map(id=>{
-              const p=projects.find(p=>p.slug===id);
-              if(p)return <SceneLink className="ai-sample ai-sample-project" type="button" key={id}  route={{view:'projects',arg:'ai',item:id}} lang={lang}><span className="sample-kind">{text('项目','Project')}</span><Media className="perch" src={A+'ai-perch.webp'} alt=""/><div className="sample-material" aria-label={id==='script-weaver'?text('工作流程示意，非产品截图','Process schematic, not a product screenshot'):undefined}><ProjectVisual project={p} lang={lang}/></div><span className="sample-caption"><strong>{p.name}</strong><small>{id==='script-weaver'?text('剧本与分镜生成','Script & storyboard generation'):text('视频字幕与遮挡清理','Subtitle & watermark removal')}</small><b aria-hidden="true">→</b></span></SceneLink>;
-              const n=displayObservations.find(n=>n.id===id),memory=id===aiWritingIds[0];
-              return <SceneLink className="ai-sample ai-sample-note" type="button" key={id}  route={{view:'notes',arg:'ai',item:id}} lang={lang}><span className="sample-kind">{text('文章','Writing')}</span><Media className="perch" src={A+'ai-perch.webp'} alt=""/><div className="note-paper"><time className="mono">{n.date.replace('-', '.')}</time><strong>{memory?text(<>记忆如何<br/>决定行动</>,<>When memory<br/>shapes action</>):text(<>压缩之后，<br/>如何接着工作</>,<>Keep working<br/>after compression</>)}</strong></div><span className="sample-caption"><strong>{memory?'Agent Memory Systems':'Claude Code Compact'}</strong><b aria-hidden="true">→</b></span></SceneLink>;
-            })}
-          </div>
-          <div className="ai-more"><SceneLink type="button"  route={{view:'projects',arg:'ai',item:'script-weaver'}} lang={lang}>{lang==='zh'?'全部项目 →':'All projects →'}</SceneLink><SceneLink route={{view:'notes',arg:'ai',item:aiWritingIds[0]}} lang={lang}>{lang==='zh'?'全部专业文章 →':'Technical writing archive →'}</SceneLink></div>
-        </section>}
-        {route.arg==='execution'&&<section className="execution-layout">
-          <div className="execution-lead"><div className="lens-intro"><span className="mono">SYSTEM IN PRACTICE / 2026</span><h1>{lang==='zh'?<>让复杂工作，<br/>走到完成。</>:<>Carry the work<br/>through.</>}</h1></div><p>{text('从剧本理解、角色资产到分镜生成，把质量检查与失败恢复放进同一条工作链路。','Connect script understanding, character assets and storyboards with quality checks and recovery in one workflow.')}</p></div>
-          <div className="execution-path"><span className="mono">AI COMICS GENERATION / WORKFLOW</span><div>{(lang==='zh'?['读懂剧本','整理资产','生成分镜','质检与恢复']:['Read the script','Prepare assets','Build storyboards','Check and recover']).map((step,i)=><article key={step}><small className="mono">0{i+1}</small><strong>{step}</strong></article>)}</div><Media src={A+'execution.webp'} alt=""/></div>
-          <div className="execution-results"><div><span className="mono">FIXED EVALUATION SET</span><strong>≈18% <i>→</i> 9.53%</strong><p>{text('动作过载与景别失当问题率','Issue rate: overloaded action and unsuitable shot scale')}</p></div><div><span className="mono">ONE LONG RUN</span><strong>20 <small>{text('集','episodes')}</small></strong><p>{text('中间报错后自动恢复，完整跑完','Recovered from runtime errors and completed the full run')}</p></div></div>
-          <div className="dual-passage"><SceneLink className="passage" type="button"  route={{view:'projects',arg:'execution',item:'script-weaver'}} lang={lang}><span className="mono">WORK / PROJECTS</span><strong>{text('浏览做过的更多项目','Explore more projects')}</strong><em>→</em></SceneLink><SceneLink className="passage" type="button"  route={{view:'about',arg:'execution'}} lang={lang}><span className="mono">PERSON / ABOUT</span><strong>{text('认识做这些工作的人','Meet the person behind the work')}</strong><em>→</em></SceneLink></div>
-        </section>}
-      </div>
-    </main>}
-
-    {route.view==='projects'&&<main id="main" className="collection-scene project-scene screen-enter" data-screen-label="Projects work table" ref={mainRef} tabIndex="-1">
-      <div className="collection-wrap">
-        <div className="view-line"><SceneLink route={route.view==='taste'?{view:'lens',arg:'taste'}:route.view==='about'?{view:'home'}:(lensInfo[route.arg]?{view:'lens',arg:route.arg}:{view:'home'})} lang={lang} onActivate={back}>← {route.arg==='home'?t.home:lensInfo[route.arg]?.name||t.home}</SceneLink><span className="mono">02 / PROJECTS · WORK TABLE</span></div>
-        <div className="collection-title compact-title"><h1>{t.projectIndex}</h1><p>{text('工具、产品与研究','Tools, products and research')} · {projects.length}</p></div>
-        <div className="project-filters"><div className="filter-group" aria-label={text('筛选项目','Filter projects')}>{[['all',text('全部','All')],['make',text('制作','Making')],['think',text('思考','Thinking')],['research',text('研究','Research')],['capture',text('记录','Capture')]].map(([key,label])=><button key={key} type="button" aria-pressed={projectFilter===key} className={projectFilter===key?'active':''} onClick={()=>setProjectFilter(key)}>{label}</button>)}</div><label className="search"><span className="mono">SEARCH</span><input aria-label={text('搜索项目','Search projects')} value={projectQuery} onChange={e=>setProjectQuery(e.target.value)} placeholder={text('名称 / 关键词','Name / keyword')}/></label></div>
-        <details className="project-options-disclosure"><summary>{text('排序与归档','Sorting and archive')}</summary><div className="project-options"><label><input type="checkbox" checked={showArchived} onChange={e=>setShowArchived(e.target.checked)}/>{text('显示归档项目','Include archived projects')}</label><label>{text('排序','Sort')}<select value={projectSort} onChange={e=>setProjectSort(e.target.value)}><option value="selected">{text('精选','Selected')}</option><option value="stars">Stars</option><option value="updated">{text('最近更新','Recently updated')}</option></select></label></div></details>{!filteredProjects.length&&<p className="empty-result">{text('没有找到项目，请换个关键词。','No matching projects. Try another keyword.')}</p>}
-        {filteredProjects.length>0&&<div className="work-table">
-          <div className="work-surface"><div className="work-surface-top mono"><span>ON THE TABLE / {activeProject.name}</span><span>{activeProject.tagline}</span></div><ProjectVisual project={activeProject} large anchor lang={lang}/><div className="work-surface-foot"><div><span className="mono">{activeProject.practice.toUpperCase()} / {activeProject.language||'PROJECT'}</span><h2>{activeProject.name}</h2><p>{lang==='zh'?activeProject.thesisZh:activeProject.thesis}</p></div><span className="work-index mono">{projects.length} TOTAL</span></div></div>
-          <aside className="work-drawer"><div className="drawer-head"><span className="mono">INDEX / {filteredProjects.length} WORKS</span><span className="mono desktop-hint">↓ {text('滚动浏览','SCROLL')}</span><span className="mobile-hint">↔ {text('滑动浏览','SWIPE')}</span></div><div className="drawer-list">{filteredProjects.map((p,i)=><SceneLink id={p.slug} route={{view:'projects',arg:route.arg,item:p.slug}} lang={lang} key={p.slug} aria-current={p.slug===activeProject.slug} className={p.slug===activeProject.slug?'active':''}><span className="mono">{String(i+1).padStart(2,'0')}</span><strong>{p.name}</strong><small>{p.tagline}</small><i>→</i></SceneLink>)}</div></aside>
-        </div>}
-        {filteredProjects.length>0&&<><div className="collection-bottom"><p>{lang==='zh'?activeProject.descriptionZh:activeProject.description}</p><div><a href={activeProject.url} target="_blank" rel="noopener noreferrer">GitHub ↗</a>{activeProject.detailUrl&&<a href={(lang==='zh'?'/zh':'')+activeProject.detailUrl}>{text('项目详解 ↗','Project story ↗')}</a>}{activeProject.homepage&&<a href={activeProject.homepage} target="_blank" rel="noopener noreferrer">{text('访问产品 ↗','Visit product ↗')}</a>}</div></div><p className="project-index-note">{activeProject.stars} stars · {activeProject.forks} forks · {text('更新','Updated')} {activeProject.pushedAt.slice(0,10)} · {text('快照','Snapshot')} <time dateTime={githubSnapshot.date}>{githubSnapshot.date}</time></p></>}
-      </div>
-    </main>}
-
-    {(route.view==='notes'&&route.arg!=='ai'||route.view==='lens'&&route.arg==='online')&&<main id="main" className="near-scene tuner-scene" data-screen-label="Online observation space" ref={mainRef} tabIndex="-1" onClick={e=>{if(e.target===e.currentTarget)navigate('home');}}>
-      <div className="near-shell"><div className="view-line"><SceneLink route={route.view==='notes'?{view:'lens',arg:'online'}:{view:'home'}} lang={lang} onActivate={()=>route.view==='notes'?back():navigate('home')}>← {route.view==='notes'?(route.arg==='ai'?'AI':'Online'):t.home}</SceneLink><span className="mono">{route.view==='notes'?'NOTES / ARCHIVE':'01 / ONLINE'}</span></div>
-        <LensTuner query={noteQuery} setQuery={setNoteQuery} filter={noteFilter} setFilter={value=>{setNoteFilter(value);if(route.view==='notes'){const next={...route,topic:value};history.replaceState({...history.state,route:next},'',routeHash(next));setRoute(next);}}} expanded={route.view==='notes'} entries={displayObservations} curated={displayCurated} selected={activeNote} onSelect={selectNote} onExpand={()=>openNotes('online',noteId)} onCollapse={back} collapseLabel={text('← 回到精选观察','← Back to selected observations')} lang={lang}/>
-      </div>
-    </main>}
-
-    {route.view==='notes'&&route.arg==='ai'&&<main id="main" className="near-scene research-scene" data-screen-label="Selected article" ref={mainRef} tabIndex="-1" onClick={e=>{if(e.target===e.currentTarget)navigate('home');}}><div className="near-shell"><div className="view-line"><SceneLink route={route.view==='taste'?{view:'lens',arg:'taste'}:route.view==='about'?{view:'home'}:(lensInfo[route.arg]?{view:'lens',arg:route.arg}:{view:'home'})} lang={lang} onActivate={back}>← AI</SceneLink><span className="mono">03 / AI · WRITING</span></div><ResearchViewer note={activeNote} entries={displayObservations.filter(n=>n.primary==='ai')} onSelect={selectNote} lang={lang}/></div></main>}
-
-    {route.view==='taste'&&<main id="main" className="near-scene taste-scene" data-screen-label="Taste single artwork" ref={mainRef} tabIndex="-1"><div className="near-shell"><TasteViewer productId={route.arg} index={Math.min(route.work||0,(tasteProducts.find(p=>p.id===route.arg)||tasteProducts[0]).works.length-1)} onSelect={selectTaste} onProducts={back} onProjects={()=>openProjects('taste',route.arg==='kami-reader'?'obsidian-kami':'card-skill')} lang={lang}/></div></main>}
-
-    {route.view==='about'&&<main id="main" className="collection-scene about-scene screen-enter" data-screen-label="About Kenny" ref={mainRef} tabIndex="-1">
-      <div className="collection-wrap">
-        <div className="view-line"><SceneLink route={route.view==='taste'?{view:'lens',arg:'taste'}:route.view==='about'?{view:'home'}:(lensInfo[route.arg]?{view:'lens',arg:route.arg}:{view:'home'})} lang={lang} onActivate={back}>← {lang==='zh'?'返回上一层':'Back'}</SceneLink><span className="mono">PERSON / BEHIND THE FOUR STATES</span></div>
-        <div className="about-hero"><div className="about-words"><span className="mono">KENNY WU / SHENZHEN / AI ENGINEER</span><h1>{text(<>镜头背后，<br/>是同一个人。</>,<>One person,<br/>behind the lenses.</>)}</h1><p>{text('我是 Kenny Wu，一名在深圳的 AI 工程师。经历从 NLP 与信息检索，延伸到多模态理解与内容生成。我最关心的一件事，是如何把前沿模型能力，扎扎实实做成稳定好用的产品。','I’m Kenny Wu, an AI engineer in Shenzhen. My work spans NLP, information retrieval, multimodal understanding and content generation. I care about turning advances in models into stable, useful products.')}</p><a href={`mailto:${site.email}`}>{text('联系我 ↗','Contact me ↗')}</a></div><div className="about-image"><div className="portrait-frame"><div className="portrait-halo" aria-hidden="true"></div><Media className="portrait" src={A+'self-profo.jpg'} width="1080" height="1080" alt={text('Kenny Wu 肖像','Portrait of Kenny Wu')}/></div><span className="mono">{text('KENNY WU / 吴嘉业','KENNY WU / JIAYE WU')}</span></div></div>
-        <div className="about-four"><span className="mono">ONE PERSON / FOUR STATES</span><div>{Object.entries(lensInfo).map(([key,l])=><SceneLink key={key} route={{view:'lens',arg:key}} lang={lang}><Media src={A+l.character} alt=""/><span>{l.name}</span><small>→</small></SceneLink>)}</div></div>
-        <div className="about-record"><div><span className="mono">EXPERIENCE / SELECTED</span><h2>{text('做事的轨迹','The work so far')}</h2></div><div className="about-timeline"><article><time>2026</time><div><h3>{text('AI 漫剧生成系统','AI comic drama production')}</h3><p>{text('项目技术侧负责人。统筹剧本理解、角色资产与分镜生成，建立质检与恢复机制。','Technical lead, connecting script understanding, character assets and storyboard generation with quality checks and recovery.')}</p><strong>≈18% → 9.53% <small>{text('固定评测集问题率','Issue rate on a fixed evaluation set')}</small></strong></div></article><article><time>2025–2026</time><div><h3>{text('短剧智能剪辑与人物身份一致性','Short-drama editing and character consistency')}</h3><p>{text('围绕跨集角色对齐与高光检索，让自动化剪辑始终咬住同一主角。','Cross-episode character alignment and highlight retrieval keep automated editing focused on the same protagonist.')}</p><strong>1285s → 24s <small>{text('10 集测试样本，身份消歧','Identity disambiguation on one 10-episode sample')}</small></strong></div></article><AboutMore lang={lang}/></div></div>
-      </div>
-    </main>}
-
-    <div className="environment"><button className="environment-trigger" type="button" aria-label={text('语言与明暗设置','Language and theme settings')} aria-expanded={settings} onClick={()=>setSettings(v=>!v)}>◐<span className="mono">{lang==='zh'?'设置':'SETTINGS'}</span></button>{settings&&<div className="environment-panel"><div><span className="mono">{t.language}</span><a href={routePath(route,'zh')} data-language="zh" className={lang==='zh'?'active':''}>中</a><a href={routePath(route,'en')} data-language="en" className={lang==='en'?'active':''}>EN</a></div><div className="theme-options"><span className="mono">{t.theme}</span><button type="button" aria-pressed={theme==='system'} className={theme==='system'?'active':''} onClick={()=>themeController.current?.set('system')}>{text('跟随系统','System')}</button><button type="button" aria-pressed={theme==='light'} className={theme==='light'?'active':''} onClick={()=>themeController.current?.set('light')}>{t.light}</button><button type="button" aria-pressed={theme==='dark'} className={theme==='dark'?'active':''} onClick={()=>themeController.current?.set('dark')}>{t.dark}</button></div></div>}</div>
-    {route.view!=='home'&&<SceneLink className="quiet-home" type="button"  route={{view:'home',arg:''}} lang={lang} aria-label={text('回到首页','Return Home')}>⌂ <span className="mono">HOME</span></SceneLink>}
-  </div>;
+    <main id="main" className="pb-main" ref={main} tabIndex="-1">
+      <div className="pb-viewline"><SceneLink className="pb-back" route={back} data-space-return="">← {backLabel}</SceneLink></div>
+      {route.view==='lens'&&route.arg==='online'&&<LensTuner expanded={false} entries={selectedEntries} curated={selectedEntries} selected={selected} onSelect={id=>update({selected:id})} lang={lang} formal/>}
+      {route.view==='lens'&&route.arg==='taste'&&<Taste lang={lang}/>}
+      {route.view==='lens'&&route.arg==='ai'&&<Ai entries={entries} lang={lang}/>}
+      {route.view==='lens'&&route.arg==='execution'&&<Execution lang={lang}/>}
+      {route.view==='taste'&&artwork&&<TasteViewer productId={route.arg} index={route.work||0} lang={lang} formal/>}
+      {route.view==='projects'&&(project?<ProjectDetail project={project} route={route} lang={lang}/>:<ProjectIndex controls={controls} update={update} route={route} lang={lang}/>)}
+      {route.view==='notes'&&<Writing entries={entries} route={route} query={controls.query} setQuery={query=>update({query})} setTopic={setTopic} lang={lang}/>}
+      {route.view==='about'&&<About lang={lang}/>}
+    </main>
+  </div></RoutePathContext.Provider>;
 }

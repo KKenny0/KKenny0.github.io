@@ -1,10 +1,10 @@
 import { projects as sourceProjects } from './projects';
 import { writings } from './writings';
 export const lensInfo={
-  online:{number:'01',name:'Online',character:'online.webp',zh:'趋势观察',short:'Observations',en:'Stay online. Keep noticing change.'},
-  taste:{number:'02',name:'Taste',character:'taste.webp',zh:'产品与创作',short:'Craft & Products',en:'A sense of taste, put into form.'},
-  ai:{number:'03',name:'AI',character:'ai.webp',zh:'项目与研究',short:'Systems & Research',en:'Understand systems. Build with them.'},
-  execution:{number:'04',name:'Execution',character:'execution.webp',zh:'交付与实践',short:'Delivery in Practice',en:'Carry complex work through.'}
+  online:{number:'01',name:'Online',navigation:{zh:'观察',en:'Observations'},character:'online.webp',zh:'趋势观察',short:'Observations',en:'Stay online. Keep noticing change.'},
+  taste:{number:'02',name:'Taste',navigation:{zh:'Taste',en:'Taste'},character:'taste.webp',zh:'产品与创作',short:'Craft & Products',en:'A sense of taste, put into form.'},
+  ai:{number:'03',name:'AI',navigation:{zh:'AI',en:'AI'},character:'ai.webp',zh:'项目与研究',short:'Systems & Research',en:'Understand systems. Build with them.'},
+  execution:{number:'04',name:'Execution',navigation:{zh:'实践',en:'Practice'},character:'execution.webp',zh:'交付与实践',short:'Delivery in Practice',en:'Carry complex work through.'}
 };
 export const onlineStops=[
   {id:'apr',date:'2026.04',label:'平台差异',title:'同样的模型，为什么在不同 Agent 平台上表现不同？',summary:'从 Hermes 与 OpenClaw 的对比，观察工具链、系统提示与上下文管理如何改变实际表现。',url:'https://zhuanlan.zhihu.com/p/2026240034802528822'},
@@ -35,3 +35,6 @@ export const projectVisual={
 export const aiWritingIds=['2060032007506334292','2031687123431051328'];
 export const zh={home:'首页',back:'返回',all:'全部',works:'作品',writings:'文字',about:'关于',contact:'联系',explore:'选择一个镜头 · 靠近',selected:'精选视角',continue:'继续深入',open:'打开原始作品 ↗',source:'阅读原文 ↗',theme:'明暗',language:'语言',light:'亮色',dark:'暗色',projects:'项目',notes:'笔记',projectIndex:'作品台',noteIndex:'观察档案'};
 export const en={home:'Home',back:'Back',all:'All',works:'Works',writings:'Writing',about:'About',contact:'Contact',explore:'Choose a lens · move closer',selected:'Selected view',continue:'Go deeper',open:'Open original ↗',source:'Read original ↗',theme:'Theme',language:'Language',light:'Light',dark:'Dark',projects:'Projects',notes:'Notes',projectIndex:'Work table',noteIndex:'Observation archive'};
+
+// Editorial grouping for the writing index. URL sections keep their original IDs.
+export const isTechnicalWriting=note=>!note.provisional&&note.id!=='2060715503174341318';
