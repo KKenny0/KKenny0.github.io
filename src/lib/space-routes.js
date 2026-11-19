@@ -28,6 +28,7 @@ export function routePath(route,locale='en'){
   const source=route.source||(['projects','about'].includes(route.view)&&sources.includes(route.arg)?route.arg:undefined);
   if(sources.includes(source))params.set('from',source);
   if(sources.includes(route.via))params.set('via',route.via);
+  if(route.view==='story'&&source==='work'&&params.has('via')&&sources.includes(route.origin))params.set('origin',route.origin);
   if(route.view==='notes'&&writingTopics.includes(route.topic))params.set('topic',route.topic);
   return prefix+path+(params.size?`?${params}`:'')+(route.anchor?`#${route.anchor}`:'');
 }
@@ -38,7 +39,7 @@ export function canonicalPath(route,locale='en'){
 
 export function storyReturnPath(route,locale='en'){
   return routePath(stories.includes(route.arg)
-    ?{view:'projects',item:route.arg,source:route.source==='work'?route.via:route.source}
+    ?{view:'projects',item:route.arg,source:route.source==='work'?route.via:route.source,via:route.source==='work'&&route.via?route.origin:undefined}
     :{view:'projects'},locale);
 }
 
@@ -51,7 +52,10 @@ export function parseRoute(url){
   const home={view:'home',arg:''};
   if(parts[0]==='lens')return Object.hasOwn(lensInfo,parts[1])?{view:'lens',arg:parts[1],...origin}:home;
   if(parts[0]==='taste')return Object.hasOwn(artworkIds,parts[1])&&artworkIds[parts[1]].includes(parts[2])?{view:'taste',arg:parts[1],work:artworkIds[parts[1]].indexOf(parts[2])}:home;
-  if(parts[0]==='projects'&&stories.includes(parts[1]))return {view:'story',arg:parts[1],...origin};
+  if(parts[0]==='projects'&&stories.includes(parts[1])){
+    const storyOrigin=source==='work'&&via?read(url.searchParams,'origin',sources):undefined;
+    return {view:'story',arg:parts[1],...origin,...(storyOrigin?{origin:storyOrigin}:{})};
+  }
   if(parts[0]==='work'||parts[0]==='projects'){
     const item=parts[0]==='work'?parts[1]:decodeHash(url);
     return {view:'projects',...origin,...(projects.some(p=>p.slug===item)?{item}:{})};

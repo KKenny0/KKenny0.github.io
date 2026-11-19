@@ -1,64 +1,85 @@
 ---
+import storyNavigation from '../scripts/story-navigation.js?raw';
 import PortfolioLayout from '../layouts/PortfolioLayout.astro';
+import { site } from '../data/site';
 interface Props { lang: 'en' | 'zh'; }
 const { lang } = Astro.props;
+const base = lang === 'en' ? '' : '/zh';
 const t = (en: string, zh: string) => lang === 'en' ? en : zh;
+const projects = [
+  { name: 'Tracework', slug: 'tracework', repo: 'https://github.com/KKenny0/Tracework' },
+  { name: 'weave', slug: 'weave', repo: 'https://github.com/KKenny0/weave' },
+];
 ---
 <PortfolioLayout title={t('Support', '支持')} lang={lang} page="support">
   <main id="main" class="support-page">
+    <a class="text-link support-back" data-support-back href={`${base}/projects/`}>{t('← Projects', '← 返回项目')}</a>
     <header class="support-heading">
-      <p class="label">{t('SUPPORT THE WORK', '支持这些工作')}</p>
-      <h1>{t('Help useful experiments stay maintained.', '让有用的尝试继续得到维护。')}</h1>
-      <p>{t('Stars, issues, thoughtful notes, and sponsorship all help local-first tools and agent workflows remain documented and usable.', '标星、问题反馈、认真写下的建议，以及赞助，都能帮助这些本地工具与智能体工作流继续完善文档、保持可用。')}</p>
+      <h1>{t('Help maintain the work', '参与维护这些项目')}</h1>
+      <p>{t('If one of my projects has been useful to you, here are a few ways to help me maintain the work.', '如果这里的作品帮到了你，可以用下面这些方式支持后续维护。')}</p>
     </header>
-    <div class="support-options">
-      <section>
-        <p class="label">{t('01 / DIRECT SUPPORT', '01 / 直接支持')}</p>
-        <h2>{t('Alipay & WeChat Pay', '支付宝与微信支付')}</h2>
-        <div class="qr-pair">
-          <figure><img src="/assets/img/support/alipay-qr.png" width="720" height="720" alt={t('Alipay payment QR code', '支付宝收款二维码')} /><figcaption>{t('Alipay', '支付宝')}</figcaption></figure>
-          <figure><img src="/assets/img/support/wechat-qr.png" width="720" height="720" alt={t('WeChat Pay payment QR code', '微信收款二维码')} /><figcaption>{t('WeChat Pay', '微信支付')}</figcaption></figure>
-        </div>
-      </section>
-      <section>
-        <p class="label">{t('02 / OTHER WAYS', '02 / 其他方式')}</p>
-        <h2>{t('Support from anywhere', '从任何地方支持')}</h2>
-        <p>{t('If these tools have been useful, you can make an optional contribution through PayPal. Support never unlocks features or changes access.', '如果这些工具对你有用，可以通过 PayPal 自愿支持。是否支持不会影响功能或使用权限。')}</p>
-        <a class="text-link" href="https://www.paypal.me/Kennywu96" target="_blank" rel="noopener noreferrer">{t('Support via PayPal ↗', '通过 PayPal 支持 ↗')}</a>
-        <ul>
-          <li>{t('Star a project you actually use.', '给实际用到的项目标星。')}</li>
-          <li>{t('Open an issue with a concrete failure.', '提交能说明具体故障的问题反馈。')}</li>
-          <li>{t('Share a tool with the person who needs it.', '把工具分享给需要的人。')}</li>
-          <li>{t('Tell me what should stay quiet.', '告诉我哪些地方应当保持简单、不打扰。')}</li>
-        </ul>
-        <a class="text-link" href="https://github.com/KKenny0" target="_blank" rel="noopener noreferrer">{t('Visit GitHub ↗', '访问 GitHub ↗')}</a>
-      </section>
-    </div>
+
+    <section class="support-actions" aria-labelledby="support-actions-title">
+      <h2 id="support-actions-title">{t('Feedback, sharing and stars', '反馈、分享和标星')}</h2>
+      <ul>
+        <li>
+          <h3>{t('Tell me where you got stuck', '告诉我你在哪里卡住了')}</h3>
+          <p>{t('A version, the steps you tried, and what you expected help me reproduce a bug or fix an unclear instruction.', '附上版本、操作步骤和预期结果，能帮我复现问题，或找出文档里没写清楚的地方。')}</p>
+          <div class="support-links">
+            {projects.map(({ name, repo }) => <a class="text-link" href={`${repo}/issues/new`}>{t(`Report a ${name} issue ↗`, `反馈 ${name} 的问题 ↗`)}</a>)}
+          </div>
+          <a class="text-link" href={`mailto:${site.email}`}>{t('Send feedback on another project ↗', '通过邮件反馈其他项目 ↗')}</a>
+        </li>
+        <li>
+          <h3>{t('Share a project with someone who needs it', '把作品分享给用得上的人')}</h3>
+          <p>{t('A short note about why it helped gives someone a place to start and helps me see which examples deserve more documentation.', '分享时带上一句它解决了什么问题，能让对方更容易上手，也帮我判断哪些例子值得补进文档。')}</p>
+          <div class="support-links">
+            {projects.map(({ name, slug }) => {
+              const url = `https://kkenny0.github.io${base}/projects/${slug}/`;
+              return <a class="text-link" href={`mailto:?subject=${encodeURIComponent(name)}&body=${encodeURIComponent(url)}`}>{t(`Share ${name} by email ↗`, `通过邮件分享 ${name} ↗`)}</a>;
+            })}
+          </div>
+        </li>
+        <li>
+          <h3>{t('Star a project you use', '给用过的项目标星')}</h3>
+          <p>{t('Stars help people find the repositories and give me a rough signal of where there is interest.', '标星让更多人找到仓库，也让我大致知道哪些项目有人关注。')}</p>
+          <div class="support-links">
+            {projects.map(({ name, repo }) => <a class="text-link" href={repo}>{t(`Star ${name} on GitHub ↗`, `在 GitHub 给 ${name} 标星 ↗`)}</a>)}
+          </div>
+          <a class="text-link" href={`${base}/projects/`}>{t('Find another project', '查找其他项目')}</a>
+        </li>
+      </ul>
+    </section>
+
+    <section class="support-donate" aria-labelledby="support-donate-title">
+      <h2 id="support-donate-title">{t('Make a voluntary contribution', '自愿捐助')}</h2>
+      <p>{t('Contributions support time for maintenance, examples and documentation. Everyone has the same access to the tools.', '捐助支持我继续投入维护、补充示例和编写文档。所有人都可以同样使用这些工具。')}</p>
+      <div class="qr-pair">
+        <figure><img src="/assets/img/support/alipay-qr.png" width="720" height="720" alt={t('Alipay payment QR code', '支付宝收款二维码')} loading="lazy" /><figcaption>{t('Alipay', '支付宝')}</figcaption></figure>
+        <figure><img src="/assets/img/support/wechat-qr.png" width="720" height="720" alt={t('WeChat Pay payment QR code', '微信收款二维码')} loading="lazy" /><figcaption>{t('WeChat Pay', '微信支付')}</figcaption></figure>
+      </div>
+      <a class="text-link" href="https://www.paypal.me/Kennywu96" target="_blank" rel="noopener noreferrer">{t('Contribute via PayPal ↗', '通过 PayPal 捐助 ↗')}</a>
+    </section>
   </main>
 </PortfolioLayout>
+<script is:inline set:html={storyNavigation}></script>
 <style>
-  .support-heading { padding: 48px 0 36px; border-bottom: 1px solid var(--line); }
-  h1 { font-size: 38px; line-height: 1.3; margin: 12px 0 20px; max-width: 26ch; }
-  .support-heading > p:last-child { max-width: 65ch; color: var(--muted); }
-  .support-options { display: grid; grid-template-columns: 1fr 1fr; gap: 64px; padding: 40px 0 48px; }
-  h2 { font-size: 24px; margin: 8px 0 24px; line-height: 1.4; }
-  .support-options section { min-width: 0; }
-  .support-options section > p:not(.label), ul { color: var(--muted); }
-  .qr-pair { display: grid; grid-template-columns: 1fr 1fr; gap: 20px; max-width: 440px; }
-  figure { padding: 16px; background: white; border: 1px solid var(--line); }
-  figcaption { color: #333; font-size: 14px; text-align: center; margin-top: 12px; }
-  ul { padding-left: 20px; margin: 24px 0 8px; }
-  li + li { margin-top: 8px; }
-  .text-link { margin-top: 12px; min-height: 44px; display: inline-flex; align-items: center; }
-  @media (prefers-reduced-motion: no-preference) {
-    :global(body:not([data-keyboard])) .text-link:active { transform: translateY(1px); }
-  }
-  @media (max-width: 850px) { .support-options { gap: 32px; } }
-  @media (max-width: 640px) {
-    .support-heading { padding-top: 32px; }
-    h1 { font-size: 32px; }
-    .support-options { grid-template-columns: 1fr; gap: 40px; }
-    .qr-pair { gap: 16px; }
-    figure { padding: 12px; }
-  }
+  .support-heading { padding: 24px 0 36px; border-bottom: 1px solid var(--line); }
+  h1 { font-size: 38px; line-height: 1.3; margin-bottom: 16px; }
+  p { max-width: 65ch; color: var(--muted); }
+  .support-actions:lang(zh) li > p { line-height: 1.8; }
+  .support-actions, .support-donate { padding: 36px 0; }
+  .support-donate { border-top: 1px solid var(--line); }
+  h2 { font-size: 24px; margin: 0 0 16px; line-height: 1.4; }
+  h3 { font-size: 18px; margin-bottom: 6px; }
+  ul { list-style: none; padding: 0; margin: 0; }
+  li + li { border-top: 1px solid var(--line); margin-top: 12px; padding-top: 16px; }
+  .support-links { display: flex; flex-wrap: wrap; gap: 0 24px; }
+  .qr-pair { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 16px; max-width: 340px; margin: 24px 0 8px; }
+  figure { padding: 12px; background: white; border: 1px solid var(--line); }
+  img { display: block; width: 100%; height: auto; }
+  figcaption { color: #333; font-size: 14px; text-align: center; margin-top: 8px; }
+  .text-link { min-height: 44px; display: inline-flex; align-items: center; }
+  .support-back { margin-top: 16px; }
+  @media (max-width: 640px) { h1 { font-size: 32px; } }
 </style>

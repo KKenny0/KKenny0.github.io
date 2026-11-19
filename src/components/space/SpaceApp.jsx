@@ -11,12 +11,18 @@ import {Media} from './Media';
 import CollageNav from './CollageNav';
 
 const assets='/assets/space/';
-const storagePrefix='kenny-space-return:v1:';
+const storagePrefix='kenny-space-return:v2:';
 const initialControls={query:'',practice:'all',sort:'selected',archived:false,options:false,selected:curated[0].id};
 const address=url=>url.pathname+url.search;
-const viewKey=url=>{
-  const topic=new URLSearchParams(url.search).get('topic');
-  return url.pathname+(topic?`?topic=${topic}`:'');
+const withoutLocale=path=>path.replace(/^\/zh(?=\/|$)/,'')||'/';
+const viewKey=url=>routePath(parseRoute(new URL(url.href)));
+const focusPath=link=>link?.origin===location.origin?withoutLocale(address(link))+link.hash:link?.getAttribute('href');
+const restoreFocus=(focus,lang)=>{
+  if(typeof focus==='string')return document.getElementById(focus)||[...document.links].find(link=>link.getAttribute('href')===focus);
+  if(focus?.id)return document.getElementById(focus.id);
+  if(!focus?.href)return null;
+  const href=focus.href.startsWith('/')&&lang==='zh'?`/zh${focus.href}`:focus.href;
+  return [...document.links].find(link=>link.getAttribute('href')===href||(link.origin===location.origin&&address(link)+link.hash===href));
 };
 const localized=(lang,zh,en)=>prototypeText(lang,zh,en);
 
@@ -48,14 +54,14 @@ function ProjectMedia({project,lang}){
 
 function ProjectDetail({project,route,lang}){
   const text=(zh,en)=>localized(lang,zh,en);
-  const story=project.detailUrl&&{view:'story',arg:project.slug,source:'work',via:route.source};
+  const story=project.detailUrl&&{view:'story',arg:project.slug,source:'work',via:route.source,origin:route.via};
   return <article className="space-work">
     <header className="space-heading"><h1>{project.name}</h1><p>{text(project.thesisZh,project.thesis)}</p></header>
     <ProjectMedia project={project} lang={lang}/>
     <div className="space-work-facts"><p>{text(project.descriptionZh,project.description)}</p><div className="space-links">
       <a href={project.url}>GitHub ↗</a>
       {project.homepage&&<a href={project.homepage}>{text('访问产品 ↗','Visit product ↗')}</a>}
-      {story&&<SceneLink route={story}>{text('阅读长案例 →','Read the case study →')}</SceneLink>}
+      {story&&<SceneLink data-story-link="" route={story}>{text('阅读长案例 →','Read the case study →')}</SceneLink>}
       {project.slug==='card-skill'&&<SceneLink route={{view:'taste',arg:'card-skill'}}>{text('查看作品 →','View the artwork →')}</SceneLink>}
       {['obsidian-kami','kami-reader-companion'].includes(project.slug)&&<SceneLink route={{view:'taste',arg:'kami-reader'}}>{text('查看阅读界面 →','View the reading layouts →')}</SceneLink>}
     </div></div>
@@ -92,7 +98,7 @@ function Writing({route,entries,query,setQuery,setTopic,lang}){
     <header className="space-heading"><p>{isTechnicalWriting(note)?topics.ai:text('观察','Observation')} · <time dateTime={note.date}>{note.date}</time></p><h1>{note.title}</h1></header>
     <p className="space-summary-label">{lang==='zh'?'摘要':note.hasEnglishSummary?'English summary':'Chinese summary'}</p><p className="space-summary" lang={lang==='en'&&!note.hasEnglishSummary?'zh-CN':undefined}>{note.teaser}</p>
     <div className="space-links"><a href={note.url} hrefLang="zh-CN" target="_blank" rel="noopener noreferrer">{note.provisional?text('在微信阅读中文合集 ↗','Open the Chinese WeChat collection ↗'):text('在知乎阅读中文原文 ↗','Read the Chinese original on Zhihu ↗')}</a>
-      <SceneLink route={{view:'notes',topic:route.topic}}>{text('浏览文章索引 →','Browse the writing index →')}</SceneLink></div>
+      <SceneLink data-space-return="" route={{view:'notes',topic:route.topic,source:route.source==='notes'?route.via:route.source}}>{text('浏览文章索引 →','Browse the writing index →')}</SceneLink></div>
   </article>;
   const topic=route.topic||'all';
   const matches=entries.filter(n=>(topic==='all'||(topic==='ai'?isTechnicalWriting(n):n.topic===topic))&&[n.title,n.originalTitle,n.teaser,n.source,topics[n.topic]].join(' ').toLowerCase().includes(query.trim().toLowerCase()));
@@ -198,14 +204,16 @@ export default function SpaceApp({initialRoute,locale:lang}){
       if(disclosure)disclosure.open=true;
       target.scrollIntoView({block:'start'});
     };
+    let departureFocus;
     function save(focus=document.activeElement){
-      const state={controls:latest.current,scroll:window.scrollY,focus:focus?.id||focus?.getAttribute('href')};
+      const state={controls:latest.current,scroll:window.scrollY,focus:focus?.id?{id:focus.id}:{href:focusPath(focus)}};
       history.replaceState({...history.state,space:state},'');
       try{sessionStorage.setItem(storagePrefix+viewKey(location),JSON.stringify(state));}catch{}
     }
     function onLink(event){
       const link=event.target.closest('a[href]');
       if(!link||event.defaultPrevented||event.button!==0||event.metaKey||event.ctrlKey||event.shiftKey||event.altKey||link.target||link.origin!==location.origin||address(link)===address(location))return;
+      departureFocus=link;
       save(link);
       if(!link.hasAttribute('data-space-return'))return;
       const navigation=window.navigation;
@@ -217,19 +225,20 @@ export default function SpaceApp({initialRoute,locale:lang}){
       }
       try{sessionStorage.setItem(storagePrefix+'destination',address(link));}catch{}
     }
-    const pagehide=()=>save();
+    const pagehide=()=>save(departureFocus);
+    const pageshow=()=>{departureFocus=undefined;};
     const hashchange=()=>{readLocation();openAnchor();};
     const navigation=performance.getEntriesByType('navigation')[0]?.type;
     let saved=history.state?.space;
     try{
       const destination=sessionStorage.getItem(storagePrefix+'destination');
+      if(destination)sessionStorage.removeItem(storagePrefix+'destination');
       if(destination===address(location)){
         saved ||= JSON.parse(sessionStorage.getItem(storagePrefix+viewKey(location))||'null');
-        sessionStorage.removeItem(storagePrefix+'destination');
       }else if(!saved&&document.referrer){
         const previous=new URL(document.referrer);
         const detail=parseRoute(previous);
-        if(previous.origin===location.origin&&detail.view==='story'&&new URL(storyReturnPath(detail,lang),location.origin).pathname===location.pathname){
+        if(previous.origin===location.origin&&detail.view==='story'&&address(new URL(storyReturnPath(detail,lang),location.origin))===address(location)){
           saved=JSON.parse(sessionStorage.getItem(storagePrefix+viewKey(location))||'null');
         }
       }
@@ -239,11 +248,13 @@ export default function SpaceApp({initialRoute,locale:lang}){
     if(location.hash&&!saved)requestAnimationFrame(openAnchor);
     if(navigation==='back_forward'&&saved)history.scrollRestoration='manual';
     window.addEventListener('pagehide',pagehide);
+    window.addEventListener('pageshow',pageshow);
     window.addEventListener('hashchange',hashchange);
     window.addEventListener('popstate',readLocation);
     document.addEventListener('click',onLink);
     return ()=>{
       window.removeEventListener('pagehide',pagehide);
+      window.removeEventListener('pageshow',pageshow);
       window.removeEventListener('hashchange',hashchange);
       window.removeEventListener('popstate',readLocation);
       document.removeEventListener('click',onLink);
@@ -253,7 +264,7 @@ export default function SpaceApp({initialRoute,locale:lang}){
     if(!ready||!pending.current)return;
     const {scroll,focus}=pending.current;
     pending.current=null;
-    const target=focus&&(document.getElementById(focus)||[...document.links].find(link=>link.getAttribute('href')===focus));
+    const target=restoreFocus(focus,lang);
     (target||main.current)?.focus({preventScroll:true});
     window.scrollTo({top:scroll,behavior:'instant'});
   },[ready]);
@@ -278,7 +289,7 @@ export default function SpaceApp({initialRoute,locale:lang}){
   const languageHref=linkFor({...route,anchor:ready?location.hash.slice(1):undefined},lang==='zh'?'en':'zh');
   const artwork=tasteProducts.find(product=>product.id===route.arg);
 
-  return <RoutePathContext.Provider value={linkFor}><div className="proto-site collage-inner formal-space" data-view={route.view}>
+  return <RoutePathContext.Provider value={linkFor}><div className="proto-site collage-inner formal-space" data-view={route.view} data-space-ready={ready?'':undefined}>
     <header className="pb-header">
       <SceneLink className="pb-brand" route={{view:'home'}} data-space-return="">Kenny Wu</SceneLink>
       <CollageNav lang={lang} view={route.view} topic={route.view==='lens'?route.arg:route.view==='taste'?'taste':undefined} mode="formal"/>
@@ -288,6 +299,7 @@ export default function SpaceApp({initialRoute,locale:lang}){
     </header>
     <main id="main" className="pb-main" ref={main} tabIndex="-1">
       <div className="pb-viewline"><SceneLink className="pb-back" route={back} data-space-return="">← {backLabel}</SceneLink></div>
+      {!ready&&['notes','projects'].includes(route.view)&&<p className="space-query-status" role="status">{text('正在加载导航与筛选…','Loading navigation and filters…')}</p>}
       {route.view==='lens'&&route.arg==='online'&&<LensTuner expanded={false} entries={selectedEntries} curated={selectedEntries} selected={selected} onSelect={id=>update({selected:id})} lang={lang} formal/>}
       {route.view==='lens'&&route.arg==='taste'&&<Taste lang={lang}/>}
       {route.view==='lens'&&route.arg==='ai'&&<Ai entries={entries} lang={lang}/>}

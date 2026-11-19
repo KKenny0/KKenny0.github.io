@@ -1,29 +1,53 @@
 ---
+import storyNavigation from '../scripts/story-navigation.js?raw';
 import PortfolioLayout from '../layouts/PortfolioLayout.astro';
 import '../styles/project-story.css';
 interface Props { lang: 'en' | 'zh'; }
 const { lang } = Astro.props;
 const base = lang === 'en' ? '' : '/zh';
 const t = (en: string, zh: string) => lang === 'en' ? en : zh;
+const materials = 'https://github.com/KKenny0/weave/blob/b48ed2b83a1db4894a52194a3680a5e6802be7ab/evals';
+const course = 'https://anthropic.skilljar.com/claude-with-the-anthropic-api';
+const back = `${base}/work/weave/`;
 ---
 <PortfolioLayout title="weave" lang={lang} page="projects/weave">
 <main id="main" class="story-page">
     <section class="story-hero" aria-labelledby="weave-title">
       <div class="story-hero-copy">
-        <a class="story-back" href={`${base}/projects/`}>{t("← Projects", "← 项目")}</a>
-        <div class="story-hero-meta"><span>{t("02 / Think", "02 / 思考")}</span><span>{t("Research & writing skill", "研究与写作技能")}</span><span>{t("Claude Code + Codex", "Claude Code + Codex")}</span></div>
-        <h1 id="weave-title">{t("weave", "weave")}</h1>
-        <p class="story-hero-subtitle">{t("Research the question. Write it clearly.", "围绕你的问题，研究并写清楚。")}</p>
+        <a class="story-back" data-project-back href={back}>{t("← Back to weave", "← 返回 weave 项目")}</a>
+        <div class="story-hero-meta"><span>{t("Public research case", "公开研究案例")}</span></div>
+        <h1 id="weave-title">weave</h1>
+        <p class="story-hero-subtitle">{t("What can the public Claude API syllabus teach a first-time reader?", "只看公开的 Claude API 课程大纲，能为初学者讲清什么？")}</p>
       </div>
 
       <div class="story-hero-aside">
-        <p>{t("Start with a question, a few sources, or code. weave researches the gaps around your goal, develops a provisional explanation, and turns it into a focused first draft suited to your readers.", "给一个问题、几份材料或代码，weave 会围绕目标补足证据，形成可修正的解释方向，写成重点清楚、适合读者的初稿。")}</p>
+        <p>{t("The seven published sections support a guide from a first API request to evaluation, tool use, retrieval, MCP, and workflows. The source also leaves a concrete discrepancy: the summary recorded in weave’s benchmark says 84 lectures, while the seven section counts add up to 87.", "公开目录的七节内容足以组织一份入门指南，从第一次 API 请求讲到评估、工具调用、检索、MCP 和工作流。材料也留下一处可核对的差异：weave 的评测记录写着课程简介有 84 讲，但七节的讲数相加是 87。")}</p>
         <div class="story-hero-actions">
-          <a class="story-link" href="https://github.com/KKenny0/weave" target="_blank" rel="noopener">{t("Read the repository ↗", "查看代码仓库 ↗")}</a>
-          <span class="story-hero-note">{t("Your goal guides the research.", "让目标引导研究")}</span>
+          <a class="story-link" href={`${materials}/anthropic-course-saturated.md`}>{t("Read the published article (Chinese) ↗", "阅读公开成稿 ↗")}</a>
+          <a class="story-link" href="#case">{t("Check the evidence ↓", "核对证据 ↓")}</a>
         </div>
       </div>
+    </section>
 
+    <section class="story-question" aria-labelledby="weave-evidence-title" id="case">
+      <span class="story-section-label">{t("Follow the evidence", "沿着材料复核")}</span>
+      <div>
+        <h2 id="weave-evidence-title">{t("Two counts, and no public explanation for the difference.", "两个数字，公开材料没有解释差异。")}</h2>
+        <p>{t("Open the pinned benchmark and add its seven rows: 16 + 16 + 14 + 10 + 12 + 8 + 11 = 87. Compare that with the recorded summary of 84. The resulting article keeps both counts and follows the seven visible topics. For example, it explains why a tool call needs an execution loop: the application runs the tool and sends its result back to the model.", "打开固定版本的评测材料，把七行加起来：16 + 16 + 14 + 10 + 12 + 8 + 11 = 87，再与记录中的简介 84 讲对照。成稿保留两个数字，并沿七个可见主题展开。例如讲到工具调用，它解释了执行循环：应用执行工具，再把结果送回模型。")}</p>
+        <p>{t("The calculation reproduces the discrepancy in the recorded material. The live course can change. The inventory supports the guide’s structure, while lesson contents behind login, which items account for the difference, and what a learner can do after the course remain outside this check.", "这个加法可以复核已记录材料里的差异。当前课程页可能更新。目录能支撑指南的结构；登录后的课节内容、哪些条目造成讲数差异，以及学员结课后的实际能力，都超出这次核对的范围。")}</p>
+        <div class="story-cta-links">
+          <a class="story-link" href={`${materials}/anthropic-course-benchmark.md`}>{t("Course inventory and rubric ↗", "课程目录记录与评测规则 ↗")}</a>
+          <a class="story-link" href={course}>{t("Current public course page ↗", "当前公开课程页 ↗")}</a>
+          <a class="story-link" href={`${materials}/anthropic-course-baseline.md`}>{t("Baseline draft (Chinese) ↗", "基准稿 ↗")}</a>
+        </div>
+        <div class="story-cta-links">
+          <a class="story-link" data-story-support href={`${base}/support/?project=weave`}>{t("Help maintain weave →", "支持 weave 的维护 →")}</a>
+          <a class="story-link" data-project-back href={back}>{t("Back to weave", "返回 weave 项目")}</a>
+        </div>
+      </div>
+    </section>
+
+    <section class="story-routes" aria-label={t("How weave works", "weave 的工作方式")}>
       <div class="story-board">
         <div class="story-board-heading"><span>{t("Research & writing", "研究与写作")}</span><span>{t("one flow, with room to return", "一条可以往返的主线")}</span></div>
         <div class="story-board-flow">
@@ -121,12 +145,16 @@ const t = (en: string, zh: string) => lang === 'en' ? en : zh;
           <a class="story-link" href="https://github.com/KKenny0/weave" target="_blank" rel="noopener">{t("Open weave on GitHub ↗", "在 GitHub 查看 weave ↗")}</a>
           <a class="story-link" href="https://github.com/KKenny0/weave/releases/tag/v2.0.0" target="_blank" rel="noopener">{t("v2.0.0 release ↗", "v2.0.0 版本说明 ↗")}</a>
           <a class="story-link" href="https://github.com/KKenny0/weave/blob/main/MIGRATION.md" target="_blank" rel="noopener">{t("Migration guide ↗", "迁移说明 ↗")}</a>
-          <a class="story-link story-link--quiet" href={`${base}/projects/`}>{t("Back to the project index ↗", "返回项目列表 ↗")}</a>
+          <a class="story-link story-link--quiet" data-project-back href={back}>{t("Back to weave", "返回 weave 项目")}</a>
         </div>
       </div>
     </section>
   </main>
 </PortfolioLayout>
+<script is:inline set:html={storyNavigation}></script>
+<style>
+  .story-hero-meta { display: flex; }
+</style>
 
 <style>
   .weave-install { min-width: 0; max-width: 100%; margin-top: 20px; padding: 16px; background: var(--soft); color: var(--ink); white-space: pre-wrap; overflow-wrap: anywhere; overflow-x: auto; }

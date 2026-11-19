@@ -6,7 +6,7 @@ import {join} from 'node:path';
 import {fileURLToPath} from 'node:url';
 
 const root=fileURLToPath(new URL('..',import.meta.url));
-const dist=join(root,'dist');
+const dist=process.argv[2]??join(root,'dist');
 assert.ok(existsSync(join(dist,'index.html')),'dist/ missing — run `npm run build` before this check');
 
 const decode=html=>html.replace(/&amp;/g,'&');
@@ -14,6 +14,20 @@ const pages={en:join(dist,'collage','index.html'),zh:join(dist,'zh','collage','i
 for(const [locale,path] of Object.entries(pages))assert.ok(existsSync(path),`dist/${locale==='zh'?'zh/':''}collage/index.html missing`);
 
 const zh=locale=>locale==='zh';
+function checkHomeWall(html, locale, route){
+  const objects=[...html.matchAll(/\bdata-object="([^"]+)"/g)].map(match=>match[1]);
+  assert.deepEqual(objects,['compare','portrait','poster','kami','replay','goal','compact','taste','ai'],`${route}: cover and discovery reading order`);
+  const handles=[...html.matchAll(/<button\b(?=[^>]*\bclass="cg-drag")(?=[^>]*\baria-describedby="cg-arrange-hint")[^>]*>/g)];
+  assert.equal(handles.length,objects.length,`${route}: every object must have a visible move handle by default`);
+  assert.doesNotMatch(html,/cg-arrange-toggle|data-arranging=/,`${route}: the move handles must not require an arrange mode`);
+  assert.ok(html.includes(`class="cg-cover-details" href="${route}work/videowipe/"`),`${route}: cover must link to its VideoWipe detail`);
+  assert.ok(existsSync(join(dist,route,'work','videowipe','index.html')),`${route}: missing VideoWipe detail`);
+  assert.match(html,zh(locale)?/重置位置/:/Reset positions/,`${route}: wall reset must be visible`);
+  const kami=html.match(/<article[^>]*data-object="kami"[^>]*>[\s\S]*?<\/article>/)?.[0];
+  assert.ok(kami,`${route}: missing Kami card`);
+  assert.match(kami,new RegExp(`<button[^>]*aria-haspopup="dialog"[\\s\\S]*?${zh(locale)?'预览界面':'Preview interface'}[\\s\\S]*?</button>`),`${route}: missing labeled Kami preview button`);
+  assert.match(kami,new RegExp(`<a class="cg-repo-link" href="https://github.com/KKenny0/obsidian-kami"[^>]*>${zh(locale)?'查看 GitHub':'View GitHub'}`),`${route}: missing separate labeled Kami GitHub link`);
+}
 for(const [locale,path] of Object.entries(pages)){
   const prefix=zh(locale)?'/zh':'';
   const html=decode(readFileSync(path,'utf8'));
@@ -23,6 +37,7 @@ for(const [locale,path] of Object.entries(pages)){
   assert.match(html,/meta name="robots" content="noindex"/,`${relative}: must stay noindex`);
   assert.ok(html.includes('kenny-space-theme'),`${relative}: theme bootstrap missing`);
   assert.match(html,/class="collage"/,`${relative}: island root missing`);
+  checkHomeWall(html,locale,relative);
 
   // Every expandable wall object is a button that opens in the current space.
   const openers=[...html.matchAll(/class="cg-pin-face"[^>]*aria-haspopup="dialog"/g)].length;
@@ -35,8 +50,10 @@ for(const [locale,path] of Object.entries(pages)){
     'https://github.com/Cinnamon/kotaemon/pull/287','https://github.com/Cinnamon/kotaemon/pull/341','https://github.com/Cinnamon/kotaemon/pull/461']){
     assert.ok(html.includes(url),`${relative}: direct source link missing: ${url}`);
   }
-  const repoLinks=[...html.matchAll(/<a class="cg-repo-link" href="([^"]+)"/g)].map(match=>match[1]);
-  assert.deepEqual(repoLinks,['https://github.com/Cinnamon/kotaemon','https://github.com/KKenny0/obsidian-kami','https://github.com/KKenny0/videowipe','https://github.com/KKenny0/script-weaver'],`${relative}: project title links must point to the four repositories`);
+  const wall=html.match(/<div class="cg-wall"[\s\S]*?(?=<dialog\b)/)?.[0];
+  assert.ok(wall,`${relative}: missing SSR wall`);
+  const repoLinks=[...wall.matchAll(/<a class="cg-repo-link" href="([^"]+)"/g)].map(match=>match[1]);
+  assert.deepEqual(repoLinks,['https://github.com/KKenny0/videowipe','https://github.com/Cinnamon/kotaemon','https://github.com/KKenny0/obsidian-kami','https://github.com/KKenny0/script-weaver'],`${relative}: wall repository links must follow editorial order`);
   assert.doesNotMatch(html,/<p class="cg-metric mono">\s*<a\b/,`${relative}: project metrics must not add a separate GitHub link`);
   for(const url of ['https://community.obsidian.md/themes/kami-reader','https://obsidian.md/plugins?id=kami-reader-companion'])assert.ok(html.includes(url),`${relative}: Kami metric link missing: ${url}`);
   const noteLinks=[...html.matchAll(/class="cg-pin-face" href="(https:[^"]+)"/g)].map(match=>match[1]);
@@ -69,9 +86,9 @@ for(const [locale,path] of Object.entries(pages)){
 const en=decode(readFileSync(pages.en,'utf8'));
 const zhHtml=decode(readFileSync(pages.zh,'utf8'));
 assert.ok(en.includes('href="/zh/collage/"')&&zhHtml.includes('href="/collage/"'),'collage language mirrors must point at each other');
-assert.ok(en.includes('THE COLLAGE WALL · ONE PINBOARD')&&zhHtml.includes('拼贴墙 · 一块软木板'),'localized masthead kickers missing');
+assert.ok(en.includes('The collage wall')&&zhHtml.includes('拼贴墙'),'localized masthead kickers missing');
 assert.ok(en.includes('Drag or use arrow keys to compare')&&zhHtml.includes('拖动或使用方向键比较'),'localized comparison copy missing');
-assert.ok(en.includes('EXTERNAL OPEN SOURCE · CONTRIBUTOR')&&zhHtml.includes('外部开源项目 · 贡献者'),'localized contributor attribution missing');
+assert.ok(en.includes('External open source · Contributor')&&zhHtml.includes('外部开源项目 · 贡献者'),'localized contributor attribution missing');
 assert.ok(en.includes('Script-Weaver')&&zhHtml.includes('Script-Weaver'),'Script-Weaver missing');
 
 // Check the actual production homepages, independently of the isolated prototypes.
@@ -91,8 +108,9 @@ for(const locale of ['en','zh']){
   }
   assert.match(html,/<main\b/,`${prefix||'/'}: missing SSR main`);
   assert.match(html,/class="collage"/,`${prefix||'/'}: missing SSR collage`);
+  checkHomeWall(html,locale,`${prefix}/`);
   assert.match(html,/id="cg-comparison"[^>]*type="range"/,`${prefix||'/'}: missing comparison`);
-  assert.ok(html.includes(locale==='zh'?'拼贴墙 · 一块软木板':'THE COLLAGE WALL · ONE PINBOARD'),`${prefix||'/'}: localized content missing`);
+  assert.ok(html.includes(locale==='zh'?'拼贴墙':'The collage wall'),`${prefix||'/'}: localized content missing`);
   assert.ok(html.includes(locale==='zh'?'拖动或使用方向键比较':'Drag or use arrow keys to compare'),`${prefix||'/'}: localized comparison missing`);
   for(const name of ['Script-Weaver','VideoWipe','Kotaemon'])assert.ok(html.toLowerCase().includes(name.toLowerCase()),`${prefix||'/'}: ${name} missing`);
   const hrefs=[...html.matchAll(/<a\b[^>]*\bhref="([^"]+)"/g)].map(match=>match[1]);

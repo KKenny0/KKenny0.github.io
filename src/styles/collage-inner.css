@@ -1,5 +1,5 @@
 /* Collage-only inner pages. Existing readers and controls remain the source of content. */
-.collage-inner{--wb-display:Charter,Georgia,JinKai,"Songti SC",serif;--role-online:#386f70;--role-taste:#a85a32;--role-ai:#82624a;--role-execution:#627a4d}
+.collage-inner{--wb-display:var(--display-serif);--role-online:#386f70;--role-taste:#a85a32;--role-ai:#82624a;--role-execution:#627a4d}
 .collage-inner .pb-header{background:var(--panel);border-bottom:1px solid var(--line)}
 .collage-inner .pb-brand{font-size:21px;font-weight:500}
 .collage-inner .pb-nav a[aria-current="true"]{background:var(--paper);box-shadow:inset 0 0 0 1px var(--line)}
@@ -106,6 +106,8 @@
 .space-about .pb-portrait img{height:auto}
 .space-about [id]{scroll-margin-top:85px}
 .space-about .about-full{padding-inline:0}
+.space-about:lang(zh) .pb-about-hero .space-heading > p,
+.space-about:lang(zh) > .space-editorial-section > p{line-height:1.8}
 .formal-space .tuner-heading p{max-width:53ch;text-align:start}
 .formal-space .tuner-rail{max-height:none}
 .formal-space .tuner-detail{margin-inline-start:8px}

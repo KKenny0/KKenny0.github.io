@@ -10,6 +10,20 @@ const isIndex=['projects','notes'].some(view=>Astro.url.pathname.replace(/\/$/,'
 const route=isIndex?{view:entry.view}:entry;
 ---
 <SpaceLayout lang={lang} route={route}>
+  {['notes','projects'].includes(route.view)&&<Fragment>
+    <script is:inline>
+      const spaceQuery = new URLSearchParams(location.search);
+      if (spaceQuery.has('from') || spaceQuery.has('topic')) document.documentElement.dataset.spaceQuery = '';
+    </script>
+    <style is:inline>
+      [data-space-query] .formal-space:not([data-space-ready]) :is(
+        .pb-back, .pb-language, .space-writing-detail [data-space-return], .space-work [data-story-link]
+      ) { visibility: hidden; }
+      [data-space-query] .formal-space:not([data-space-ready]) .space-index > :not(.space-heading) { display: none; }
+      .space-query-status { display: none; }
+      [data-space-query] .formal-space:not([data-space-ready]) .space-query-status { display: block; }
+    </style>
+  </Fragment>}
   <SpaceApp client:load locale={lang} initialRoute={route}/>
   <noscript><nav class="static-options" aria-label={lang==='zh'?'语言与更多入口':'Language and more'}>
     <a href={routePath(route,lang==='zh'?'en':'zh')}>{lang==='zh'?'English':'中文'}</a>

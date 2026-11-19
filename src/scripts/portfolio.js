@@ -1,6 +1,6 @@
 const english = document.documentElement.lang === 'en';
 const languageLink = document.querySelector('.language');
-const languageTarget = languageLink?.getAttribute('href');
+const languageTarget = languageLink?.pathname;
 function syncLanguageLink() {
   if (!languageLink) return;
   languageLink.href = languageTarget + location.search + location.hash;

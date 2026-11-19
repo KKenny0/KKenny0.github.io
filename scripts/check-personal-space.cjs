@@ -264,6 +264,11 @@ for(const locale of ['en','zh']){
     assert.equal(parse(`/work/${slug}/`).item,slug);
     assert.equal(storyReturnPath(parse(`/projects/${slug}/`),locale),`${prefix}/work/${slug}/`);
     assert.equal(storyReturnPath(parse(`/projects/${slug}/?from=work&via=projects`),locale),`${prefix}/work/${slug}/?from=projects`);
+    const story=parse(`/projects/${slug}/?from=work&via=projects&origin=taste`);
+    assert.equal(story.origin,'taste');
+    assert.equal(routePath(story,locale),`${prefix}/projects/${slug}/?from=work&via=projects&origin=taste`);
+    assert.equal(canonicalPath(story,locale),`${prefix}/projects/${slug}/`);
+    assert.equal(storyReturnPath(story,locale),`${prefix}/work/${slug}/?from=projects&via=taste`);
   }
   const read=route=>readFileSync(path.join(output,prefix.replace(/^\//,''),route,'index.html'),'utf8');
   assert.match(read('projects'),/<input\b[^>]*id="project-search"/);
