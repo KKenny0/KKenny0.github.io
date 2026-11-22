@@ -1,8 +1,8 @@
 ---
 import SpaceLayout from '../layouts/SpaceLayout.astro';
-import HomeCollage from '../components/space/HomeCollage';
-import '../styles/home-collage.css';
+import StudioHome from '../components/space/StudioHome';
+import '../styles/studio-b2.css';
 ---
-<SpaceLayout lang="en" route={{view:'home',arg:''}}>
-  <HomeCollage client:load lang="en" mode="formal"/>
+<SpaceLayout lang="en" route={{view: 'home', arg: ''}}>
+  <StudioHome client:load lang="en" />
 </SpaceLayout>

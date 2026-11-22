@@ -1,8 +1,7 @@
 ---
 import SpaceLayout from '../layouts/SpaceLayout.astro';
 import SpaceApp from './space/SpaceApp';
-import '../styles/proto-workbench.css';
-import '../styles/collage-inner.css';
+import '../styles/studio-b2.css';
 import {projects} from '../data/projects';
 import {routePath} from '../lib/space-routes';
 const {lang,route:entry}=Astro.props;
@@ -17,9 +16,9 @@ const route=isIndex?{view:entry.view}:entry;
     </script>
     <style is:inline>
       [data-space-query] .formal-space:not([data-space-ready]) :is(
-        .pb-back, .pb-language, .space-writing-detail [data-space-return], .space-work [data-story-link]
+        [data-space-return], [data-story-link]
       ) { visibility: hidden; }
-      [data-space-query] .formal-space:not([data-space-ready]) .space-index > :not(.space-heading) { display: none; }
+      [data-space-query] .formal-space:not([data-space-ready]) .ba-index-rows { display: none; }
       .space-query-status { display: none; }
       [data-space-query] .formal-space:not([data-space-ready]) .space-query-status { display: block; }
     </style>
@@ -30,6 +29,7 @@ const route=isIndex?{view:entry.view}:entry;
     <a href={`${lang==='zh'?'/zh':''}/projects/`}>{lang==='zh'?'全部项目':'All projects'}</a>
     <a href={`${lang==='zh'?'/zh':''}/notes/`}>{lang==='zh'?'全部观察':'All observations'}</a>
     <a href={`${lang==='zh'?'/zh':''}/about/`}>{lang==='zh'?'关于 Kenny':'About Kenny'}</a>
+    <a href={`${lang==='zh'?'/zh':''}/support/`}>{lang==='zh'?'支持':'Support'}</a>
     {route.view==='projects'&&<details><summary>{lang==='zh'?'归档项目':'Archived projects'}</summary>{projects.filter(p=>p.archived).map(p=><a id={p.slug} href={routePath({view:'projects',item:p.slug},lang)}>{p.name}</a>)}</details>}
   </nav></noscript>
 </SpaceLayout>
