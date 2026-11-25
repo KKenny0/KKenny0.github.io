@@ -1,41 +1,26 @@
-# Kenny Wu — Cerulean Ink Studio
+# Kenny Wu — Director’s Cut & Optical Eraser Loupe
 
 ## Approved direction
 
-The **Cerulean Ink Studio (B2)** architectural exhibition layout is the visual and interaction baseline for the personal site (`/` and `/zh/`).
-Visitors land on a clear two-column architectural layout: a sticky `296px` left directory rail (`StudioShell`) and a spacious right exhibition stage (`StudioHome` / `SpaceApp`).
-Every directory page (`Home`, `About`, `Projects`, `Writing`, `Support`) and the four lenses (`Online`, `Taste`, `AI`, `Execution`) remain one click away with real HTML `<a href>` links before JavaScript hydrates.
-
-The default entry is English (`/`), with full bilingual mirroring under `/zh/`. Theme defaults to the system color scheme; visitors can explicitly choose System, Light or Dark from the rail header.
-
-## Scenes and content
-
-- **Exhibition Home (`StudioHome`)**: Six numbered plates (`N°01`–`N°06`) showcasing `VideoWipe` (interactive before/after slider), `Kami Reader` (`Taste`), `Script-Weaver` (`AI` schematic), `Online` observations, `Execution` delivery evidence, and the four lens characters.
-- **Online**: Observation tuner with stepper, observation list, summaries and original-source links, plus full archive access under `/notes/`.
-- **Taste**: Products first (`Kami Reader`, `card-skill`), then individual outputs inside `TasteViewer` with aspect-preserving framing and zoom modal.
-- **AI**: GitHub projects (`Script-Weaver`, `VideoWipe`) and technical writing (`Agent Memory Systems`, `Claude Code Compact`) presented side by side with comparable weight.
-- **Execution**: 4-stage pipeline, bounded recovery and independent evaluation evidence, linked back to the public work record.
-- **Projects**: Searchable, filterable and sortable work index (`selected`, `stars`, `updated`, archived toggle), using fresh snapshot counts from `collage-metrics.json` when present.
-- **About**: Single-column editorial intro + coordinates strip (no duplicate portrait beside the left rail `FIG. 00`), followed by the complete experience, publications, awards (with 3-column layout for timeline photos) and links in `space-about.json`.
-- **Support**: Feedback, sharing and star pathways alongside voluntary contribution QR codes and PayPal inside the shared `StudioShell`.
-
-Use the Script-Weaver schematic until Kenny supplies a current screenshot. Never use the obsolete local workbench screenshot. Label professional diagrams as diagrams. Keep fixed evaluation sets, internal tests and individual task runs distinguishable.
+The **Director’s Cut & Optical Eraser Loupe** borderless editorial layout is the visual and interaction baseline for the personal site (`/` and `/zh/`).
+Instead of a traditional sidebar-and-card-grid template, the site unfolds like an avant-garde monograph and 35mm director’s storyboard:
+- **Top Editorial Masthead (`StudioShell`)**: A translucent horizontal masthead keeps the wordmark, directory pages (`00–04`), four persona lenses (`01–04`), theme switcher (`System / Light / Dark`), language switcher (`EN / 中`), and contact pill accessible across all pages without caging the canvas inside a left sidebar.
+- **Act I — Poster Overprint Hero & 4-Character Horizon Cast**: Monumental serif typography overlaps the uncropped `1:1` fisheye checkerboard portrait (`FRAME 00A`, slightly tilted like a 35mm contact print). Below, the four hand-drawn characters (`online.webp`, `taste.webp`, `ai.webp`, `execution.webp`) stand freely on an open horizon rule with spotlight dimming and speech bubbles.
+- **Act II — Scene 01 (`The Eraser Loupe`)**: A borderless widescreen `VideoWipe` stage where moving the pointer sweeps a circular **Optical Eraser Loupe** (`clip-path: circle(...)` with HUD crosshairs) that erases burned-in subtitles in real time, paired with a `LOUPE / CURTAIN` mode switch and an accessible `#cg-comparison` scrub slider.
+- **Act III — Scene 02 (`Taste & Typography`)**: An asymmetric desk spread layering `Kami Reader` (`kami.png`) and the tilted `A Thousand Brains` poster (`thousand-brains.png`) with `taste.webp` marginalia and live Obsidian download/star metrics.
+- **Act IV — Scene 03 & 04 (`35mm Director’s Storyboard Strip`)**: A 4-cut horizontal contact strip (`CUT 01` → `CUT 04`) connecting `Script-Weaver`, cross-episode identity lock (`1,285s → 24s`), storyboard grading (`≈18% → 9.53%`), and 20-episode bounded recovery, followed by the `Kotaemon` upstream contribution ledger (`#287`, `#341`, `#461`).
+- **Act V — Scene 05 (`Observation Ledger & Perched Manuscript`)**: A monumental numbered observation list (`01`–`05`) paired with a tilted folded-corner manuscript sheet where `ai-perch.webp` perches on the top paper edge above the flagship AI essays.
 
 ## Typography
 
 Follow Kami’s typography principles. Titles, body and ordinary controls share a serif family within each language. Chinese uses local JinKai W04 / W05, then Charter, Georgia and CJK serif fallbacks. English uses Charter first. Metadata uses JetBrains Mono, Consolas and the page serif fallback. Symbols have a separate system symbol stack. Do not introduce a sans-serif display or control family.
 
-Body weight is 400; titles and emphasis use 500. Chinese has genuine separate weights. Charter uses the supplied Regular outlines for 400–500; disable synthetic bold and italic. Rebuild local font subsets after changing copy, including the complete professional content rather than only Home.
+## Surfaces and color tokens
 
-## Surfaces and color tokens (Cerulean Ink · B2)
-
-- **Light**: Pure white canvas (`#ffffff`), cool alabaster rail (`#f7f8fa`), light mat (`#f3f5f9`), ink (`#0f131a`), muted subtext (`#5c6473`), Cerulean Ink accent (`#026aa2`), hairline rules (`rgba(15, 19, 26, 0.09)`), and `2px` chapter datum rules (`#0f131a`).
-- **Dark**: Deep ink canvas (`#0b0d12`), rail (`#11141c`), elevated surface (`#141822`), mat (`#1a202d`), light ink (`#f5f7fa`), muted subtext (`#94a0b8`), luminous cerulean accent (`#53b1fd`), hairline rules (`rgba(245, 247, 250, 0.10)`).
-- **Portrait**: Left-rail `FIG. 00` displays the full uncropped `1:1` portrait (`object-fit: contain`, `max-height: 240px`).
-- **Motion**: Restrained `240ms` view entrances; honor `prefers-reduced-motion`.
+- **Light**: Warm gallery chalk (`#faf9f5`), soft stone mat (`#f1efe8`), folded manuscript sheet (`#f3efe4`), deep carbon ink (`#111318`), muted subtext (`#585e6a`), Cerulean Ink (`#026aa2`), and Film Signal Vermilion (`#d94826`).
+- **Dark**: Cinema darkroom obsidian (`#0b0d12`), elevated surface (`#131822`), mat (`#171d29`), warm ivory ink (`#f4f3ee`), muted subtext (`#96a0b5`), luminous cerulean (`#53b1fd`), and signal orange (`#ff6442`).
 
 ## Production acceptance
 
 Keep Astro static output, bilingual entry pages and the existing data sources.
-No browser Babel, React development build, remote font runtime or new backend.
-Verify built routes, assets, keyboard operation, mobile layouts, themes, language switching, zoom and browser history. Public deployment follows review of the complete local production build.
+Run `npm run notes:check && npm run build && npm run check:site` before deploying to GitHub Pages.

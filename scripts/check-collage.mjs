@@ -107,10 +107,9 @@ for(const locale of ['en','zh']){
     if(/name="(?:robots|googlebot)"/i.test(tag))assert.doesNotMatch(tag,/noindex|none/i,`${prefix||'/'}: homepage must be indexable`);
   }
   assert.match(html,/<main\b/,`${prefix||'/'}: missing SSR main`);
-  assert.match(html,/class="collage"/,`${prefix||'/'}: missing SSR collage`);
-  checkHomeWall(html,locale,`${prefix}/`);
-  assert.match(html,/id="cg-comparison"[^>]*type="range"/,`${prefix||'/'}: missing comparison`);
-  assert.ok(html.includes(locale==='zh'?'拼贴墙':'The collage wall'),`${prefix||'/'}: localized content missing`);
+  assert.match(html,/class="ba-shell"/,`${prefix||'/'}: missing SSR studio shell`);
+  assert.match(html,/id="cg-comparison"[^>]*type="range"|type="range"[^>]*id="cg-comparison"/,`${prefix||'/'}: missing comparison`);
+  assert.ok(html.includes(locale==='zh'?'持续观察':'Keep noticing'),`${prefix||'/'}: localized content missing`);
   assert.ok(html.includes(locale==='zh'?'拖动或使用方向键比较':'Drag or use arrow keys to compare'),`${prefix||'/'}: localized comparison missing`);
   for(const name of ['Script-Weaver','VideoWipe','Kotaemon'])assert.ok(html.toLowerCase().includes(name.toLowerCase()),`${prefix||'/'}: ${name} missing`);
   const hrefs=[...html.matchAll(/<a\b[^>]*\bhref="([^"]+)"/g)].map(match=>match[1]);
