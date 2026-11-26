@@ -401,6 +401,11 @@ p, li {
   background: var(--ba-bg);
 }
 
+.ab-gallery-header {
+  position: relative;
+  z-index: 35;
+}
+
 /* Subtle Exhibition Wayfinding Header */
 .ab-wayfinding {
   display: flex;
@@ -426,6 +431,7 @@ p, li {
 .ab-cobalt-dot {
   width: 6px;
   height: 6px;
+  flex: none;
   border-radius: 50%;
   background: var(--ba-accent);
 }
@@ -459,11 +465,13 @@ p, li {
 /* Origin-Aware Light-Table Contact Sheet Drawer (Bidirectional Spring Entrance & Exit) */
 .ab-contact-sheet {
   position: absolute;
-  top: 42px;
+  top: 100%;
   left: clamp(24px, 4vw, 56px);
   right: clamp(24px, 4vw, 56px);
   z-index: 35;
   padding: 24px;
+  overflow-y: auto;
+  overscroll-behavior-y: contain;
   background: color-mix(in srgb, var(--ba-bg) 95%, transparent);
   backdrop-filter: blur(20px);
   border: 1px solid var(--ba-rule-strong);
@@ -472,21 +480,17 @@ p, li {
   opacity: 0;
   transform: scale(0.96) translate3d(0, -6px, 0);
   pointer-events: none;
-  visibility: hidden;
   transition:
     opacity 180ms var(--ease-out-quart),
-    transform 220ms var(--ease-spring),
-    visibility 0ms linear 220ms;
+    transform 220ms var(--ease-spring);
 }
 .ab-contact-sheet.is-open {
   opacity: 1;
   transform: scale(1) translate3d(0, 0, 0);
   pointer-events: auto;
-  visibility: visible;
   transition:
     opacity 200ms var(--ease-out-quart),
-    transform 260ms var(--ease-spring),
-    visibility 0ms linear 0ms;
+    transform 260ms var(--ease-spring);
 }
 
 .ab-sheet-grid {
@@ -511,6 +515,7 @@ p, li {
 }
 
 .ab-sheet-thumb {
+  width: 100%;
   display: flex;
   flex-direction: column;
   align-items: center;
@@ -545,6 +550,8 @@ p, li {
 }
 
 .ab-sheet-meta {
+  min-width: 0;
+  max-width: 100%;
   display: flex;
   align-items: baseline;
   gap: 6px;
@@ -556,18 +563,17 @@ p, li {
 }
 .ab-sheet-meta strong {
   font: 500 12px/1.2 var(--serif);
-  white-space: nowrap;
-  overflow: hidden;
-  text-overflow: ellipsis;
+  overflow-wrap: anywhere;
 }
 
 /* Horizontal Camera Corridor Aperture (Zero Native Scrollbars) */
 .ab-corridor-viewport {
   position: relative;
+  order: 1;
   flex: 1;
   display: flex;
   align-items: center;
-  width: 100vw;
+  width: 100%;
   overflow: hidden;
   cursor: grab;
   user-select: none;
@@ -677,6 +683,7 @@ p, li {
 
 /* Emil Kowalski Clip-Path Duplicated Floor-Plan Scrubber */
 .ab-floor-scrubber {
+  order: 2;
   display: flex;
   align-items: center;
   justify-content: space-between;
@@ -698,13 +705,13 @@ p, li {
   white-space: nowrap;
   transition: transform 140ms ease-out, opacity 160ms ease, color 160ms ease;
 }
-.ab-step-btn:hover:not(:disabled) {
+.ab-step-btn:hover:not(:disabled, [aria-disabled="true"]) {
   color: var(--ba-accent);
 }
-.ab-step-btn:active:not(:disabled) {
+.ab-step-btn:active:not(:disabled, [aria-disabled="true"]) {
   transform: scale(0.96);
 }
-.ab-step-btn:disabled {
+.ab-step-btn:is(:disabled, [aria-disabled="true"]) {
   opacity: 0.28;
   cursor: default;
 }
@@ -754,6 +761,19 @@ p, li {
 }
 .ab-scrubber-tab.is-clipped-active .ab-tab-num {
   color: #60a5fa;
+}
+
+/* Keep keyboard focus visible over the animated copy of the selected tab. */
+.ab-scrubber-tab:focus-visible {
+  position: relative;
+  z-index: 1;
+}
+
+.ab-scrubber-tab:focus-visible,
+.ab-bay:focus-visible,
+.ab-sheet-card:focus-visible {
+  outline: 2px solid var(--ba-accent);
+  outline-offset: -2px;
 }
 
 /* Exhibition Concept Switcher Bar (Compare A / B / C) */
@@ -2000,13 +2020,24 @@ p, li {
   position: relative;
 }
 
+.ba-compare {
+  width: 100%;
+  container-type: inline-size;
+}
+
+.ba-compare-preview {
+  position: relative;
+}
+
 .ba-compare-stage {
+  --loupe-radius: clamp(28px, 18cqw, 145px);
   position: relative;
   overflow: hidden;
   background: #0d1017;
   aspect-ratio: 16 / 9;
   user-select: none;
   box-shadow: var(--ba-elevation);
+  touch-action: pan-y pinch-zoom;
 }
 
 .ba-compare.is-loupe .ba-compare-stage {
@@ -2028,7 +2059,7 @@ p, li {
 
 /* Optical Loupe mode vs Curtain Split mode */
 .ba-compare.is-loupe .ba-compare-after {
-  clip-path: circle(clamp(95px, 11vw, 145px) at var(--loupe-x, 54%) var(--loupe-y, 67%));
+  clip-path: circle(var(--loupe-radius) at var(--loupe-x, 54%) var(--loupe-y, 67%));
 }
 
 .ba-compare.is-curtain .ba-compare-after {
@@ -2039,8 +2070,8 @@ p, li {
   position: absolute;
   left: var(--loupe-x, 54%);
   top: var(--loupe-y, 67%);
-  width: clamp(190px, 22vw, 290px);
-  height: clamp(190px, 22vw, 290px);
+  width: calc(2 * var(--loupe-radius));
+  height: calc(2 * var(--loupe-radius));
   transform: translate(-50%, -50%);
   border-radius: 50%;
   border: 1.5px solid #53b1fd;
@@ -2144,6 +2175,7 @@ p, li {
 
 .ba-mode-switch {
   display: inline-flex;
+  flex-wrap: wrap;
   gap: 8px;
 }
 
@@ -2183,10 +2215,14 @@ p, li {
   -webkit-appearance: none;
   appearance: none;
   width: 180px;
-  height: 2px;
-  background: var(--ba-rule-strong);
-  outline: none;
+  height: 28px;
+  margin: 0;
+  background: linear-gradient(var(--ba-rule-strong), var(--ba-rule-strong)) center / 100% 2px no-repeat;
   cursor: pointer;
+}
+.ba-range-wrap input[type="range"]:focus-visible {
+  outline: 2px solid var(--ba-accent);
+  outline-offset: 3px;
 }
 .ba-range-wrap input[type="range"]::-webkit-slider-thumb {
   -webkit-appearance: none;
@@ -2205,6 +2241,51 @@ p, li {
   background: var(--ba-surface);
   border: 2px solid var(--ba-accent);
   cursor: pointer;
+}
+
+@container (max-width: 500px) {
+  .ba-compare-bar {
+    gap: 10px;
+    margin-top: 10px;
+  }
+  .ba-mode-switch,
+  .ba-range-wrap {
+    width: 100%;
+  }
+  .ba-mode-switch button {
+    flex: 1;
+    min-height: 44px;
+    padding-inline: 6px;
+  }
+  .ba-range-wrap {
+    flex-wrap: wrap;
+    gap: 0 12px;
+  }
+  .ba-range-wrap input[type="range"] {
+    flex: 1 1 130px;
+    height: 44px;
+    min-width: 0;
+  }
+  .ba-loupe-tag {
+    display: none;
+  }
+  .ba-compare-captions {
+    display: grid;
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+    gap: 8px;
+    margin-top: 8px;
+  }
+  .ba-compare-tag {
+    position: static;
+    padding: 0;
+    background: transparent;
+    color: var(--ba-sub);
+    font-size: 9px;
+    letter-spacing: 0.04em;
+  }
+  .ba-tag-after {
+    text-align: right;
+  }
 }
 
 /* ============================================================================
@@ -4662,7 +4743,26 @@ p, li {
   .ex-mode-btn {
     white-space: nowrap;
   }
-  /* Variant AV & AC Portrait Layout: Horizontal Identity Banner on Top + Vertical Accordion Drawer Stack Below */
+}
+
+@media (max-height: 640px) {
+  .ba-shell:has(.ex-about-page) {
+    height: auto;
+    overflow: visible;
+  }
+  .ba-shell:has(.ex-about-page) .ba-stage,
+  .ex-about-page {
+    overflow: visible;
+  }
+  .ex-about-page {
+    height: auto;
+    min-height: 0;
+    display: block;
+  }
+}
+
+/* Match ABOUT_READING_LAYOUT for the natural-height About layout. */
+@media (max-width: 1040px), (orientation: portrait), (max-height: 640px) {
   .ab-about-ac,
   .ab-about-a,
   .ab-about-av {
@@ -4681,17 +4781,35 @@ p, li {
     flex: none !important;
   }
   .ab-v-drawer-bar {
-    grid-template-columns: 32px minmax(0, 1fr) auto;
+    grid-template-columns: 24px minmax(0, 1fr) auto;
+    gap: 10px;
+    min-height: 44px;
   }
+  .ab-v-title {
+    white-space: normal;
+  }
+  .ab-about-wide-hint,
   .ab-v-summary {
     display: none;
+  }
+  .ab-v-drawer.is-open .ab-v-state {
+    font-size: 0;
+  }
+  .ab-v-drawer.is-open .ab-v-state::before {
+    content: "↓";
+    font-size: 12px;
+    color: var(--ba-bg);
+  }
+  .ab-v-drawer.is-open .ab-v-drawer-collapse,
+  .ab-v-drawer-inner {
+    flex: none;
   }
   .ab-v-drawer-inner {
     overflow: visible !important;
     padding: 16px 4px 20px;
   }
   .ab-v-exp-inspector {
-    grid-template-columns: 1fr;
+    grid-template-columns: minmax(0, 1fr);
     max-height: none;
     height: auto;
     gap: 14px;
@@ -5003,20 +5121,109 @@ p, li {
   }
 }
 
-@media (max-width: 760px) {
+/* Match COMPACT_GALLERY. The two-column manuscripts clip around 1100 × 800,
+   and below 735px tall the gallery's minimum height pushes its rail offscreen. */
+@media (max-width: 1180px), (max-height: 735px) {
+  .ba-shell[data-view="home"] .ba-masthead {
+    position: relative;
+  }
+  .ba-shell[data-view="home"] .ba-stage,
   .ab-gallery {
+    overflow: visible;
+  }
+  .ab-gallery {
+    --gallery-gutter: clamp(18px, 4vw, 48px);
+    display: block;
     height: auto;
-    min-height: calc(100dvh - 115px);
+    min-height: 0;
   }
-  .ab-bay-inner {
-    grid-template-columns: 1fr;
-    gap: 20px;
+  .ab-gallery .ab-wayfinding,
+  .ab-gallery .ab-floor-scrubber {
+    padding-inline: var(--gallery-gutter);
   }
-  .ab-sheet-grid {
-    grid-template-columns: repeat(2, minmax(0, 1fr));
+  .ab-gallery .ab-wayfinding {
+    gap: 4px 16px;
+    padding-block: 6px;
   }
-  .ab-tab-label,
-  .ab-gesture-hint {
+  .ab-gallery .ab-overview-btn,
+  .ab-gallery .ab-step-btn,
+  .ab-gallery .ab-scrubber-tab {
+    min-height: 44px;
+  }
+  .ab-gallery .ab-overview-btn {
+    white-space: nowrap;
+  }
+  .ab-gallery .ab-contact-sheet {
+    inset-inline: var(--gallery-gutter);
+    padding: clamp(12px, 3vw, 24px);
+  }
+  .ab-gallery .ab-sheet-grid {
+    grid-template-columns: repeat(3, minmax(0, 1fr));
+    gap: 12px;
+  }
+  .ab-gallery .ab-corridor-viewport {
+    display: block;
+    overflow: visible;
+    cursor: auto;
+    user-select: auto;
+    touch-action: auto;
+    padding: clamp(26px, 5vw, 56px) var(--gallery-gutter) clamp(40px, 7vw, 80px);
+  }
+  .ab-gallery .ab-camera-track {
+    display: block;
+    height: auto;
+    transform: none;
+    transition: none;
+    will-change: auto;
+  }
+  .ab-gallery .ab-bay:not(.is-active) {
+    display: none;
+  }
+  .ab-gallery .ab-bay {
+    width: 100%;
+    height: auto;
+    padding: 0;
+  }
+  .ab-gallery .ab-bay-inner {
+    width: min(100%, 760px);
+    grid-template-columns: minmax(0, 1fr);
+    gap: clamp(20px, 4vw, 34px);
+  }
+  .ab-gallery .ab-bay .ex-portrait-frame {
+    width: min(100%, 310px);
+    padding: clamp(12px, 5vw, 22px);
+  }
+  .ab-gallery .ab-bay.is-active .ex-placard {
+    margin-bottom: 0;
+    transition: none;
+  }
+  .ab-gallery .ab-bay .ex-placard-title {
+    font-size: clamp(26px, 4.5vw, 36px);
+  }
+  .ab-gallery .ab-bay .ex-placard-note {
+    font-size: 15px;
+  }
+  .ab-gallery .ab-bay .ex-manuscript-vitrine {
+    gap: clamp(18px, 4vw, 36px);
+    padding: clamp(14px, 4vw, 32px);
+  }
+  .ab-gallery .ab-floor-scrubber {
+    gap: clamp(4px, 2vw, 16px);
+    padding-block: 6px;
+    border-top: 0;
+    border-bottom: 1px solid var(--ba-rule);
+  }
+  .ab-gallery .ab-step-btn,
+  .ab-gallery .ab-scrubber-tab {
+    padding-inline: 2px;
+  }
+  .ab-gallery .ab-gesture-hint {
+    display: none;
+  }
+}
+
+@media (max-width: 760px) {
+  .ab-tab-label {
     display: none;
   }
   .ba-about-record .about-full .timeline.cail-entry,
@@ -5030,6 +5237,16 @@ p, li {
     grid-column: 1;
     max-width: 220px;
     margin-top: 12px;
+  }
+}
+
+@media (max-width: 540px) {
+  .ab-gallery .ab-sheet-grid {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+  }
+  .ab-gallery .ab-bay .ex-vitrine-list a {
+    grid-template-columns: 18px minmax(0, 1fr) auto;
+    gap: 7px;
   }
 }
 
@@ -5072,8 +5289,10 @@ p, li {
   *::before,
   *::after {
     animation-duration: 0.01ms !important;
+    animation-delay: 0ms !important;
     animation-iteration-count: 1 !important;
     transition-duration: 0.01ms !important;
+    transition-delay: 0ms !important;
     scroll-behavior: auto !important;
   }
 }

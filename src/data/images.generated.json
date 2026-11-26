@@ -57,7 +57,7 @@
     "width": 1080,
     "height": 1080,
     "src": "/assets/optimized/space-self-profo-960.webp",
-    "srcset": "/assets/optimized/space-self-profo-480.webp 480w, /assets/optimized/space-self-profo-960.webp 960w, /assets/optimized/space-self-profo-1080.webp 1080w"
+    "srcset": "/assets/optimized/space-self-profo-480.webp 480w, /assets/optimized/space-self-profo-640.webp 640w, /assets/optimized/space-self-profo-960.webp 960w, /assets/optimized/space-self-profo-1080.webp 1080w"
   },
   "/assets/space/videowipe-before.jpg": {
     "width": 1920,

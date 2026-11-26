@@ -4,6 +4,10 @@ import ThemeHead from '../components/ThemeHead.astro';
 import '../styles/space.css';
 import {routePath,routeTitle,canonicalPath} from '../lib/space-routes';
 const {lang,route}=Astro.props;
+const chineseFonts=route.view==='home'
+  ? ['JinKai-Home-Regular.woff2', 'JinKai-Home-Medium.woff2']
+  : ['JinKai-Regular.woff2?v=20261125', 'JinKai-Medium.woff2?v=20261125'];
+const preloadFonts=lang==='zh' ? chineseFonts : ['Charter-Regular.woff2'];
 const title=routeTitle(route,lang);
 const isIndex=['projects','notes'].includes(route.view) && Astro.url.pathname.replace(/\/$/,'')===`${lang==='zh'?'/zh':''}/${route.view}`;
 const canonicalRoute=isIndex?{...route,item:undefined}:route;
@@ -24,8 +28,7 @@ const description=lang==='zh'?'Kenny Wu，一名在深圳的 AI 工程师。持�
     <link rel="alternate" hreflang="zh-CN" href={new URL(canonicalPath(canonicalRoute,'zh'),site.canonical).href}/>
     <link rel="alternate" hreflang="x-default" href={new URL(canonicalPath(canonicalRoute,'en'),site.canonical).href}/>
     <link rel="icon" href={site.favicon}/>
-    <link rel="preload" href={lang==='zh'?'/assets/space/JinKai-Regular.woff2?v=20261125':'/assets/space/Charter-Regular.woff2'} as="font" type="font/woff2" crossorigin/>
-    {lang==='zh' && <link rel="preload" href="/assets/space/JinKai-Medium.woff2?v=20261125" as="font" type="font/woff2" crossorigin/>}
+    {preloadFonts.map(font => <link rel="preload" href={`/assets/space/${font}`} as="font" type="font/woff2" crossorigin/>)}
     <meta property="og:title" content={title}/>
     <meta property="og:description" content={description}/>
     <meta property="og:url" content={canonical}/>

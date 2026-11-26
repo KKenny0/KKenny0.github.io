@@ -1,4 +1,4 @@
-import React, {useState} from 'react';
+import React, {memo, useRef, useState} from 'react';
 import {lensInfo} from '../../data/space';
 import {prototypeText} from '../../data/space-i18n';
 import metrics from '../../data/collage-metrics.json';
@@ -19,68 +19,103 @@ export function liveStars(project) {
  * - Default 'loupe' mode: cursor becomes a circular optical lens that erases burned-in subtitles in real time.
  * - 'curtain' mode: full-height vertical split wipe.
  */
-export function VideoWipeCompare({text, inputId = 'cg-comparison'}) {
+export const VideoWipeCompare = memo(function VideoWipeCompare({
+  text,
+  inputId = 'cg-comparison',
+  loading = 'eager',
+  sizes = '(max-width: 760px) 94vw, (max-width: 1280px) 86vw, 1180px'
+}) {
   const [mode, setMode] = useState('loupe');
   const [pos, setPos] = useState({x: 54, y: 67});
-  const [split, setSplit] = useState(54);
+  const touch = useRef(null);
 
   function updateFromPointer(event) {
     const rect = event.currentTarget.getBoundingClientRect();
-    const x = Math.round(Math.min(94, Math.max(6, ((event.clientX - rect.left) / rect.width) * 100)));
+    const x = Math.round(Math.min(100, Math.max(0, ((event.clientX - rect.left) / rect.width) * 100)));
     const y = Math.round(Math.min(90, Math.max(10, ((event.clientY - rect.top) / rect.height) * 100)));
-    setPos({x, y});
-    setSplit(x);
+    setPos(current => current.x === x && current.y === y ? current : {x, y});
+  }
+
+  function handlePointerDown(event) {
+    if (!event.isPrimary || event.button !== 0) return;
+    if (event.pointerType === 'touch') {
+      touch.current = {id: event.pointerId, x: event.clientX, y: event.clientY, dragging: false};
+    } else if (mode === 'curtain') {
+      event.currentTarget.setPointerCapture(event.pointerId);
+      updateFromPointer(event);
+    }
+  }
+
+  function handlePointerMove(event) {
+    if (!event.isPrimary) return;
+    if (event.pointerType === 'touch') {
+      const gesture = touch.current;
+      if (gesture?.id !== event.pointerId) return;
+      if (!gesture.dragging) {
+        const dx = Math.abs(event.clientX - gesture.x);
+        const dy = Math.abs(event.clientY - gesture.y);
+        if (dx < 8 || dx <= dy) return;
+        gesture.dragging = true;
+      }
+    } else if (mode === 'curtain' && event.buttons !== 1) return;
+    updateFromPointer(event);
+  }
+
+  function endTouch(event) {
+    if (touch.current?.id === event.pointerId) touch.current = null;
   }
 
   return (
     <div className={`ba-compare is-${mode}`}>
-      <div
-        className="ba-compare-stage"
-        style={{
-          '--ba-split': `${split}%`,
-          '--loupe-x': `${pos.x}%`,
-          '--loupe-y': `${pos.y}%`
-        }}
-        onPointerMove={event => {
-          if (mode === 'loupe' || event.buttons === 1) {
-            updateFromPointer(event);
-          }
-        }}
-        onClick={event => {
-          updateFromPointer(event);
-        }}
-      >
-        <Media
-          src={`${ASSETS}videowipe-before.jpg`}
-          alt={text('处理前：画面带烧录字幕', 'Before: burned-in subtitles')}
-          loading="eager"
-          draggable={false}
-          sizes="(max-width: 760px) 94vw, (max-width: 1280px) 86vw, 1180px"
-        />
-        <Media
-          className="ba-compare-after"
-          src={`${ASSETS}videowipe-after.jpg`}
-          alt={text('处理后：字幕被清除', 'After: subtitles removed')}
-          loading="eager"
-          draggable={false}
-          sizes="(max-width: 760px) 94vw, (max-width: 1280px) 86vw, 1180px"
-        />
+      <div className="ba-compare-preview">
+        <div
+          className="ba-compare-stage"
+          style={{
+            '--ba-split': `${pos.x}%`,
+            '--loupe-x': `${pos.x}%`,
+            '--loupe-y': `${pos.y}%`
+          }}
+          onPointerDown={handlePointerDown}
+          onPointerMove={handlePointerMove}
+          onPointerUp={endTouch}
+          onPointerCancel={endTouch}
+          onLostPointerCapture={endTouch}
+          onClick={updateFromPointer}
+        >
+          <Media
+            src={`${ASSETS}videowipe-before.jpg`}
+            alt={text('处理前：画面带烧录字幕', 'Before: burned-in subtitles')}
+            loading={loading}
+            draggable={false}
+            sizes={sizes}
+          />
+          <Media
+            className="ba-compare-after"
+            src={`${ASSETS}videowipe-after.jpg`}
+            alt={text('处理后：字幕被清除', 'After: subtitles removed')}
+            loading={loading}
+            draggable={false}
+            sizes={sizes}
+          />
 
-        {mode === 'loupe' ? (
-          <span className="ba-loupe-ring" aria-hidden="true">
-            <span className="ba-loupe-crosshair" />
-            <span className="ba-loupe-tag mono">{text('消字透镜 · 实时抹除', 'ERASER LOUPE · LIVE')}</span>
-          </span>
-        ) : (
-          <span className="ba-compare-line" aria-hidden="true">
-            <span className="ba-compare-knob" />
-          </span>
-        )}
+          {mode === 'loupe' ? (
+            <span className="ba-loupe-ring" aria-hidden="true">
+              <span className="ba-loupe-crosshair" />
+              <span className="ba-loupe-tag mono">{text('消字透镜 · 实时抹除', 'ERASER LOUPE · LIVE')}</span>
+            </span>
+          ) : (
+            <span className="ba-compare-line" aria-hidden="true">
+              <span className="ba-compare-knob" />
+            </span>
+          )}
+        </div>
 
-        <span className="ba-compare-tag ba-tag-before mono">{text('原画 · 带烧录字幕', 'ORIGINAL · SUBTITLED')}</span>
-        <span className="ba-compare-tag ba-tag-after mono">
-          {mode === 'loupe' ? text('移动鼠标透视抹除效果', 'MOVE CURSOR TO ERASE SUBTITLES') : text('处理后 · 字幕已清除', 'CLEANED · SUBTITLE-FREE')}
-        </span>
+        <div className="ba-compare-captions">
+          <span className="ba-compare-tag ba-tag-before mono">{text('原画 · 带烧录字幕', 'ORIGINAL · SUBTITLED')}</span>
+          <span className="ba-compare-tag ba-tag-after mono">
+            {mode === 'loupe' ? text('移动鼠标、轻点或横拖检视', 'MOVE, TAP OR DRAG TO INSPECT') : text('处理后 · 字幕已清除', 'CLEANED · SUBTITLE-FREE')}
+          </span>
+        </div>
       </div>
 
       <div className="ba-compare-bar">
@@ -110,19 +145,18 @@ export function VideoWipeCompare({text, inputId = 'cg-comparison'}) {
             type="range"
             min="0"
             max="100"
-            value={split}
+            value={pos.x}
             aria-label={text('字幕清除前后对比', 'Before and after subtitle removal')}
-            onChange={e => {
-              const next = Number(e.target.value);
-              setSplit(next);
-              setPos(current => ({...current, x: next}));
+            onChange={event => {
+              const x = Number(event.target.value);
+              setPos(current => ({...current, x}));
             }}
           />
         </label>
       </div>
     </div>
   );
-}
+});
 
 export function StudioShell({lang, activeKey, theme, onSetTheme, languageHref, mainRef, children}) {
   const zh = lang === 'zh';

@@ -1,4 +1,4 @@
-import React, {useEffect, useLayoutEffect, useMemo, useRef, useState} from 'react';
+import React, {useCallback, useEffect, useLayoutEffect, useMemo, useRef, useState} from 'react';
 import {AboutMore, TasteViewer, tasteProducts} from './Scenes';
 import {localizedNote, prototypeText, tasteEnglish} from '../../data/space-i18n';
 import {aiWritingIds, curated, isTechnicalWriting, lensInfo, notes, projects, projectVisual} from '../../data/space';
@@ -931,6 +931,9 @@ const ABOUT_EXPERIENCES = [
   }
 ];
 
+// Match the natural-height About layout in studio-b2.css.
+const ABOUT_READING_LAYOUT = '(max-width: 1040px), (orientation: portrait), (max-height: 640px)';
+
 function About({lang}) {
   const zh = lang === 'zh';
   const text = (chinese, english) => localized(lang, chinese, english);
@@ -946,6 +949,21 @@ function About({lang}) {
 
   const bWheelLock = useRef(0);
   const aWheelLock = useRef(0);
+  const drawerStack = useRef(null);
+  const focusNextDrawer = useRef(false);
+
+  const moveChapter = useCallback(next => {
+    const activeDrawer = drawerStack.current?.querySelector('.ab-v-drawer.is-open');
+    focusNextDrawer.current = variant === 'AV' && next !== chapterIdx &&
+      Boolean(activeDrawer?.contains(document.activeElement));
+    setChapterIdx(next);
+  }, [chapterIdx, variant]);
+
+  useLayoutEffect(() => {
+    if (!focusNextDrawer.current) return;
+    focusNextDrawer.current = false;
+    drawerStack.current?.querySelector('.ab-v-drawer.is-open .ab-v-drawer-bar')?.focus();
+  }, [chapterIdx]);
 
   useEffect(() => {
     if (typeof window === 'undefined') return;
@@ -966,12 +984,13 @@ function About({lang}) {
     const onKeyDown = e => {
       const tag = document.activeElement?.tagName;
       if (tag === 'INPUT' || tag === 'SELECT' || e.metaKey || e.ctrlKey || e.altKey) return;
+      if ((e.key === 'ArrowDown' || e.key === 'ArrowUp') && window.matchMedia(ABOUT_READING_LAYOUT).matches) return;
       if (e.key === 'ArrowRight') {
-        if (variant === 'AV' || variant === 'A') setChapterIdx(p => (p + 1) % 5);
+        if (variant === 'AV' || variant === 'A') moveChapter((chapterIdx + 1) % 5);
         if (variant === 'AC' || variant === 'C') setPillarIdx(p => (p + 1) % 5);
         if (variant === 'B') setBayIdx(p => Math.min(4, p + 1));
       } else if (e.key === 'ArrowLeft') {
-        if (variant === 'AV' || variant === 'A') setChapterIdx(p => (p + 4) % 5);
+        if (variant === 'AV' || variant === 'A') moveChapter((chapterIdx + 4) % 5);
         if (variant === 'AC' || variant === 'C') setPillarIdx(p => (p + 4) % 5);
         if (variant === 'B') setBayIdx(p => Math.max(0, p - 1));
       } else if (e.key === 'ArrowDown' && (((variant === 'A' || variant === 'AV') && chapterIdx === 1) || (variant === 'AC' && pillarIdx === 1))) {
@@ -984,15 +1003,16 @@ function About({lang}) {
     };
     window.addEventListener('keydown', onKeyDown);
     return () => window.removeEventListener('keydown', onKeyDown);
-  }, [variant, chapterIdx, pillarIdx]);
+  }, [variant, chapterIdx, pillarIdx, moveChapter]);
 
   function onStageWheelA(e) {
+    if (window.matchMedia(ABOUT_READING_LAYOUT).matches || e.ctrlKey) return;
     const delta = Math.abs(e.deltaY) >= Math.abs(e.deltaX) ? e.deltaY : e.deltaX;
     if (Math.abs(delta) < 18) return;
     const now = performance.now();
     if (now < aWheelLock.current) return;
     aWheelLock.current = now + 340;
-    setChapterIdx(p => Math.max(0, Math.min(4, p + (delta > 0 ? 1 : -1))));
+    moveChapter(Math.max(0, Math.min(4, chapterIdx + Math.sign(delta))));
   }
 
   function rewriteHref(href) {
@@ -1039,7 +1059,7 @@ function About({lang}) {
             0{chapterIdx + 1} / 05
           </span>
         </div>
-        <span className="ex-mode-caption mono">
+        <span className="ex-mode-caption mono ab-about-wide-hint">
           {text('滚轮 / 点击抽屉 / 方向键 ← → ↑ ↓ 检视五幕档案', 'SCROLL / CLICK DRAWERS / ← → ↑ ↓ TO INSPECT')}
         </span>
       </header>
@@ -1077,7 +1097,7 @@ function About({lang}) {
         </aside>
 
         {/* Right Full-Width 5-Drawer Vertical Spring Accordion Stack */}
-        <div className="ab-v-stack" role="region" aria-label={text('纵向五幕弹簧手风琴档案柜', 'Vertical 5-chapter spring accordion dossier')}>
+        <div ref={drawerStack} className="ab-v-stack" role="region" aria-label={text('纵向五幕弹簧手风琴档案柜', 'Vertical 5-chapter spring accordion dossier')}>
           {[
             {
               num: '01',
@@ -1309,19 +1329,20 @@ function About({lang}) {
               <section
                 key={drawer.num}
                 className={`ab-v-drawer ${isOpen ? 'is-open' : ''}`}
-                aria-expanded={isOpen}
               >
                 <button
                   type="button"
                   className="ab-v-drawer-bar"
+                  aria-expanded={isOpen}
+                  aria-controls={`about-drawer-${drawer.num}`}
                   onClick={() => setChapterIdx(idx)}
                 >
                   <span className="mono ab-v-num">{drawer.num}</span>
                   <strong className="ab-v-title">{zh ? drawer.titleZh : drawer.titleEn}</strong>
                   <span className="mono ab-v-summary">{zh ? drawer.metricZh : drawer.metricEn}</span>
-                  <span className="mono ab-v-state">{isOpen ? drawer.tag : '+'}</span>
+                  <span className="mono ab-v-state" aria-hidden="true">{isOpen ? drawer.tag : '+'}</span>
                 </button>
-                <div className="ab-v-drawer-collapse">
+                <div className="ab-v-drawer-collapse" id={`about-drawer-${drawer.num}`} inert={isOpen ? undefined : ''}>
                   <div className="ab-v-drawer-clip">
                     {drawer.body}
                   </div>

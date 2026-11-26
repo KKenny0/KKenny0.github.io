@@ -1,0 +1,20 @@
+@font-face {
+  font-family: "JinKai Home";
+  src: url('/assets/space/JinKai-Home-Regular.woff2') format('woff2');
+  font-style: normal;
+  font-weight: 400;
+  font-display: swap;
+}
+
+@font-face {
+  font-family: "JinKai Home";
+  src: url('/assets/space/JinKai-Home-Medium.woff2') format('woff2');
+  font-style: normal;
+  font-weight: 500;
+  font-display: swap;
+}
+
+:root:lang(zh) {
+  --display-serif: Charter, "Iowan Old Style", Georgia, "JinKai Home", JinKai, var(--cjk-serif);
+  --serif: "JinKai Home", JinKai, Charter, Georgia, var(--cjk-serif);
+}

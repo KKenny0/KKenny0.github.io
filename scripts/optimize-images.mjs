@@ -20,8 +20,10 @@ for (const src of sources) {
     manifest[src] = { width, height, src, srcset: '' };
     continue;
   }
+  const isPortrait = src === '/assets/space/self-profo.jpg';
   const requested = (src.includes('/practices/') || /\/(online|taste|ai|execution|ai-perch)\.webp$/.test(src)) ? [160, 320, 480]
-    : src.includes('/about/') ? [192, 384, 768] : [480, 960, 1520];
+    : src.includes('/about/') ? [192, 384, 768]
+    : isPortrait ? [480, 640, 960, 1520] : [480, 960, 1520];
   const widths = [...new Set(requested.map(w => Math.min(w, width)))];
   const stem = src.replace('/assets/', '').replace(/\.[^.]+$/, '').replaceAll('/', '-');
   const variants = [];
@@ -30,7 +32,7 @@ for (const src of sources) {
     await sharp(input).resize({ width: w, withoutEnlargement: true }).webp({ quality: 90, effort: 6 }).toFile(`public${target}`);
     variants.push({ src: target, width: w });
   }
-  manifest[src] = { width, height, src: variants[1]?.src ?? variants[0].src,
+  manifest[src] = { width, height, src: variants[isPortrait ? 2 : 1]?.src ?? variants[0].src,
     srcset: variants.map(v => `${v.src} ${v.width}w`).join(', ') };
 }
 await sharp('public/assets/img/awkward-neck-profile-avatar-v2.png').resize(32, 32).png().toFile('public/assets/optimized/favicon-32.png');
